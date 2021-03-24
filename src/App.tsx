@@ -12,25 +12,25 @@ import settings from "./assets/icon/settings.svg";
 import login from "./assets/icon/login.svg";
 import man from "./assets/icon/man.svg";
 
-const   App: React.FC = () => {
+const App: React.FC = () => {
   return (
     <div className="App">
       <div className="sidebar">
         <span className="logo-app">RS.</span>
         <div className="menu">
-          <img className="menu__item" src={home} />
-          <img className="menu__item" src={hat} />
-          <img className="menu__item" src={message} />
-          <img className="menu__item" src={settings} />
+          <img className="menu__item" src={home} alt="icon" />
+          <img className="menu__item" src={hat} alt="icon" />
+          <img className="menu__item" src={message} alt="icon" />
+          <img className="menu__item" src={settings} alt="icon" />
         </div>
-        <img className="login" src={login} />
+        <img className="login" src={login} alt="icon" />
       </div>
       <main className="main">
         <div className="content">
           <div className="banner">
             <h1 className="banner__title">Hello Guest</h1>
             <span className="banner__text">It's good to see you again.</span>
-            <img className="banner__img" src={man} />
+            <img className="banner__img" src={man} alt="icon" />
           </div>
           <div className="statistic">
             <div className="statistic__container">
@@ -108,22 +108,14 @@ const   App: React.FC = () => {
             <div className="account"></div>
           </div>
           <h3>Games</h3>
-          <div className="block__game">
-            
-          </div>
-          <div className="block__game">
-
-          </div>
-          <div className="block__game">
-
-          </div>
-          <div className="block__game">
-
-          </div>
+          <div className="block__game"></div>
+          <div className="block__game"></div>
+          <div className="block__game"></div>
+          <div className="block__game"></div>
         </div>
       </main>
     </div>
   );
-}
+};
 
 export default App;
