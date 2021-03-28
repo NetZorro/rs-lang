@@ -1,7 +1,7 @@
 import React from "react";
 
 
-import man from "../assets/icon/man.svg";
+import man from "../../assets/icon/man.svg";
 import './home.css';
 
 const Home: React.FC = () => {

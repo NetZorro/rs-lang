@@ -1,6 +1,6 @@
 import React from "react";
 
-import { CategoryWords } from "../components/CategoryWords";
+import { CategoryWords } from "../../components/CategoryWords";
 import "./words.css";
 
 /**

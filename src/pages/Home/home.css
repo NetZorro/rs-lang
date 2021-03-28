@@ -115,11 +115,11 @@
   }
   
   .button-groups__button-next {
-    background: no-repeat center url("../assets/icon/arrow_next.svg");
+    background: no-repeat center url("../../assets/icon/arrow_next.svg");
   }
   
   .button-groups__button-prev {
-    background: no-repeat center url("../assets/icon/arrow_prev.svg");
+    background: no-repeat center url("../../assets/icon/arrow_prev.svg");
     margin-right: 16px;
   }
   
@@ -127,7 +127,7 @@
     position: relative;
     height: 40px;
     width: 40px;
-    background: no-repeat center url("../assets/icon/ellipse.svg");
+    background: no-repeat center url("../../assets/icon/ellipse.svg");
     margin-right: 40px;
   }
   
@@ -205,7 +205,7 @@
     border-radius: 8px;
     border: none;
     background: #f5f5f7;
-    background: no-repeat 16px url("../assets/icon/search.svg");
+    background: no-repeat 16px url("../../assets/icon/search.svg");
     outline: none;
   }
   .account {
@@ -223,13 +223,5 @@
     border-radius: 14px;
     height: 160px;
     margin-bottom: 16px;
-  }
-  @font-face {
-    font-family: "Baloo Bhai";
-    src: url(../assets/fonts/BalooBhai.ttf);
-  }
-  @font-face {
-    font-family: "Roboto";
-    src: url(../assets/fonts/Roboto-Regular.ttf);
   }
   
