@@ -13,7 +13,7 @@ export const TextBook: React.FC = () => {
     <div className="textBook">
       <div className="textBook__list">
         {category.map((item) => (
-          <Link key={item} to={`/textbook/category/${item}`}>
+          <Link key={item} to={`/textbook/category-${item}`}>
             <div className="textBook__item">{item + 1} Collection</div>
           </Link>
         ))}

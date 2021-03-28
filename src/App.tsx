@@ -27,11 +27,11 @@ const App: React.FC = () => {
             <Route
               exact
               component={Units}
-              path="/textbook/category/:categoryId"
+              path="/textbook/category-:categoryId/"
             />
             <Route
               component={Words}
-              path="/textbook/category/:categoryId/:unitId"
+              path="/textbook/category-:categoryId/unit-:unitId"
             />
             <Redirect from="/" to="/" />
           </Switch>
