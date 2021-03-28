@@ -13,7 +13,7 @@ import './sideBar.css';
  * 
  * SideBar
  */
-const SideBar: React.FC = () => {
+export const SideBar: React.FC = () => {
     return (
         <div className="sidebar">
             <div className="sidebar__container">
@@ -35,5 +35,3 @@ const SideBar: React.FC = () => {
         </div>
     )
 }
-
-export default SideBar;

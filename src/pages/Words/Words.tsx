@@ -1,12 +1,6 @@
 import React from "react";
 
-import { CategoryWords } from "../../components/CategoryWords";
 import "./words.css";
-
-/**
- * страница вывода слов
- *
- */
 
 type WordsProps = {
   group: string;
@@ -14,16 +8,18 @@ type WordsProps = {
   match: { params: { number: string } };
 };
 
-const Words: React.FC<WordsProps> = (props) => {
+/**
+ * Cтраница вывода слов
+ *
+ */
+export const Words: React.FC<WordsProps> = (props) => {
   const { number } = props.match.params;
   const { group } = props;
   console.log(props);
   console.log(group);
   return (
     <div className="words">
-      <CategoryWords group={group} id={number} />
+      {/* <CategoryWords group={group} id={number} /> */}
     </div>
   );
 };
-
-export default Words;

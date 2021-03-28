@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { baseURL } from "../../consts/baseURL";
+import { baseURL } from "constants/baseURL";
 import "./categoryWords.css";
 
 type data = {
@@ -25,7 +25,7 @@ type CategoryWordsProps = {
  * Компанент вывода слов с API
  */
 
-const CategoryWords: React.FC<CategoryWordsProps> = ({id}) => {
+export const CategoryWords: React.FC<CategoryWordsProps> = ({id}) => {
   const [data, setData] = useState<data[]>([]);
   const [loading, setLoading ] = useState<boolean>(true);
   useEffect(() => {
@@ -108,5 +108,3 @@ const CategoryWords: React.FC<CategoryWordsProps> = ({id}) => {
     </div>
   );
 };
-
-export default CategoryWords;

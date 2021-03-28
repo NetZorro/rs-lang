@@ -1,31 +1,30 @@
-import React from "react";
-import { Link, Route } from "react-router-dom";
+// import React from "react";
+import "./units.css";
+import { Link} from "react-router-dom";
 
-import { units } from "../../consts/data";
-import Words from '../Words';
-import './units.css';
-
-
-/**
- *
-  Страница отвечает за вывод юнитов учебника 
-  по переходу по ссылке с TextBook
- */
+import { units } from "constants/data";
 
 type UnitsProps = {
-  match: object;
+  match: {number: string};
 };
 
-const CategoryTextBook: React.FC<UnitsProps> = (props: any) => {
+/**
+  *
+   Страница отвечает за вывод юнитов учебника 
+   fdafsaf
+  */
+export const Units: React.FC<UnitsProps> = (props) => {
   const { number } = props.match;
-  let test = number;
+  let test:number = +number;
   if (!test) test = 1;
   return (
     <div className="units">
       {units[test].map((item, index) => {
         return (
           <div className="units__card">
-            <Link to={{ pathname : `/textbook/category/:number/unit/${index}`, state : index}}>
+            <Link
+              to={`/textbook/category/:categoryId/${index}`}
+            >
               <span className="units__title">Unit {index + 1}:</span>
             </Link>
           </div>
@@ -34,5 +33,3 @@ const CategoryTextBook: React.FC<UnitsProps> = (props: any) => {
     </div>
   );
 };
-
-export default CategoryTextBook;

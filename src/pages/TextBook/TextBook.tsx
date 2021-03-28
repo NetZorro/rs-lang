@@ -2,13 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import "./textBook.css";
+
 /**
  *
   Страница отвечает вывод категорий учебника
   и отображения ссылок для перехода в юнит
  */
-
-const TextBook: React.FC = () => {
+export const TextBook: React.FC = () => {
   const category = [1, 2, 3, 4, 5, 6];
   return (
     <div className="textBook">
@@ -22,5 +22,3 @@ const TextBook: React.FC = () => {
     </div>
   );
 };
-
-export default TextBook;

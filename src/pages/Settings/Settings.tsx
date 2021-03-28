@@ -1,6 +1,6 @@
 import React from "react";
 
-const Settings: React.FC = () => {
+export const Settings: React.FC = () => {
   return (
     <div>
       <h1>Settings</h1>
@@ -19,5 +19,3 @@ const Settings: React.FC = () => {
     </div>
   );
 };
-
-export default Settings;

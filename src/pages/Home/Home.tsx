@@ -4,7 +4,7 @@ import React from "react";
 import man from "../../assets/icon/man.svg";
 import './home.css';
 
-const Home: React.FC = () => {
+export const Home: React.FC = () => {
   return (
     <div className="App">
       <main className="main">
@@ -93,5 +93,3 @@ const Home: React.FC = () => {
     </div>
   );
 };
-
-export default Home;
