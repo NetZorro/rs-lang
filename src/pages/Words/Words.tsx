@@ -1,11 +1,9 @@
-import React from "react";
-
+import { CategoryWords } from "components/CategoryWords";
 import "./words.css";
 
 type WordsProps = {
-  group: string;
-  // id: string
-  match: { params: { number: string } };
+  // group: string;
+  match: { params: { categoryId: string; unitId: string } };
 };
 
 /**
@@ -13,13 +11,10 @@ type WordsProps = {
  *
  */
 export const Words: React.FC<WordsProps> = (props) => {
-  const { number } = props.match.params;
-  const { group } = props;
-  console.log(props);
-  console.log(group);
+  const { categoryId, unitId } = props.match.params;
   return (
     <div className="words">
-      {/* <CategoryWords group={group} id={number} /> */}
+      <CategoryWords category={categoryId} unit={unitId} />
     </div>
   );
 };

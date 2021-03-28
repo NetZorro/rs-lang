@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Switch,
   Route,
@@ -6,9 +5,10 @@ import {
   BrowserRouter as Router,
 } from "react-router-dom";
 
-import { TextBook, Home, Units, Words, Settings } from "pages";
+import { TextBook, Home, Units, Words, Settings, Statistics } from "pages";
 import { SideBar } from "components/SideBar";
 import "./App.css";
+import { Games } from "pages/Games/Games";
 
 const App: React.FC = () => {
   return (
@@ -22,10 +22,12 @@ const App: React.FC = () => {
             <Route exact component={Home} path="/" />
             <Route exact component={Settings} path="/settings" />
             <Route exact component={TextBook} path="/textbook" />
+            <Route exact component={Statistics} path="/statistics" />
+            <Route exact component={Games} path="/games" />
             <Route
               exact
               component={Units}
-              path="/textbook/category/:categoryId?"
+              path="/textbook/category/:categoryId"
             />
             <Route
               component={Words}

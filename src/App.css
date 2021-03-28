@@ -4,6 +4,7 @@
   display: flex;
 }
 .body__content {
+  padding-top: 24px;
   width: 1020px;
 }
 .body__sidebar {

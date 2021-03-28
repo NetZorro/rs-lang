@@ -1,6 +1,6 @@
 .main {
     display: flex;
-    margin-top: 54px;
+    padding-top: 30px;
   }
   .content {
     max-width: 620px;

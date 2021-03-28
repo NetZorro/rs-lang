@@ -1,6 +1,3 @@
-.textBook {
-  padding-top: 24px;
-}
 .textBook__list {
   display: flex;
   flex-direction: column;

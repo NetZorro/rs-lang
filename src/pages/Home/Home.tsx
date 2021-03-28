@@ -1,8 +1,5 @@
-import React from "react";
-
-
 import man from "../../assets/icon/man.svg";
-import './home.css';
+import "./home.css";
 
 export const Home: React.FC = () => {
   return (
