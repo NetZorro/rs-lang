@@ -1,129 +1,58 @@
-import React from "react";
+import { useReducer } from "react";
+import {
+  Switch,
+  Route,
+  Redirect,
+  BrowserRouter as Router,
+} from "react-router-dom";
 
-import ReactPlayer from "react-player";
-
-// Render a YouTube video player
-
+import {
+  TextBook,
+  Home,
+  Units,
+  Words,
+  Settings,
+  Statistics,
+  Games,
+  DictionaryPage,
+} from "pages";
+import { SideBar } from "components/SideBar";
 import "./App.css";
-import home from "./assets/icon/home.svg";
-import hat from "./assets/icon/hat.svg";
-import message from "./assets/icon/message.svg";
-import settings from "./assets/icon/settings.svg";
-import login from "./assets/icon/login.svg";
-import man from "./assets/icon/man.svg";
+import { initialState, reducer, Context } from "reducers";
 
-const   App: React.FC = () => {
+const App: React.FC = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
   return (
-    <div className="App">
-      <div className="sidebar">
-        <span className="logo-app">RS.</span>
-        <div className="menu">
-          <img className="menu__item" src={home} />
-          <img className="menu__item" src={hat} />
-          <img className="menu__item" src={message} />
-          <img className="menu__item" src={settings} />
-        </div>
-        <img className="login" src={login} />
-      </div>
-      <main className="main">
-        <div className="content">
-          <div className="banner">
-            <h1 className="banner__title">Hello Guest</h1>
-            <span className="banner__text">It's good to see you again.</span>
-            <img className="banner__img" src={man} />
+    <div className="body">
+      <Context.Provider value={{ state, dispatch }}>
+        <Router>
+          <div className="body__sidebar">
+            <SideBar />
           </div>
-          <div className="statistic">
-            <div className="statistic__container">
-              <div className="statistic__block"></div>
-              <div className="statistic__text">
-                <h2 className="statistic__title">English A2</h2>
-                <p className="statistic__author">by Rodion Khahush</p>
-              </div>
-              <div className="statistic__progress">
-                <span className="progress__procent">0%</span>
-              </div>
-              <button className="statistic__button">Continue</button>
-            </div>
-            <div className="button-groups">
-              <button className="button-groups__button-prev"></button>
-              <button className="button-groups__button-next"></button>
-            </div>
+          <div className="body__content">
+            <Switch>
+              <Route exact component={Home} path="/" />
+              <Route exact component={Settings} path="/settings" />
+              <Route exact component={TextBook} path="/textbook" />
+              <Route exact component={Statistics} path="/statistics" />
+              <Route exact component={Games} path="/games" />
+              <Route exact component={DictionaryPage} path="/dictionary" />
+              <Route
+                exact
+                component={Units}
+                path="/textbook/category-:categoryId/"
+              />
+              <Route
+                component={Words}
+                path="/textbook/category-:categoryId/unit-:unitId"
+              />
+              <Redirect from="/" to="/" />
+            </Switch>
           </div>
-          <div className="dictionary">
-            <h2 className="dictionary__title">Dictionary</h2>
-            <div className="dictionary__tabs">
-              <span>Tab</span>
-              <span>Tab</span>
-              <span>Tab</span>
-            </div>
-            <div className="dictionary__card">
-              <div className="dictionary__img-block"></div>
-              <div className="dictionary__text-block">
-                <h3 className="text-block__title">lorem</h3>
-                <span className="text-block__description">
-                  lorem lorem lorem
-                </span>
-              </div>
-            </div>
-            <div className="dictionary__card">
-              <div className="dictionary__img-block"></div>
-              <div className="dictionary__text-block">
-                <h3 className="text-block__title">lorem</h3>
-                <span className="text-block__description">
-                  lorem lorem lorem
-                </span>
-              </div>
-            </div>
-            <div className="dictionary__card">
-              <div className="dictionary__img-block"></div>
-              <div className="dictionary__text-block">
-                <h3 className="text-block__title">lorem</h3>
-                <span className="text-block__description">
-                  lorem lorem lorem
-                </span>
-              </div>
-            </div>
-            <div className="dictionary__card">
-              <div className="dictionary__img-block"></div>
-              <div className="dictionary__text-block">
-                <h3 className="text-block__title">lorem</h3>
-                <span className="text-block__description">
-                  lorem lorem lorem
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className="video">
-            <ReactPlayer
-              width="620px"
-              url="https://www.youtube.com/watch?v=ysz5S6PUM-U"
-            />
-          </div>
-        </div>
-        <div className="block">
-          <div className="block__profile">
-            <div className="search">
-              <input type="text"></input>
-            </div>
-            <div className="account"></div>
-          </div>
-          <h3>Games</h3>
-          <div className="block__game">
-            
-          </div>
-          <div className="block__game">
-
-          </div>
-          <div className="block__game">
-
-          </div>
-          <div className="block__game">
-
-          </div>
-        </div>
-      </main>
+        </Router>
+      </Context.Provider>
     </div>
   );
-}
+};
 
 export default App;
