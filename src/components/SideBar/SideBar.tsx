@@ -32,7 +32,9 @@ export const SideBar: React.FC = () => {
             <img className="menu__item" src={settings} alt="icon" />
           </Link>
         </div>
-        <img className="login" src={login} alt="icon" />
+        <Link to="/dictionary">
+          <img className="login" src={login} alt="icon" />
+        </Link>
       </div>
     </div>
   );

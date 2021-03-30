@@ -18,7 +18,7 @@ export const Units: React.FC<UnitsProps> = (props) => {
     <div className="units">
       {units[+categoryId].map((item, index) => {
         return (
-          <div className="units__card">
+          <div className="units__card" key={index}>
             <Link to={`/textbook/category-${categoryId}/unit-${index}`}>
               <span className="units__title">Unit {index + 1}:</span>
             </Link>

@@ -1,1 +1,2 @@
-export * from './IWordsService';
+export * from "./IWordsService";
+export * from "./ISettings";

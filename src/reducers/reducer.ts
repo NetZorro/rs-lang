@@ -9,7 +9,8 @@ export const initialState: any = {
     translateTextExample: true,
     showBtnGroups: true,
   },
-  words : [],
+  words: [],
+  dictionary: { deleted: [], difficult: [], study: [] },
 };
 
 export const reducer = (
@@ -22,11 +23,11 @@ export const reducer = (
         ...state,
         ...action.payload,
       };
-    case "add__words":
+    case "words__add":
       return {
         ...state,
-        ...action.payload
-      }
+        ...action.payload,
+      };
     default:
       return state;
   }

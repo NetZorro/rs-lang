@@ -1,4 +1,4 @@
-import {  useReducer } from "react";
+import { useReducer } from "react";
 import {
   Switch,
   Route,
@@ -14,6 +14,7 @@ import {
   Settings,
   Statistics,
   Games,
+  DictionaryPage,
 } from "pages";
 import { SideBar } from "components/SideBar";
 import "./App.css";
@@ -35,6 +36,7 @@ const App: React.FC = () => {
               <Route exact component={TextBook} path="/textbook" />
               <Route exact component={Statistics} path="/statistics" />
               <Route exact component={Games} path="/games" />
+              <Route exact component={DictionaryPage} path="/dictionary" />
               <Route
                 exact
                 component={Units}

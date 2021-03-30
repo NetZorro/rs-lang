@@ -20,12 +20,13 @@ export const Settings: React.FC = () => {
       },
     });
   };
+  console.log(state)
   return (
     <div>
       <h1 className="settings__title">Settings</h1>
       {settingsText.map((item, index) => {
         return (
-          <div>
+          <div key={index}>
             <label className="settings__label">
               {item}
               <input
