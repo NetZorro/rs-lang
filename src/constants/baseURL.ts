@@ -1,0 +1,1 @@
+export const baseURL: string = "https://react-learnwords-example.herokuapp.com/";
