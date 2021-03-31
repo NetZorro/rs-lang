@@ -20,13 +20,14 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
   category,
 }) => {
   const { state, dispatch } = useContext(Context);
-  const { settings, words, dictionary } = state;
+  const { words, dictionary } = state;
   useEffect(() => {
     wordsService
       .getWords(category, unit)
-      .then((resolve) =>
-        dispatch({ type: "words__add", payload: { ...state, words: resolve } })
-      );
+      .then((resolve) => {
+        dispatch({ type: "words__add", payload: { ...state, words: resolve } });
+      })
+      .catch((error) => error);
   }, []);
   const handlerDelete = (item: object) => {
     dispatch({
@@ -58,9 +59,9 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
         return (
           <WordCard
             item={item}
-            settings={settings}
             deleted={handlerDelete}
             difficult={handlerDifficult}
+            key={index}
           />
         );
       })}

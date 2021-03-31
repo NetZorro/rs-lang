@@ -4,10 +4,10 @@ export const Context = React.createContext({ state: {}, dispatch: {} } as any);
 
 export const initialState: any = {
   settings: {
-    translateWord: true,
-    translateTextMeaning: true,
-    translateTextExample: true,
-    showBtnGroups: true,
+    translateWord: false,
+    translateTextMeaning: false,
+    translateTextExample: false,
+    showBtnGroups: false,
   },
   words: [],
   dictionary: { deleted: [], difficult: [], study: [] },
