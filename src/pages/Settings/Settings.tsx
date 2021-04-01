@@ -1,6 +1,6 @@
 import { useContext } from "react";
 
-import { Context } from "reducers";
+import { Context } from "reducer";
 import { settingsText } from "constants/data";
 import "./settings.css";
 

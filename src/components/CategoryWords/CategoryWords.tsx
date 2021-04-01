@@ -1,7 +1,7 @@
 import { useEffect, useContext } from "react";
 
 import { wordsService } from "services";
-import { Context } from "reducers";
+import { Context } from "reducer";
 import { sortArrObj } from "utils/lib";
 import { WordCard } from "./WordCard";
 import { IWord } from "interfaces";

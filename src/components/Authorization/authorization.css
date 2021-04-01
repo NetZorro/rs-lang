@@ -1,0 +1,8 @@
+.authorization {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.authorization__login {
+    margin-bottom: 16px;
+}

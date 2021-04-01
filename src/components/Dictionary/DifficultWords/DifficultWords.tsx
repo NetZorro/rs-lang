@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Context } from "reducers";
+import { Context } from "reducer";
 import { IWord } from "interfaces";
 import { WordCard } from "components/CategoryWords/WordCard";
 
