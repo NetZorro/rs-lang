@@ -1,0 +1,13 @@
+.authorization__register {
+    height: 640px;
+    width: 400px;
+}
+.authorization__register {
+    /* margin-right: 8px; */
+}
+.register__block {
+    margin-bottom: 8px;
+}
+.register__block label {
+    margin-right: 8px;
+}

@@ -7,7 +7,7 @@ import "./authorizationPage.css";
 export const AuthorizationPage = () => {
   const [formRegister, setFormRegister] = useState(false);
   return (
-    <div>
+    <div className="authorization">
       {formRegister ? <Register /> : <Authorization />}
       <span onClick={() => setFormRegister(!formRegister)}>
         {formRegister ? "Login" : "Register"}

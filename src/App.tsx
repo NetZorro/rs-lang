@@ -14,7 +14,7 @@ import {
   Settings,
   Statistics,
   Games,
-  DictionaryPage,
+  // DictionaryPage,
   AuthorizationPage,
 } from "pages";
 import { SideBar } from "components/SideBar";

@@ -1,8 +1,9 @@
-.authorization {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.login__input-email {
+    /* margin-bottom: 16px; */
 }
-.authorization__login {
-    margin-bottom: 16px;
+.login__block {
+    margin-bottom: 8px;
+}
+.login__block label {
+    margin-right: 8px;
 }

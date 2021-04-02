@@ -19,34 +19,42 @@ export const Authorization: React.FC = () => {
   const handleChange = ({ target }: React.SyntheticEvent) => {
     let t = target as HTMLInputElement;
     setData({
+      ...data,
       [t.name]: t.value,
     } as IUserAuth);
   };
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    authorization.userAuth(data, dispatch);
+    authorization.userAuth(data, dispatch).then((res) => {
+      if (res) {
+        setData({ email: "", password: "" });
+      }
+    });
   };
   return (
-    <div className="authorization">
+    <div className="authorization__login">
       <form onSubmit={handleSubmit}>
         <h1>Login</h1>
-
-        <label>Username</label>
-        <input
-          name="email"
-          placeholder="Email"
-          value={data.email}
-          onChange={handleChange}
-          className="authorization__login"
-        />
-        <label>Password</label>
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={data.password}
-          onChange={handleChange}
-        />
+        <div className="login__block">
+          <label>Username</label>
+          <input
+            name="email"
+            placeholder="Email"
+            value={data.email}
+            onChange={handleChange}
+            className="login__input-email"
+          />
+        </div>
+        <div className="login__block">
+          <label>Password</label>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={data.password}
+            onChange={handleChange}
+          />
+        </div>
         <input type="submit" />
       </form>
     </div>

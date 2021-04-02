@@ -11,6 +11,8 @@ export const initialState: any = {
   },
   words: [],
   dictionary: { deleted: [], difficult: [], study: [] },
+  user: {},
+  login: false,
 };
 
 export const reducer = (
@@ -27,6 +29,16 @@ export const reducer = (
       return {
         ...state,
         ...action.payload,
+      };
+    case "user__authorization":
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case "user__loginIn":
+      return {
+        ...state,
+        login: true,
       };
     default:
       return state;
