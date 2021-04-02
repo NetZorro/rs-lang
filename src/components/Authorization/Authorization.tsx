@@ -33,7 +33,7 @@ export const Authorization: React.FC = () => {
   };
   return (
     <div className="authorization__login">
-      <form onSubmit={handleSubmit}>
+      <form className="login__form" onSubmit={handleSubmit}>
         <h1>Login</h1>
         <div className="login__block">
           <label>Username</label>

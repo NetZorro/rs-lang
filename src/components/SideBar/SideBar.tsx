@@ -11,7 +11,8 @@ import "./sideBar.css";
 
 /**
  *
- * Вывод левого меню
+ * Вывод меню .
+ * Иконок приложения и авторизации
  */
 export const SideBar: React.FC = () => {
   const { state, dispatch } = useContext(Context);
@@ -38,7 +39,9 @@ export const SideBar: React.FC = () => {
         </div>
         <Link to="/authorization">
           <div
-            onClick={() => { if (login) dispatch({ type: "user__logOut" })}}
+            onClick={() => {
+              if (login) dispatch({ type: "user__logOut" });
+            }}
             className="sidebar__login"
             style={
               login
@@ -47,11 +50,7 @@ export const SideBar: React.FC = () => {
             }
           >
             {user.message ? (
-              <span
-                className="sidebar__login-icon"
-              >
-                {user.name[0]}
-              </span>
+              <span className="sidebar__login-icon">{user.name[0]}</span>
             ) : null}
           </div>
         </Link>

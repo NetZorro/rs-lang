@@ -10,6 +10,9 @@ body {
 a {
   text-decoration: none;
 }
+h1 {
+  margin: 0;
+}
 @font-face {
   font-family: "Baloo Bhai";
   src: url(./assets/fonts/BalooBhai.ttf);
