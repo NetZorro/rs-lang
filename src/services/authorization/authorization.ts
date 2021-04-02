@@ -23,7 +23,7 @@ export const authorization = {
       if (result.status === 200) {
         let reply: Promise<JSON> = await result.json();
         await dispatch(loginUser(reply));
-        await dispatch({type: "user__loginIn"});
+        await dispatch({ type: "user__logIn" });
         return true;
       } else {
         return false;
@@ -58,5 +58,5 @@ export const authorization = {
 
 const loginUser = (userObj: Object) => ({
   type: "user__authorization",
-  payload: { user: userObj },
+  payload: userObj,
 });

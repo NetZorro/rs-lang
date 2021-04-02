@@ -6,7 +6,7 @@ import home from "../../assets/icon/home.svg";
 import hat from "../../assets/icon/hat.svg";
 import message from "../../assets/icon/message.svg";
 import settings from "../../assets/icon/settings.svg";
-import login from "../../assets/icon/login.svg";
+import loginIco from "../../assets/icon/login.svg";
 import "./sideBar.css";
 
 /**
@@ -15,8 +15,7 @@ import "./sideBar.css";
  */
 export const SideBar: React.FC = () => {
   const { state, dispatch } = useContext(Context);
-  const { user , login} = state;
-  console.log(state);
+  const { user, login } = state;
   return (
     <div className="sidebar">
       <div className="sidebar__container">
@@ -39,14 +38,21 @@ export const SideBar: React.FC = () => {
         </div>
         <Link to="/authorization">
           <div
+            onClick={() => { if (login) dispatch({ type: "user__logOut" })}}
             className="sidebar__login"
             style={
               login
-              ? { backgroundColor: "white", borderRadius: "8px" }
-              : { backgroundImage: `url("${login}")` }
+                ? { backgroundColor: "white", borderRadius: "8px" }
+                : { backgroundImage: `url("${loginIco}")` }
             }
           >
-            {user.message ? <span className="sidebar__login-icon">{user.name[0]}</span> : null}
+            {user.message ? (
+              <span
+                className="sidebar__login-icon"
+              >
+                {user.name[0]}
+              </span>
+            ) : null}
           </div>
         </Link>
       </div>

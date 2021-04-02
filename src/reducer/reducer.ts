@@ -33,12 +33,18 @@ export const reducer = (
     case "user__authorization":
       return {
         ...state,
-        ...action.payload,
+        user : action.payload,
       };
-    case "user__loginIn":
+    case "user__logIn":
       return {
         ...state,
         login: true,
+      };
+    case "user__logOut":
+      return {
+        ...state,
+        login: false,
+        user: {},
       };
     default:
       return state;
