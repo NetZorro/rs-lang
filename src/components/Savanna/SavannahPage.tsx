@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useState} from "react";
+import React, {useCallback, useEffect, useReducer, useState} from "react";
 import {ISavannahAction, ISavannahState, IWordWithSuccess} from "./interfacesSavannah";
 import cl from "classnames"
 
@@ -53,7 +53,13 @@ function savannahReducer(state: ISavannahState, action: ISavannahAction): ISavan
                 result: action.payload.result
             }
         }
-        default: throw new Error('Unexpected action');
+        case 'SETDEFAULT': {
+            return {
+                ...action.payload
+            }
+        }
+
+        default: return state;
     }
 }
 
@@ -65,6 +71,7 @@ const initialState = {
     result: false
 }
 
+
 const SavannahPage: React.FC = () => {
 
     const [gameState, changeGameState] = useReducer<React.Reducer<ISavannahState, ISavannahAction>>(savannahReducer, initialState);
@@ -72,10 +79,56 @@ const SavannahPage: React.FC = () => {
     const [refreshRound, setRefreshRound] = useState<boolean>(false);
     const [errorWords, setErrorWords] = useState<number>(0);
     const [successWords, setSuccessWords] = useState<number>(0);
+    const [timeLeft, setTimeLeft] = useState<number>(0);
+    const [myIntervalId, setMyIntervalId] = useState<any>(0);
+    const [pressKey, setPressKey] = useState<number>(0)
 
     // const [isGuessed, setIsGuessed] = useState<boolean>(false);
 
     const isGuessed = selectWordId === gameState.gameWordArray[gameState.gameWordArray.length - 1]?.id;
+
+    const handleUserKeyPress = useCallback(event => {
+        const { key, keyCode } = event;
+        console.log('key >> ', key)
+
+
+        if (key === '1') { setPressKey(0)}
+        if (key === '2') { setPressKey(1)}
+        if (key === '3') { setPressKey(2)}
+        if (key === '4') { setPressKey(3)}
+
+    }, []);
+
+    useEffect(() => {
+        document.addEventListener('keyup', handleUserKeyPress);
+
+        return () => {
+            document.removeEventListener('keyup', handleUserKeyPress);
+        };
+    }, [handleUserKeyPress]);
+
+    useEffect(() => {
+        console.log(pressKey, gameState.roundWordArray);
+
+        if (gameState.roundWordArray.length > 0) {
+            const wordId = gameState.roundWordArray[pressKey].id;
+
+            let arr = gameState.gameWordArray;
+
+            setSelectWordId(wordId);
+            clearInterval(myIntervalId);
+
+            if (wordId === gameState.gameWordArray[gameState.gameWordArray.length - 1].id) {
+                playAudio('audio', correctAudio);
+                arr[arr.length - 1].success = true;
+                changeGameState({type: 'ADDWORD', payload: {...gameState, gameWordArray: arr}})
+            } else {
+                playAudio('audio', errorAudio);
+                changeGameState({type: 'SETATTEMPT', payload: {...gameState, attempt: gameState.attempt - 1}})
+            }
+        }
+
+    }, [pressKey])
 
     const getWordDataNewRound = async () => {
         setSelectWordId('');
@@ -109,30 +162,64 @@ const SavannahPage: React.FC = () => {
         console.log('selectWordId useEffect >>', selectWordId);
 
         if (selectWordId !== '') {
-            setRefreshRound(true);
+            setTimeout(() => {
+                if (gameState.attempt > 0) {
+                    setRefreshRound(true);
+                }
+            }, 2000);
         }
     }, [selectWordId])
 
     useEffect(() => {
         console.log('gameState.inProgress useEffect >>', gameState.inProgress);
 
-        const getWordData = async () => {
-            await getWordDataNewRound();
-        };
-
         if (gameState.inProgress) {
-            getWordData();
+            setRefreshRound(true);
         }
 
     },[gameState.inProgress]);
 
 
     useEffect(() => {
-        console.log('gameState useEffect >>', gameState.attempt);
+        // Добавились новые слова для ирры в массив, запускаем таймер
+        console.log('gameState.roundWordArray >>', gameState.roundWordArray);
+        setTimeLeft(5);
+
+        if (gameState.roundWordArray.length > 0) {
+            const timerID = setInterval(() => {
+                setTimeLeft((prevValue) => {
+                    if (prevValue === 0) {
+                        clearInterval(timerID);
+                        playAudio('audio', errorAudio);
+                        changeGameState({type: 'SETATTEMPT', payload: {...gameState, attempt: gameState.attempt - 1}})
+                        setRefreshRound(true);
+                        return 0;
+                    }
+
+                    return prevValue - 1;
+                });
+            }, 1000);
+
+            setMyIntervalId(timerID);
+
+            const cleanup = () => {
+                console.log('CLEAR TIMER')
+
+                clearInterval(timerID);
+            };
+
+            return cleanup;
+        }
+    }, [gameState.roundWordArray])
+
+    useEffect(() => {
+        console.log('gameState.attempt useEffect >>', gameState.attempt);
 
         if (gameState.attempt === 0) {
-            changeGameState({type: 'RESULT', payload: {...gameState, result:  true }})
+            clearInterval(myIntervalId);
+            setSelectWordId('');
             setRefreshRound(false);
+            changeGameState({type: 'RESULT', payload: {...gameState, result:  true }})
         }
     }, [gameState.attempt]);
 
@@ -150,7 +237,7 @@ const SavannahPage: React.FC = () => {
         return (
             <div className={cl('cards__item', {
                 'activeCard': (isSelected && isGuessed) || (selectWordId !== '' && !isGuessed && word.id === gameState.gameWordArray[gameState.gameWordArray.length - 1].id),
-                'activeCardError': isSelected && !isGuessed
+                'activeCardError': (isSelected && !isGuessed) || ((timeLeft === 0) && (word.id === gameState.gameWordArray[gameState.gameWordArray.length - 1].id))
             })}
                  data-wordid={word.id}
                  onClick={(event) => {registerCardsClickEvent(event, word.id)}}
@@ -184,6 +271,7 @@ const SavannahPage: React.FC = () => {
         let arr = gameState.gameWordArray
 
         setSelectWordId(wordId);
+        clearInterval(myIntervalId);
 
         if (wordId === gameState.gameWordArray[gameState.gameWordArray.length - 1].id) {
             playAudio('audio', correctAudio);
@@ -193,25 +281,6 @@ const SavannahPage: React.FC = () => {
             playAudio('audio', errorAudio);
             changeGameState({type: 'SETATTEMPT', payload: {...gameState, attempt: gameState.attempt - 1}})
         }
-
-
-        // const currentWord = document.querySelector('.current__word');
-        //
-        // this.stopTimer();
-        // currentWord.classList.add('fadeout');
-        //
-        //     if (clickedCard === this.gameWordArray[this.gameWordArray.length - 1].id) {
-        //         this.setActiveCard(this.gameWordArray[this.gameWordArray.length - 1].id, 'activeCard');
-        //         this.gameWordArray[this.gameWordArray.length - 1].success = true;
-        //         playAudio('audio', correctAudio);
-        //         this.restartTimer();
-        //     } else {
-        //         this.attempt -= 1;
-        //         this.setActiveCard(clickedCard, 'activeCardError');
-        //         this.setActiveCard(this.gameWordArray[this.gameWordArray.length - 1].id, 'activeCard');
-        //         playAudio('audio', errorAudio);
-        //         this.restartTimer();
-        //     }
     }
 
     return (
@@ -239,7 +308,7 @@ const SavannahPage: React.FC = () => {
                 <div className="savanna-container flex-column justify-content-center align-items-center">
                     <div className="savanna-wrapper d-flex flex-column align-items-center container">
                         <div className="savanna-info d-flex flex-row align-items-center justify-content-between">
-                            <span className="timer"/>
+                          <span className="timer">Time Left: {timeLeft}</span>
                           <div className="savanna-info__attempt"> Attempt: {gameState.attempt} </div>
                         </div>
 
@@ -291,7 +360,13 @@ const SavannahPage: React.FC = () => {
                         </div>
 
                         <div className="result-page__btns-res text-center mt-5">
-                            <a href="#" className="btn btn-primary btn-md result-page__new-game">New game</a>
+                            <a href="#" className="btn btn-primary btn-md result-page__new-game"
+                               onClick={() => {
+                                   changeGameState({type: 'INPROGRESS', payload: {...gameState, inProgress: false}})
+                                   changeGameState({type: 'SETDEFAULT', payload: {...initialState }})
+                               }}>
+                              New game
+                            </a>
                         </div>
                     </div>
                 </div>

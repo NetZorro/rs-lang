@@ -66,37 +66,4 @@ export default class WordServices {
 
         return cnt;
     }
-
-    // getWordById(id) {
-    //     let wordObj = {};
-    //     this.currentWordArray.forEach((item) => {
-    //         if (item.id === id) {
-    //             wordObj = item;
-    //         }
-    //     });
-    //
-    //     return wordObj;
-    // }
-    //
-    // getWordByWord(word) {
-    //     let wordObj = {};
-    //     this.currentWordArray.forEach((item) => {
-    //         if (item.word.toUpperCase() === word.toUpperCase()) {
-    //             wordObj = item;
-    //         }
-    //     });
-    //
-    //     return wordObj;
-    // }
-    //
-    // setWordSuccessById(id) {
-    //     this.currentWordArray.forEach((item) => {
-    //         if (item.id === id) {
-    //             // eslint-disable-next-line no-param-reassign
-    //             item.success = true;
-    //         }
-    //     });
-    // }
-    //
-
 }
