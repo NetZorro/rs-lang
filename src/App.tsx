@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import React, { useReducer } from "react";
 import {
   Switch,
   Route,
@@ -19,39 +19,43 @@ import {
 import { SideBar } from "components/SideBar";
 import "./App.css";
 import { initialState, reducer, Context } from "reducers";
+import SavannahPage from "./components/Savanna/SavannahPage";
 
 const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   return (
-    <div className="body">
-      <Context.Provider value={{ state, dispatch }}>
-        <Router>
-          <div className="body__sidebar">
-            <SideBar />
-          </div>
-          <div className="body__content">
-            <Switch>
-              <Route exact component={Home} path="/" />
-              <Route exact component={Settings} path="/settings" />
-              <Route exact component={TextBook} path="/textbook" />
-              <Route exact component={Statistics} path="/statistics" />
-              <Route exact component={Games} path="/games" />
-              <Route exact component={DictionaryPage} path="/dictionary" />
-              <Route
-                exact
-                component={Units}
-                path="/textbook/category-:categoryId/"
-              />
-              <Route
-                component={Words}
-                path="/textbook/category-:categoryId/unit-:unitId"
-              />
-              <Redirect from="/" to="/" />
-            </Switch>
-          </div>
-        </Router>
-      </Context.Provider>
-    </div>
+      <>
+        <SavannahPage />
+      </>
+    // <div className="body">
+    //   <Context.Provider value={{ state, dispatch }}>
+    //     <Router>
+    //       <div className="body__sidebar">
+    //         <SideBar />
+    //       </div>
+    //       <div className="body__content">
+    //         <Switch>
+    //           <Route exact component={Home} path="/" />
+    //           <Route exact component={Settings} path="/settings" />
+    //           <Route exact component={TextBook} path="/textbook" />
+    //           <Route exact component={Statistics} path="/statistics" />
+    //           <Route exact component={Games} path="/games" />
+    //           <Route exact component={DictionaryPage} path="/dictionary" />
+    //           <Route
+    //             exact
+    //             component={Units}
+    //             path="/textbook/category-:categoryId/"
+    //           />
+    //           <Route
+    //             component={Words}
+    //             path="/textbook/category-:categoryId/unit-:unitId"
+    //           />
+    //           <Redirect from="/" to="/" />
+    //         </Switch>
+    //       </div>
+    //     </Router>
+    //   </Context.Provider>
+    // </div>
   );
 };
 
