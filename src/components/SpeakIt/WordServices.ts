@@ -45,6 +45,14 @@ export default class WordServices {
         return result;
     }
 
+    static getWordByWord(wordWithSuccessArray: IWordWithSuccess[], word: string): IWordWithSuccess  {
+        return  <IWordWithSuccess>wordWithSuccessArray.find((item) => {
+            if (item.word.toUpperCase() === word.toUpperCase()) {
+                return item;
+            }
+        });
+    }
+
     static getCountError(wordArray: IWordWithSuccess[]): number {
         let cnt = 0;
 
