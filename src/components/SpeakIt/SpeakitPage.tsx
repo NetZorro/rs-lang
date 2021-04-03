@@ -1,5 +1,6 @@
 import React, {useEffect, useReducer, useState} from "react";
 import cl from "classnames"
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 
 import './speakit.scss'
 
@@ -12,7 +13,7 @@ import blank from "./images/blank.jpg"
 
 import {ISpeakitAction, ISpeakitState, IWordWithSuccess} from "./interfacesSpeakit";
 import WordServices from "./WordServices";
-import {getRandomInt, playAudio} from "./helpers";
+import {playAudio} from "./helpers";
 import templatesURL from "./templatesURL";
 
 function speakitReducer(state: ISpeakitState, action: ISpeakitAction): ISpeakitState {
@@ -68,6 +69,8 @@ const initialState = {
 const SpeakitPage: React.FC = () => {
     const [gameState, changeGameState] = useReducer<React.Reducer<ISpeakitState, ISpeakitAction>>(speakitReducer, initialState);
     const [selectWord, setSelectWord] = useState<IWordWithSuccess>({} as IWordWithSuccess);
+    const { transcript, interimTranscript, finalTranscript, resetTranscript} = useSpeechRecognition();
+    const [message, setMessage] = useState<string>('');
 
     const getWordDataNewRound = async () => {
         // setSelectWordId('');
@@ -75,7 +78,6 @@ const SpeakitPage: React.FC = () => {
         const wordsList = await WordServices.getWordList(0, 20); // - получаем IWord из вне, а дальше делаем все что надо
 
         const wordsListWithSuccess = WordServices.setFalseToSuccessField(wordsList);
-        const idx = getRandomInt(wordsList.length - 1);
 
         const xRoundWordArray = WordServices.getRoundWordsArray(wordsListWithSuccess, 10);
 
@@ -83,7 +85,36 @@ const SpeakitPage: React.FC = () => {
     };
 
     useEffect(() => {
+        if (finalTranscript !== '') {
+            setMessage(finalTranscript);
+            resetTranscript();
+        }
+    }, [interimTranscript, finalTranscript]);
+
+    useEffect(() => {
+        const word = WordServices.getWordByWord(gameState.roundWordArray, message);
+
+        if (word !== undefined) {
+            setSelectWord(word);
+            playAudio('audio', correctAudio);
+        }
+    }, [message]);
+
+    useEffect(() => {
+        if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
+            alert("Ups, your browser is not supported SpeechRecognition!");
+        }
+    }, []);
+
+    useEffect(() => {
         setSelectWord({} as IWordWithSuccess);
+
+        if (gameState.microphoneOn) {
+            SpeechRecognition.startListening({ continuous: true, language: 'en-US' });
+        } else {
+            SpeechRecognition.stopListening();
+        }
+
     }, [gameState.microphoneOn])
 
     useEffect(() => {
@@ -97,9 +128,7 @@ const SpeakitPage: React.FC = () => {
 
     },[gameState.inProgress]);
 
-    function registerCardsClickEvent(event: React.MouseEvent<HTMLDivElement>, word: IWordWithSuccess) {
-        console.log('event click >> ', word);
-
+    function registerCardsClickEvent(word: IWordWithSuccess) {
         if (!gameState.microphoneOn) {
             setSelectWord(word);
             playAudio('audio', templatesURL.getAudioURL(word.audio));
@@ -114,7 +143,7 @@ const SpeakitPage: React.FC = () => {
                 'activeCard': (selectWord.id === word.id),
             })}
                  data-wordid={word.id}
-                 onClick={(event) => {registerCardsClickEvent(event, word)}}
+                 onClick={(event) => {registerCardsClickEvent(word)}}
             >
                 <span className="cards__item--audio-icon" data-wordid={word.id}>
                     <img data-wordid={word.id} src={audio} alt="audio icon" /> </span>
@@ -175,8 +204,8 @@ const SpeakitPage: React.FC = () => {
                             (<img className="current__image" src={blank}
                                   alt="image of current word"/>)
                         }
-                      <p className="current__translation text-center">{selectWord.wordTranslate}</p>
-                      <input type="text" className={cl('current__input', {
+                      <p className="current__translation text-center">{selectWord.wordTranslate }</p>
+                      <input type="text" value={ message } className={cl('current__input', {
                           'none': !gameState.microphoneOn
                       })} readOnly />
                     </div>
