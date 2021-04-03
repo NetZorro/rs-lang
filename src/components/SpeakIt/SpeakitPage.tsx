@@ -84,7 +84,7 @@ const SpeakitPage: React.FC = () => {
 
         const wordsListWithSuccess = WordServices.setFalseToSuccessField(wordsList);
 
-        const xRoundWordArray = WordServices.getRoundWordsArray(wordsListWithSuccess, 2);
+        const xRoundWordArray = WordServices.getRoundWordsArray(wordsListWithSuccess, 10);
 
         changeGameState({type: 'NEWROUND', payload: {...gameState, roundWordArray:  xRoundWordArray }})
     };
@@ -279,7 +279,7 @@ const SpeakitPage: React.FC = () => {
                         }
                     </div>
                     <div className="btns d-flex flex-column flex-md-row mt-4">
-                      <a href="#" className="btn btn-lg btn-info btns__restart mb-2 mb-md-0 mx-0 mx-md-2">Restart</a>
+                      <a href="#" className="btn btn-lg btn-info btns__restart mb-2 mb-md-0 mx-0 mx-md-2" onClick={() => {setRestart(true)}}>Restart</a>
                       <a href="#" className="btn btn-lg btn-info btns__speak mb-2 mb-md-0 mx-0 mx-md-2"
                          onClick={() => changeGameState({type: 'MICROPHONE', payload: {...gameState, microphoneOn: !gameState.microphoneOn}})}>Press and speak</a>
                       <a href="#" className="btn btn-lg btn-info btns__result mb-2 mb-md-0 mx-0 mx-md-2"
