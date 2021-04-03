@@ -115,16 +115,19 @@ const SavannahPage: React.FC = () => {
 
             let arr = gameState.gameWordArray;
 
-            setSelectWordId(wordId);
-            clearInterval(myIntervalId);
+            if (selectWordId === '') {
+                setSelectWordId(wordId);
 
-            if (wordId === gameState.gameWordArray[gameState.gameWordArray.length - 1].id) {
-                playAudio('audio', correctAudio);
-                arr[arr.length - 1].success = true;
-                changeGameState({type: 'ADDWORD', payload: {...gameState, gameWordArray: arr}})
-            } else {
-                playAudio('audio', errorAudio);
-                changeGameState({type: 'SETATTEMPT', payload: {...gameState, attempt: gameState.attempt - 1}})
+                clearInterval(myIntervalId);
+
+                if (wordId === gameState.gameWordArray[gameState.gameWordArray.length - 1].id) {
+                    playAudio('audio', correctAudio);
+                    arr[arr.length - 1].success = true;
+                    changeGameState({type: 'ADDWORD', payload: {...gameState, gameWordArray: arr}})
+                } else {
+                    playAudio('audio', errorAudio);
+                    changeGameState({type: 'SETATTEMPT', payload: {...gameState, attempt: gameState.attempt - 1}})
+                }
             }
         }
 
@@ -268,18 +271,21 @@ const SavannahPage: React.FC = () => {
 
     function registerCardsClickEvent(event: React.MouseEvent<HTMLDivElement>, wordId: string) {
         console.log('event >> ', wordId);
-        let arr = gameState.gameWordArray
 
-        setSelectWordId(wordId);
-        clearInterval(myIntervalId);
+        if (selectWordId === '') {
+            let arr = gameState.gameWordArray
 
-        if (wordId === gameState.gameWordArray[gameState.gameWordArray.length - 1].id) {
-            playAudio('audio', correctAudio);
-            arr[arr.length - 1].success = true;
-            changeGameState({type: 'ADDWORD', payload: {...gameState, gameWordArray:  arr}})
-        } else {
-            playAudio('audio', errorAudio);
-            changeGameState({type: 'SETATTEMPT', payload: {...gameState, attempt: gameState.attempt - 1}})
+            setSelectWordId(wordId);
+            clearInterval(myIntervalId);
+
+            if (wordId === gameState.gameWordArray[gameState.gameWordArray.length - 1].id) {
+                playAudio('audio', correctAudio);
+                arr[arr.length - 1].success = true;
+                changeGameState({type: 'ADDWORD', payload: {...gameState, gameWordArray: arr}})
+            } else {
+                playAudio('audio', errorAudio);
+                changeGameState({type: 'SETATTEMPT', payload: {...gameState, attempt: gameState.attempt - 1}})
+            }
         }
     }
 
@@ -313,7 +319,7 @@ const SavannahPage: React.FC = () => {
                         </div>
 
                         <div className="current">
-                          <p className="current__word text-primary">
+                          <p className={cl('current__word',  'text-primary')}>
                               {gameState.gameWordArray[gameState.gameWordArray.length - 1]?.word}
                           </p>
                         </div>
