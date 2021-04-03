@@ -42,6 +42,12 @@ function speakitReducer(state: ISpeakitState, action: ISpeakitAction): ISpeakitS
                 result: action.payload.result
             }
         }
+        case 'ADDWORD': {
+            return {
+                ...state,
+                roundWordArray: action.payload.roundWordArray
+            }
+        }
         case 'MICROPHONE': {
             return {
                 ...state,
@@ -69,17 +75,16 @@ const initialState = {
 const SpeakitPage: React.FC = () => {
     const [gameState, changeGameState] = useReducer<React.Reducer<ISpeakitState, ISpeakitAction>>(speakitReducer, initialState);
     const [selectWord, setSelectWord] = useState<IWordWithSuccess>({} as IWordWithSuccess);
-    const { transcript, interimTranscript, finalTranscript, resetTranscript} = useSpeechRecognition();
+    const { interimTranscript, finalTranscript, resetTranscript} = useSpeechRecognition();
     const [message, setMessage] = useState<string>('');
+    const [restart, setRestart] = useState<boolean>(false);
 
     const getWordDataNewRound = async () => {
-        // setSelectWordId('');
-
         const wordsList = await WordServices.getWordList(0, 20); // - получаем IWord из вне, а дальше делаем все что надо
 
         const wordsListWithSuccess = WordServices.setFalseToSuccessField(wordsList);
 
-        const xRoundWordArray = WordServices.getRoundWordsArray(wordsListWithSuccess, 10);
+        const xRoundWordArray = WordServices.getRoundWordsArray(wordsListWithSuccess, 2);
 
         changeGameState({type: 'NEWROUND', payload: {...gameState, roundWordArray:  xRoundWordArray }})
     };
@@ -93,12 +98,27 @@ const SpeakitPage: React.FC = () => {
 
     useEffect(() => {
         const word = WordServices.getWordByWord(gameState.roundWordArray, message);
+        let arr = gameState.roundWordArray;
 
         if (word !== undefined) {
             setSelectWord(word);
+
+            const idx = gameState.roundWordArray.indexOf(word);
+            arr[idx].success = true;
+
+            changeGameState({type: 'ADDWORD', payload: {...gameState, roundWordArray: arr}})
+
             playAudio('audio', correctAudio);
+
+            const n = WordServices.getCountSuccess(arr);
+
+            if (n === arr.length) {
+                changeGameState({type: 'RESULT', payload: {...gameState, result:  true }});
+            }
+
         }
     }, [message]);
+
 
     useEffect(() => {
         if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
@@ -128,6 +148,23 @@ const SpeakitPage: React.FC = () => {
 
     },[gameState.inProgress]);
 
+    useEffect(() => {
+        if (restart) {
+
+            const getWordData = async () => {
+                await getWordDataNewRound();
+            };
+
+            getWordData();
+
+
+            changeGameState({type: 'RESULT', payload: {...gameState, result:  false }});
+            changeGameState({type: 'MICROPHONE', payload: {...gameState, microphoneOn:  false }})
+            setRestart(false);
+        }
+
+    }, [restart])
+
     function registerCardsClickEvent(word: IWordWithSuccess) {
         if (!gameState.microphoneOn) {
             setSelectWord(word);
@@ -140,7 +177,7 @@ const SpeakitPage: React.FC = () => {
 
         return (
             <div className={cl('cards__item', {
-                'activeCard': (selectWord.id === word.id),
+                'activeCard': (selectWord.id === word.id) || ((gameState.roundWordArray[gameState.roundWordArray.indexOf(word)].success) && gameState.microphoneOn),
             })}
                  data-wordid={word.id}
                  onClick={(event) => {registerCardsClickEvent(word)}}
@@ -155,10 +192,26 @@ const SpeakitPage: React.FC = () => {
 
     function Star() {
         return (
-            <div className="info__score--star"></div>
+            <div className="info__score--star"/>
         )
     }
 
+    function ResultWord(word: IWordWithSuccess) {
+        return (
+            <div className="resultpage__item" data-wordid={word.id} onClick={(event) => {registerResultWordClickEvent(word.audio)}}>
+                <span className="resultpage__item--audio-icon">
+                    <img data-wordid={word.id} src={audio} alt="audio icon" />
+                </span>
+                <p className="resultpage__item--word" data-wordid={word.id}>{word.word}</p>
+                <p className="resultpage__item--transcription" data-wordid={word.id}>{word.wordTranslate}</p>
+                <p className="resultpage__item--translation" data-wordid={word.id}>{word.transcription}</p>
+            </div>
+        )
+    }
+
+    function registerResultWordClickEvent(wordAudio: string) {
+        playAudio('audio', `https://raw.githubusercontent.com/irinainina/rslang/rslang-data/data/${wordAudio}`);
+    }
 
     return (
         <div className="main-speakit mt-0">
@@ -195,7 +248,15 @@ const SpeakitPage: React.FC = () => {
                         <span className="speakit-info__pages--page" data-groupno="4"/>
                         <span className="speakit-info__pages--page" data-groupno="5"/>
                       </div>
-                      <div className="speakit-info__score pt-3 pt-md-0"/>
+                      <div className="speakit-info__score pt-3 pt-md-0">
+                          {
+                              gameState.roundWordArray.map((item: IWordWithSuccess, idx: number) => {
+                                  if (item.success) {
+                                      return Star();
+                                  }
+                              })
+                          }
+                      </div>
                     </div>
                     <div className="current d-flex flex-column align-items-center">
                         { selectWord.image ?
@@ -216,63 +277,62 @@ const SpeakitPage: React.FC = () => {
                             })
 
                         }
-
                     </div>
                     <div className="btns d-flex flex-column flex-md-row mt-4">
                       <a href="#" className="btn btn-lg btn-info btns__restart mb-2 mb-md-0 mx-0 mx-md-2">Restart</a>
                       <a href="#" className="btn btn-lg btn-info btns__speak mb-2 mb-md-0 mx-0 mx-md-2"
                          onClick={() => changeGameState({type: 'MICROPHONE', payload: {...gameState, microphoneOn: !gameState.microphoneOn}})}>Press and speak</a>
-                      <a href="#" className="btn btn-lg btn-info btns__result mb-2 mb-md-0 mx-0 mx-md-2">Results</a>
+                      <a href="#" className="btn btn-lg btn-info btns__result mb-2 mb-md-0 mx-0 mx-md-2"
+                         onClick={() => changeGameState({type: 'RESULT', payload: {...gameState, result:  true }})}>
+                        Results
+                      </a>
                     </div>
                   </div>
                 </div>
             }
 
-            {/*{ gameState.result &&*/}
-            {/*    <div className="result-page align-items-center justify-content-center">*/}
-            {/*        <div className="result-page__container">*/}
-            {/*            <p className="results__container--errors">Errors*/}
-            {/*                <span className="result-page__errors-num">{errorWords}</span>*/}
-            {/*            </p>*/}
-            {/*            <div className="result-page__errors-item">*/}
-            {/*                {*/}
-            {/*                    gameState.gameWordArray.map((item: IWordWithSuccess) => {*/}
-            {/*                        if (!item.success) {*/}
-            {/*                            return ResultWord(item);*/}
-            {/*                        }*/}
-            {/*                    })*/}
-            {/*                }*/}
-            {/*            </div>*/}
-            {/*            <p className="results__container--success mt-3">Success*/}
-            {/*                <span className="result-page__success-num">{successWords}</span>*/}
-            {/*            </p>*/}
-            {/*            <div className="result-page__success-item">*/}
-            {/*                {*/}
-            {/*                    gameState.gameWordArray.map((item: IWordWithSuccess) => {*/}
-            {/*                        if (item.success) {*/}
-            {/*                            return ResultWord(item);*/}
-            {/*                        }*/}
-            {/*                    })*/}
-            {/*                }*/}
-
-            {/*            </div>*/}
-
-            {/*            <div className="result-page__btns-res text-center mt-5">*/}
-            {/*                <a href="#" className="btn btn-primary btn-md result-page__new-game"*/}
-            {/*                   onClick={() => {*/}
-            {/*                       changeGameState({type: 'INPROGRESS', payload: {...gameState, inProgress: false}})*/}
-            {/*                       changeGameState({type: 'SETDEFAULT', payload: {...initialState }})*/}
-            {/*                   }}>*/}
-            {/*                  New game*/}
-            {/*                </a>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-            {/*    </div>*/}
-            {/*}*/}
-
+            { gameState.result &&
+                <div className="resultpage align-items-center justify-content-center">
+                    <div className="resultpage__container">
+                        <p className="results__container--errors">Errors
+                            <span className="resultpage__errors-num">{WordServices.getCountError(gameState.roundWordArray)}</span>
+                        </p>
+                        <div className="resultpage__errors-item mb-4">
+                            {
+                                gameState.roundWordArray.map((item: IWordWithSuccess) => {
+                                    if (!item.success) {
+                                        return ResultWord(item);
+                                    }
+                                })
+                            }
+                        </div>
+                        <p className="results__container--success">Success
+                            <span className="resultpage__success-num">{WordServices.getCountSuccess(gameState.roundWordArray)}</span>
+                        </p>
+                        <div className="resultpage__success-item">
+                            {
+                                gameState.roundWordArray.map((item: IWordWithSuccess) => {
+                                    if (item.success) {
+                                        return ResultWord(item);
+                                    }
+                                })
+                            }
+                        </div>
+                        <div
+                            className="resultpage__btns-res d-flex flex-column flex-sm-row justify-content-center text-center mt-4">
+                            <a href="#" className="btn btn-info btn-md resultpage__return mb-2 m-sm-0 mx-0 mx-sm-3"
+                               onClick={() => changeGameState({type: 'RESULT', payload: {...gameState, result:  false }})}>Return</a>
+                            <a href="#" className="btn btn-info btn-md resultpage__new-game mb-2 m-sm-0 mx-0 mx-sm-3"
+                                onClick={() => setRestart(true)}
+                            >New game</a>
+                            {/*<a href="#"*/}
+                            {/*   className="btn btn-info btn-md resultpage__statistics mb-2 m-sm-0 mx-0 mx-sm-3">Statistics</a>*/}
+                        </div>
+                    </div>
+                </div>
+            }
 
             <audio className="audio"/>
-
         </div>
     );
 };
