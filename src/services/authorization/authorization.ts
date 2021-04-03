@@ -24,6 +24,7 @@ export const authorization = {
         let reply: Promise<JSON> = await result.json();
         await dispatch(loginUser(reply));
         await dispatch({ type: "user__logIn" });
+        sessionStorage.setItem("user", JSON.stringify(reply));
         return true;
       } else {
         return false;

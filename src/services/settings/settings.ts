@@ -1,11 +1,17 @@
 import { baseURL } from "constants/baseURL";
 import { ISettings } from "interfaces";
 
-export const Settings = {
-  getSettings: async (id: number): Promise<ISettings> => {
+export const serviceSettings = {
+  getSettings: async (id: number, token: string): Promise<ISettings> => {
     let result;
     try {
-      result = await fetch(`${baseURL}users/${id}/settings`);
+      result = await fetch(`${baseURL}users/${id}/settings`, {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+        },
+        body: JSON.stringify(authTokenBody(token)),
+      });
     } catch (error) {
       result = error;
     }
@@ -18,4 +24,8 @@ export const Settings = {
     });
     return await result.json();
   },
+};
+
+const authTokenBody = (token: string) => {
+  return { Authorization: `Bearer ${token}` };
 };

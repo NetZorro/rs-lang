@@ -2,12 +2,16 @@ import { useContext } from "react";
 
 import { Context } from "reducer";
 import { settingsText } from "constants/data";
+import { serviceSettings } from "services";
 import "./settings.css";
 
 export const Settings: React.FC = () => {
   const { state, dispatch } = useContext(Context);
-  const { settings } = state;
+  const { login, user, settings } = state;
   const nameObjProperties: string[] = Object.keys(settings);
+  if (login) {
+    serviceSettings.getSettings(user.userId, user.token);
+  }
   const dispatchId = (id: number) => {
     dispatch({
       type: "settings__update",
@@ -20,7 +24,6 @@ export const Settings: React.FC = () => {
       },
     });
   };
-  console.log(state)
   return (
     <div>
       <h1 className="settings__title">Settings</h1>

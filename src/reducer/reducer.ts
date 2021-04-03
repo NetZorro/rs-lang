@@ -1,5 +1,7 @@
 import React from "react";
 
+import { userAuth, userAuthObj, removeUserSessionStorage } from "utils/lib";
+
 export const Context = React.createContext({ state: {}, dispatch: {} } as any);
 
 export const initialState: any = {
@@ -11,8 +13,8 @@ export const initialState: any = {
   },
   words: [],
   dictionary: { deleted: [], difficult: [], study: [] },
-  user: {},
-  login: false,
+  user: userAuthObj(),
+  login: userAuth(),
 };
 
 export const reducer = (
@@ -33,7 +35,7 @@ export const reducer = (
     case "user__authorization":
       return {
         ...state,
-        user : action.payload,
+        user: action.payload,
       };
     case "user__logIn":
       return {
@@ -41,6 +43,7 @@ export const reducer = (
         login: true,
       };
     case "user__logOut":
+      removeUserSessionStorage();
       return {
         ...state,
         login: false,
