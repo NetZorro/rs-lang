@@ -1,1 +1,1 @@
-export const baseURL: string = "https://react-learnwords-example.herokuapp.com/";
+export const baseURL: string = "https://rslangteam98.herokuapp.com/";
