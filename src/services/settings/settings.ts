@@ -1,31 +1,42 @@
 import { baseURL } from "constants/baseURL";
-import { ISettings } from "interfaces";
 
 export const serviceSettings = {
-  getSettings: async (id: number, token: string): Promise<ISettings> => {
-    let result;
-    try {
-      result = await fetch(`${baseURL}users/${id}/settings`, {
-        method: "POST",
-        headers: {
-          accept: "application/json",
-        },
-        body: JSON.stringify(authTokenBody(token)),
-      });
-    } catch (error) {
-      result = error;
-    }
-    return (await result) ? result.json() : result;
-  },
-  putSettings: async (id: number, data: string) => {
-    let result = await fetch(`${baseURL}`, {
-      method: "PUT",
-      body: data,
+  async getSettings(
+    id: number,
+    token: string,
+    dispatch: any
+  ): Promise<boolean> {
+    let result = await fetch(`${baseURL}users/${id}/settings`, {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
-    return await result.json();
+    const { status } = result;
+    if (status === 200) {
+      let reply = await result.json();
+      dispatch(dispatchUserSettings(reply));
+      return true;
+    }
+    return false;
+  },
+  async putSettings(id: number, token: string, data: string): Promise<void> {
+    await fetch(`${baseURL}users/${id}/settings`, {
+      method: "PUT",
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: convertJSONSettings(data),
+    });
   },
 };
 
-const authTokenBody = (token: string) => {
-  return { Authorization: `Bearer ${token}` };
+const convertJSONSettings = (data: any) => {
+  return JSON.stringify({ optional: data });
+};
+const dispatchUserSettings = (data: any) => {
+  return { type: "settings__update", payload: { settings: data.optional } };
 };
