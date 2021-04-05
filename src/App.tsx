@@ -20,15 +20,14 @@ import {
 import { SideBar } from "components/SideBar";
 import "./App.css";
 
-import { initialState, reducer, Context } from "reducers";
+import { initialState, reducer, Context } from "reducer";
 import SavannahPage from "./components/Savanna/SavannahPage";
-import SpeakitPage from "./components/Speakit/SpeakitPage";
+import SpeakitPage from "components/SpeakIt/SpeakitPage";
 
 const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   return (
-
-   <div className="body">
+    <div className="body">
       <>
         <SpeakitPage />
       </>
