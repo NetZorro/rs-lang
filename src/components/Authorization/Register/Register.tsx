@@ -5,6 +5,11 @@ import { authorization } from "services";
 import { IUserReg } from "interfaces/IAuthorization";
 import "./register.css";
 
+
+/**
+ * Компонент формы регистрации
+ * @returns JSX
+ */
 export const Register = () => {
   const { dispatch } = useContext(Context);
   const [data, setData] = useState<IUserReg>({

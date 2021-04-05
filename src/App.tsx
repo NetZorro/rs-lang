@@ -19,10 +19,12 @@ import {
 } from "pages";
 import { SideBar } from "components/SideBar";
 import "./App.css";
+import { axiosService } from "services";
 import { initialState, reducer, Context } from "reducer";
 
-const App: React.FC = () => {
+export const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  axiosService(state,dispatch);
   return (
     <div className="body">
       <Context.Provider value={{ state, dispatch }}>
@@ -59,5 +61,3 @@ const App: React.FC = () => {
     </div>
   );
 };
-
-export default App;

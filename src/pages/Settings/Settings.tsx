@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useLayoutEffect } from "react";
 
 import { Context } from "reducer";
 import { settingsText } from "constants/data";
@@ -7,30 +7,30 @@ import "./settings.css";
 
 export const Settings: React.FC = () => {
   const { state, dispatch } = useContext(Context);
-  const { login, user, settings } = state;
-  const { getSettings, putSettings } = serviceSettings;
+  const {
+    login,
+    user: { userId },
+    settings,
+  } = state;
+  const { getSettings } = serviceSettings;
   const nameObjProperties: string[] = Object.keys(settings);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (login) {
-      getSettings(user.userId, user.token, dispatch);
+      getSettings(userId, dispatch);
     }
   }, []);
   const dispatchSettingStatus = (nameProperty: string) => {
-    return dispatch({
-      type: "settings__update",
+    let result = {
+      type: login ? "settings__update-login" : "settings__update",
       payload: {
         settings: {
           ...settings,
           [nameProperty]: !settings[nameProperty],
         },
       },
-    });
+    };
+    dispatch(result);
   };
-  useEffect(() => {
-    if (login) {
-      putSettings(user.userId, user.token, settings);
-    }
-  }, [dispatchSettingStatus]);
   return (
     <div>
       <h1 className="settings__title">Settings</h1>

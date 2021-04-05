@@ -1,2 +1,2 @@
 export * from "./IWordsService";
-export * from "./ISettings";
+export * from "./IAuthorization"

@@ -9,3 +9,10 @@ export interface IUserReg {
   password: string;
   [x: string]: string;
 }
+export interface IUserObj {
+  message: string;
+  token: string;
+  refreshToken: string;
+  userId: string;
+  name: string;
+}
