@@ -6,6 +6,7 @@
 .body__content {
   padding-top: 24px;
   width: 1020px;
+  position: relative;
 }
 .body__sidebar {
   padding-top: 24px ;
