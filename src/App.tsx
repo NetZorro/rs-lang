@@ -28,9 +28,7 @@ const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   return (
     <div className="body">
-      <>
-        <SpeakitPage />
-      </>
+      <>{/* <SpeakitPage /> */}</>
       <Context.Provider value={{ state, dispatch }}>
         <Router>
           <div className="body__sidebar">
