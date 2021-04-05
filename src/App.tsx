@@ -14,11 +14,12 @@ import {
   Settings,
   Statistics,
   Games,
-  DictionaryPage,
+  // DictionaryPage,
+  AuthorizationPage,
 } from "pages";
 import { SideBar } from "components/SideBar";
 import "./App.css";
-import { initialState, reducer, Context } from "reducers";
+import { initialState, reducer, Context } from "reducer";
 
 const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -36,7 +37,11 @@ const App: React.FC = () => {
               <Route exact component={TextBook} path="/textbook" />
               <Route exact component={Statistics} path="/statistics" />
               <Route exact component={Games} path="/games" />
-              <Route exact component={DictionaryPage} path="/dictionary" />
+              <Route
+                exact
+                component={AuthorizationPage}
+                path="/authorization"
+              />
               <Route
                 exact
                 component={Units}

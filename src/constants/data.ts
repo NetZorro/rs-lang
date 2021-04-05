@@ -8,8 +8,8 @@ export const units = [
 ]
 
 export const settingsText = [
-    "Show translation word",
-    "Show translation text Meaning",
-    "Show translation text Example",
-    "Show buttons difficult and remove",
+    "Turn off translation word",
+    "Turn off translation text Meaning",
+    "Turn off translation text Example",
+    "Turn off buttons difficult and remove",
   ];
