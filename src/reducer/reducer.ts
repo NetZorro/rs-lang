@@ -5,6 +5,9 @@ import { serviceSettings } from "services";
 
 export const Context = React.createContext({ state: {}, dispatch: {} } as any);
 
+/**
+ * Начальный стейт
+ */
 export const initialState: any = {
   settings: {
     translateWord: false,
@@ -20,6 +23,12 @@ export const initialState: any = {
 
 const { putSettings } = serviceSettings;
 
+/**
+ * Чистая функция, которая принимает предыдущее состояние и экшен (state и action) 
+ * и возвращает следующее состояние (новую версию предыдущего).
+ * @param state
+ * @param action
+ */
 export const reducer = (state: any, action: { type: string; payload: any }) => {
   switch (action.type) {
     case "settings__update":
@@ -42,7 +51,7 @@ export const reducer = (state: any, action: { type: string; payload: any }) => {
       return {
         ...state,
         user: action.payload,
-        login: true
+        login: true,
       };
     case "user__logOut":
       removeUserSessionStorage();
