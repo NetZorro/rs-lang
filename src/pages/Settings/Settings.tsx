@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useLayoutEffect } from "react";
 
 import { Context } from "reducer";
 import { settingsText } from "constants/data";
@@ -7,22 +7,29 @@ import "./settings.css";
 
 export const Settings: React.FC = () => {
   const { state, dispatch } = useContext(Context);
-  const { login, user, settings } = state;
+  const {
+    login,
+    user: { userId },
+    settings,
+  } = state;
+  const { getSettings } = serviceSettings;
   const nameObjProperties: string[] = Object.keys(settings);
-  if (login) {
-    serviceSettings.getSettings(user.userId, user.token);
-  }
-  const dispatchId = (id: number) => {
-    dispatch({
-      type: "settings__update",
+  useLayoutEffect(() => {
+    if (login) {
+      getSettings(userId, dispatch);
+    }
+  }, []);
+  const dispatchSettingStatus = (nameProperty: string) => {
+    let result = {
+      type: login ? "settings__update-login" : "settings__update",
       payload: {
-        ...state,
         settings: {
           ...settings,
-          [nameObjProperties[id]]: !settings[nameObjProperties[id]],
+          [nameProperty]: !settings[nameProperty],
         },
       },
-    });
+    };
+    dispatch(result);
   };
   return (
     <div>
@@ -33,8 +40,8 @@ export const Settings: React.FC = () => {
             <label className="settings__label">
               {item}
               <input
-                onChange={() => dispatchId(index)}
-                defaultChecked={settings[nameObjProperties[index]]}
+                onChange={() => dispatchSettingStatus(nameObjProperties[index])}
+                checked={settings[nameObjProperties[index]]}
                 type="checkbox"
               />
             </label>

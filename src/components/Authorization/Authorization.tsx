@@ -10,12 +10,17 @@ type AuthorizationContext = {
   dispatch: (action: { type: string; payload: object }) => {};
 };
 
+/**
+ * Компонент формы авторизации
+ * @returns JSX
+ */
 export const Authorization: React.FC = () => {
-  const { state, dispatch } = useContext<AuthorizationContext>(Context);
+  const { dispatch } = useContext<AuthorizationContext>(Context);
   const [data, setData] = useState<IUserAuth>({
     email: "",
     password: "",
   });
+  const { userAuth } = authorization;
   const handleChange = ({ target }: React.SyntheticEvent) => {
     let t = target as HTMLInputElement;
     setData({
@@ -25,7 +30,7 @@ export const Authorization: React.FC = () => {
   };
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    authorization.userAuth(data, dispatch).then((res) => {
+    userAuth(data, dispatch).then((res) => {
       if (res) {
         setData({ email: "", password: "" });
       }

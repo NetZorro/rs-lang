@@ -1,31 +1,21 @@
-import { baseURL } from "constants/baseURL";
-import { ISettings } from "interfaces";
+import axios from "axios";
 
 export const serviceSettings = {
-  getSettings: async (id: number, token: string): Promise<ISettings> => {
-    let result;
-    try {
-      result = await fetch(`${baseURL}users/${id}/settings`, {
-        method: "POST",
-        headers: {
-          accept: "application/json",
-        },
-        body: JSON.stringify(authTokenBody(token)),
-      });
-    } catch (error) {
-      result = error;
-    }
-    return (await result) ? result.json() : result;
-  },
-  putSettings: async (id: number, data: string) => {
-    let result = await fetch(`${baseURL}`, {
-      method: "PUT",
-      body: data,
+  getSettings(id: string, dispatch: any): Promise<void> {
+    return axios.get(`users/${id}/settings`).then((res) => {
+      const { status, data } = res;
+      if (status === 200) {
+        dispatch(dispatchUserSettings(data.optional));
+      }
     });
-    return await result.json();
+  },
+  putSettings(id: string, data: object): Promise<void> {
+    return axios.put(
+      `users/${id}/settings`,
+      JSON.stringify({ optional: data })
+    )
   },
 };
-
-const authTokenBody = (token: string) => {
-  return { Authorization: `Bearer ${token}` };
+const dispatchUserSettings = (data: any) => {
+  return { type: "settings__update", payload: { settings: data } };
 };

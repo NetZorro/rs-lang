@@ -18,17 +18,15 @@ import {
   AuthorizationPage,
 } from "pages";
 import { SideBar } from "components/SideBar";
+import { axiosService } from "services";
+import { initialState, reducer, Context } from "reducer";
 import "./App.css";
 
-import { initialState, reducer, Context } from "reducer";
-import SavannahPage from "./components/Savanna/SavannahPage";
-import SpeakitPage from "components/SpeakIt/SpeakitPage";
-
-const App: React.FC = () => {
+export const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  axiosService(state,dispatch);
   return (
     <div className="body">
-      <>{/* <SpeakitPage /> */}</>
       <Context.Provider value={{ state, dispatch }}>
         <Router>
           <div className="body__sidebar">
@@ -63,5 +61,3 @@ const App: React.FC = () => {
     </div>
   );
 };
-
-export default App;

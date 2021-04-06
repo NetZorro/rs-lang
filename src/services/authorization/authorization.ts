@@ -1,59 +1,39 @@
-import { baseURL } from "constants/baseURL";
+import axios from "axios";
+
 import { IUserReg, IUserAuth } from "interfaces/IAuthorization";
 
-type response = {
-  message: string;
-  jwt: string;
-  user: string;
-};
-
 export const authorization = {
-  async userAuth(user: IUserAuth, dispatch: any) {
-    let result;
-    try {
-      console.log(user);
-      result = await fetch(`${baseURL}signin`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          accept: "application/json",
-        },
-        body: JSON.stringify(user),
-      });
-      if (result.status === 200) {
-        let reply: Promise<JSON> = await result.json();
-        await dispatch(loginUser(reply));
-        await dispatch({ type: "user__logIn" });
-        sessionStorage.setItem("user", JSON.stringify(reply));
-        return true;
-      } else {
+  userAuth(user: IUserAuth, dispatch: any) {
+    return axios
+      .post("signin", JSON.stringify(user))
+      .then(({ status, data }) => {
+        if (status === 200) {
+          dispatch(loginUser(data));
+          sessionStorage.setItem("user", JSON.stringify(data));
+          return true;
+        }
         return false;
-      }
-    } catch (error) {
-      result = error;
-    }
-  },
-  async userReg(user: IUserReg) {
-    let result;
-    try {
-      result = await fetch(`${baseURL}users`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          accept: "application/json",
-        },
-        body: JSON.stringify(user),
       });
-      if (result.status > 400) {
-        return "Направильный адрес электорнной почты";
-      } else {
-        console.log("okey");
-        return "Все окей вы зарегистрированы";
-      }
-    } catch (error) {
-      console.log("Error Register", error);
-      result = error;
-    }
+  },
+  userReg(user: IUserReg) {
+    return axios
+      .post("users", JSON.stringify(user))
+      .then(({ status, data }) => {
+        console.log(status);
+        console.log(data);
+      });
+  },
+  userNewToken(userId: string, refreshToken: string, dispatch: any) {
+    axios
+      .get(`users/${userId}/tokens`, {
+        headers: { Authorization: `Bearer ${refreshToken}` },
+      })
+      .then(({ status, data }) => {
+        if (status === 200) {
+          dispatch(loginUser(data));
+          sessionStorage.setItem("user", JSON.stringify(data));
+        }
+      });
   },
 };
 
