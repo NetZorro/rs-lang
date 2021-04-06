@@ -20,6 +20,7 @@ import {
 import { SideBar } from "components/SideBar";
 import "./App.css";
 import { initialState, reducer, Context } from "reducer";
+import {AudioCallGame} from "./pages/Games/AudioCallGame/AudioCallGame";
 
 const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -37,6 +38,7 @@ const App: React.FC = () => {
               <Route exact component={TextBook} path="/textbook" />
               <Route exact component={Statistics} path="/statistics" />
               <Route exact component={Games} path="/games" />
+              <Route exact component={AudioCallGame} path="/games/audiocall" />
               <Route
                 exact
                 component={AuthorizationPage}

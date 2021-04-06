@@ -1,0 +1,72 @@
+.audioCallGame-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.words-container{
+  margin: 2rem;
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+ }
+.volume-icon{
+  width: 3rem;
+  margin: 2rem;
+}
+.result-icon{
+  width: 17px;
+  margin-right: 0.5rem ;
+}
+
+.hiddenWord-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hiddenWord-img{
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.word-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.option-word:hover{
+  font-weight: bold;
+}
+
+.button-next {
+  margin: 3rem;
+  color: #232323;
+  background: transparent;
+  border: 1px solid #232323;
+  position: relative;
+  font-size: 14px;
+  letter-spacing: .3em;
+  padding: 15px 30px 15px 35px;
+  transition: .2s ease-in-out;
+  cursor: pointer;
+}
+.button-next:before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 100%;
+  height: 100%;
+  background: #32D4E2;
+  z-index: -1;
+  transition: .25s ease;
+  transform: translate(0, 0);
+}
+.button-next:hover:before {
+  transform: translate(4px, 4px);
+}
