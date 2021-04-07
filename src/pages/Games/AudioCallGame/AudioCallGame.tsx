@@ -22,7 +22,7 @@ export const AudioCallGame: React.FC = () => {
   const [category, setCategory] = useState<string>('');
   const [page, setPage] = useState<string>('0');
   const [finish, setFinish] = useState<boolean>(false);
-  const [stats, setStats] = useState<IStats>(defaultStats);
+  const [stats, setStats] = useState<IStats>({...defaultStats});
 
   useEffect(() => {
     if (!category) return;
