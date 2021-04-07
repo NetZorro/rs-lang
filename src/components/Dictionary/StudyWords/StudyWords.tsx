@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { Context } from "reducer";
-import { IWord } from "interfaces";
+import { IWord } from "Entities";
 import { WordCard } from "components/CategoryWords/WordCard";
 
 export const StudyWords = () => {
@@ -8,8 +8,8 @@ export const StudyWords = () => {
   const { study } = state.dictionary;
   return (
     <div>
-      {study.map((item: IWord) => {
-        return <WordCard item={item} />;
+      {study.map((item: IWord, index: number) => {
+        return <WordCard item={item} key={index}/>;
       })}
     </div>
   );

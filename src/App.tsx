@@ -14,8 +14,8 @@ import {
   Settings,
   Statistics,
   Games,
-  // DictionaryPage,
   AuthorizationPage,
+  DictionaryPage,
 } from "pages";
 import { SideBar } from "components/SideBar";
 import { axiosService } from "services";
@@ -24,7 +24,9 @@ import "./App.css";
 
 export const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  axiosService(state,dispatch);
+
+  axiosService(state, dispatch);
+
   return (
     <div className="body">
       <Context.Provider value={{ state, dispatch }}>
@@ -38,6 +40,7 @@ export const App: React.FC = () => {
               <Route exact component={Settings} path="/settings" />
               <Route exact component={TextBook} path="/textbook" />
               <Route exact component={Statistics} path="/statistics" />
+              <Route exact component={DictionaryPage} path="/dictionary" />
               <Route exact component={Games} path="/games" />
               <Route
                 exact

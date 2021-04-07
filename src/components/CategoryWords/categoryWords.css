@@ -1,74 +1,7 @@
 .word {
   width: 996px;
 }
-.word__card {
-  height: 132px;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  background: #f5f5f7;
-  border-radius: 14px;
-  padding: 8px;
-}
-.word__block {
-  height: 100%;
-  flex: 0 0 70%;
-}
-.word__image {
-  height: 120px;
-  width: 120px;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  border-radius: 24px;
-  margin-right: 16px;
-  flex: 0 0 120px;
-}
-.word__name {
-  display: flex;
-  align-items: center;
-  height: 26px;
-  font-size: 14px;
-  margin-bottom: 8px;
-  margin-right: 8px;
-}
-.word__title {
-  font-family: "Baloo Bhai";
-  font-size: 16px;
-  font-weight: bold;
-  margin-right: 8px;
-}
-.word__transcription {
-  font-family: "Roboto";
-  font-weight: 400;
-  margin-right: 8px;
-}
-.word__word-translate {
-  font-family: "Roboto";
-  font-weight: 400;
-  margin-right: 8px;
-}
-.word__meaning {
-  font-size: 14px;
-  line-height: 18px;
-  margin: 0;
-  margin-bottom: 8px;
-}
-.word__example {
-  font-size: 14px;
-  line-height: 18px;
-  margin: 0;
-  font-style: oblique;
-}
-.word__sound {
-  display: inline-block;
-  height: 26px;
-  width: 26px;
-  background-image: url(../../assets/icon/volume-up.svg);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
+
 .word__loader span {
   font-size: 32px;
   animation: loading duration timing-function delay iteration-count direction
@@ -81,7 +14,7 @@
   flex-direction: column;
   align-items: flex-end;
   margin-right: 16px;
-  padding-top: 40px;
+  justify-content: center;
 }
 
 .btn-groups__difficult,

@@ -13,4 +13,6 @@ export interface IWord {
   wordTranslate: string;
   textMeaningTranslate: string;
   textExampleTranslate: string;
+  _id?: string;
+  userWord?: { difficulty?: string; optional?: { delete?: true } };
 }

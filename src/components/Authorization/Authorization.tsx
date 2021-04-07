@@ -2,13 +2,16 @@ import { useState, useContext } from "react";
 
 import { Context } from "reducer";
 import { authorization } from "services";
-import { IUserAuth } from "interfaces/IAuthorization";
+import { IUserAuth } from "Entities/IAuthorization";
 import "./authorization.css";
 
 type AuthorizationContext = {
   state: any;
   dispatch: (action: { type: string; payload: object }) => {};
 };
+
+// FIXME: написать валидацию на email и пароль
+// FIXME: Сделать уведомления пользоваетля
 
 /**
  * Компонент формы авторизации

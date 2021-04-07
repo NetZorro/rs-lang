@@ -16,7 +16,6 @@ export const initialState: any = {
     showBtnGroups: false,
   },
   words: [],
-  dictionary: { deleted: [], difficult: [], study: [] },
   user: userAuthObj(),
   login: userAuth(),
 };

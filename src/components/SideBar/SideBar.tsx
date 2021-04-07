@@ -30,7 +30,7 @@ export const SideBar: React.FC = () => {
           <Link to="/games">
             <img className="menu__item" src={hat} alt="icon" />
           </Link>
-          <Link to="/statistics">
+          <Link to="/dictionary">
             <img className="menu__item" src={message} alt="icon" />
           </Link>
           <Link to="/settings">

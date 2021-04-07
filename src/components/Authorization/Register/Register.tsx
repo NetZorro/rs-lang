@@ -2,9 +2,11 @@ import { useState, useContext } from "react";
 
 import { Context } from "reducer";
 import { authorization } from "services";
-import { IUserReg } from "interfaces/IAuthorization";
+import { IUserReg } from "Entities/IAuthorization";
 import "./register.css";
 
+// FIXME: написать валидацию на email и пароль
+// FIXME: Сделать уведомления пользоваетля
 
 /**
  * Компонент формы регистрации

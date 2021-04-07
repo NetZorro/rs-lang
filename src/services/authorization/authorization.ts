@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { IUserReg, IUserAuth } from "interfaces/IAuthorization";
+import { IUserReg, IUserAuth } from "Entities/IAuthorization";
 
 export const authorization = {
   userAuth(user: IUserAuth, dispatch: any) {
