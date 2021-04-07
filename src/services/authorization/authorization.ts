@@ -1,12 +1,6 @@
 import { baseURL } from "constants/baseURL";
 import { IUserReg, IUserAuth } from "interfaces/IAuthorization";
 
-type response = {
-  message: string;
-  jwt: string;
-  user: string;
-};
-
 export const authorization = {
   async userAuth(user: IUserAuth, dispatch: any) {
     let result;
