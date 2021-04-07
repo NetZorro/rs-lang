@@ -3,20 +3,24 @@ import trueIcon from "../../../assets/icon/true.png";
 import falseIcon from "../../../assets/icon/false.png";
 import volume from "../../../assets/icon/volume-up.svg";
 import {playAudio} from "../../../components/CategoryWords/playAudio";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {baseURL} from "../../../constants/baseURL";
+import {IStats} from "./AudioCallGame";
+
 
 interface IAudioCallGameWords {
   hiddenWord: IWord,
-  fiveRandom: Array<IWord>
+  fiveRandom: Array<IWord>,
+  stats: IStats
 }
 
-export const AudioCallGameWords = ({hiddenWord, fiveRandom}: IAudioCallGameWords) => {
+export const AudioCallGameWords = ({hiddenWord, fiveRandom, stats}: IAudioCallGameWords) => {
 
   const [selected, setSelected] = useState<IWord|undefined>();
 
   const checkWord = (e: any, word: IWord) => {
     setSelected(word);
+    word.word ===  hiddenWord.word ? stats.success++ : stats.fail++;
   }
 
   const wordsJsx = fiveRandom.map((word: IWord) => {

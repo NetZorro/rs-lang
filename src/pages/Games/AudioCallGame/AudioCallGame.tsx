@@ -5,12 +5,24 @@ import {playAudio} from "../../../components/CategoryWords/playAudio";
 import './AudioCallGame.css';
 import {AudioCallGameWords} from "./AudioCallGameWords";
 import {ChooseLevel} from "./ChooseLevel";
+import {FinishPage} from "./FinishPage";
+
+export interface IStats {
+  success: number
+  fail: number
+}
+
+const defaultStats: IStats = {
+  success: 0,
+  fail: 0
+};
 
 export const AudioCallGame: React.FC = () => {
   const [words, setWords] = useState<Array<IWord>>([]);
   const [category, setCategory] = useState<string>('');
   const [page, setPage] = useState<string>('0');
   const [finish, setFinish] = useState<boolean>(false);
+  const [stats, setStats] = useState<IStats>(defaultStats);
 
   useEffect(() => {
     if (!category) return;
@@ -29,7 +41,7 @@ export const AudioCallGame: React.FC = () => {
   }, [page, category]);
 
   if (finish) {
-    return <div>Finish page should be displayed here!</div>;
+    return <FinishPage stats={stats}/>;
   }
 
   if (!category) {
@@ -60,7 +72,11 @@ export const AudioCallGame: React.FC = () => {
 
   return (
     <div className='audioCallGame-container'>
-      <AudioCallGameWords hiddenWord={hiddenWord} fiveRandom={fiveRandom}/>
+      <AudioCallGameWords
+        hiddenWord={hiddenWord}
+        fiveRandom={fiveRandom}
+        stats={stats}
+      />
       <button className='button-next' onClick={nextWord}>next</button>
     </div>
   );
