@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import React, { useReducer } from "react";
 import {
   Switch,
   Route,
@@ -19,13 +19,17 @@ import {
 } from "pages";
 import { SideBar } from "components/SideBar";
 import "./App.css";
+
 import { initialState, reducer, Context } from "reducer";
 import {AudioCallGame} from "./pages/Games/AudioCallGame/AudioCallGame";
+import SavannahPage from "./components/Savanna/SavannahPage";
+import SpeakitPage from "components/SpeakIt/SpeakitPage";
 
 const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   return (
     <div className="body">
+      <>{/* <SpeakitPage /> */}</>
       <Context.Provider value={{ state, dispatch }}>
         <Router>
           <div className="body__sidebar">
