@@ -25,8 +25,8 @@ export const AudioCallGame: React.FC = () => {
   const [fiveRandom, setFiveRandom] = useState<Array<IWord>>([]);
   const [hiddenWord, setHiddenWord] = useState<IWord | undefined>();
   const [selected, setSelected] = useState<IWord|undefined>();
-  const [fullScreen, setFullScreen] = useState(false)
-  const [screenMood, setScreenMood] = useState('full screen')
+  const [fullScreen, setFullScreen] = useState<boolean>(false)
+  const [screenMood, setScreenMood] = useState<string>('full screen')
 
   useEffect(() => {
     if (!category) return;

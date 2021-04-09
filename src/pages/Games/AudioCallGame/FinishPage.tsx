@@ -5,7 +5,7 @@ interface IFinishPage{
 }
 
 export const FinishPage = ({stats}: IFinishPage) => {
-  let result = '';
+  let result: string;
 
   switch (true) {
     case stats.success === 10:
