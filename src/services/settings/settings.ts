@@ -1,21 +1,18 @@
 import axios from "axios";
 
+type response = {
+  status: number;
+  data: string | any;
+};
+
 export const serviceSettings = {
-  getSettings(id: string, dispatch: any): Promise<void> {
-    return axios.get(`users/${id}/settings`).then((res) => {
-      const { status, data } = res;
-      if (status === 200) {
-        dispatch(dispatchUserSettings(data.optional));
-      }
-    });
+  getSettings(id: string): Promise<response> {
+    return axios.get(`users/${id}/settings`);
   },
-  putSettings(id: string, data: object): Promise<void> {
+  setSettings(id: string, data: object): Promise<response> {
     return axios.put(
       `users/${id}/settings`,
       JSON.stringify({ optional: data })
-    )
+    );
   },
-};
-const dispatchUserSettings = (data: any) => {
-  return { type: "settings__update", payload: { settings: data } };
 };

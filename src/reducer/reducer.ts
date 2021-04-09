@@ -20,7 +20,7 @@ export const initialState: any = {
   login: userAuth(),
 };
 
-const { putSettings } = serviceSettings;
+const { setSettings } = serviceSettings;
 
 /**
  * Чистая функция, которая принимает предыдущее состояние и экшен (state и action) 
@@ -36,7 +36,7 @@ export const reducer = (state: any, action: { type: string; payload: any }) => {
         ...action.payload,
       };
     case "settings__update-login":
-      putSettings(state.user.userId, action.payload.settings);
+      setSettings(state.user.userId, action.payload.settings);
       return {
         ...state,
         ...action.payload,

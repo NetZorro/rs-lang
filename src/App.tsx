@@ -18,14 +18,15 @@ import {
   DictionaryPage,
 } from "pages";
 import { SideBar } from "components/SideBar";
-import { axiosService } from "services";
+import { authorization } from "services";
 import { initialState, reducer, Context } from "reducer";
 import "./App.css";
 
 export const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { axiosSettings } = authorization;
 
-  axiosService(state, dispatch);
+  axiosSettings(state, dispatch);
 
   return (
     <div className="body">
@@ -40,7 +41,7 @@ export const App: React.FC = () => {
               <Route exact component={Settings} path="/settings" />
               <Route exact component={TextBook} path="/textbook" />
               <Route exact component={Statistics} path="/statistics" />
-              <Route exact component={DictionaryPage} path="/dictionary" />
+              {/*FIXME: Not Working <Route exact component={DictionaryPage} path="/dictionary" /> */}
               <Route exact component={Games} path="/games" />
               <Route
                 exact

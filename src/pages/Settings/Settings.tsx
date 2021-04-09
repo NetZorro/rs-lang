@@ -7,18 +7,22 @@ import "./settings.css";
 
 export const Settings: React.FC = () => {
   const { state, dispatch } = useContext(Context);
-  const {
-    login,
-    user: { userId },
-    settings,
-  } = state;
+  const { login, user, settings } = state;
+  const { userId } = user;
   const { getSettings } = serviceSettings;
+
   const nameObjProperties: string[] = Object.keys(settings);
+
   useLayoutEffect(() => {
     if (login) {
-      getSettings(userId, dispatch);
+      getSettings(userId).then(({ status, data }) => {
+        if (status === 200) {
+          dispatch(dispatchUserSettings(data.optional));
+        }
+      });
     }
   }, []);
+
   const dispatchSettingStatus = (nameProperty: string) => {
     let result = {
       type: login ? "settings__update-login" : "settings__update",
@@ -29,8 +33,10 @@ export const Settings: React.FC = () => {
         },
       },
     };
+
     dispatch(result);
   };
+
   return (
     <div>
       <h1 className="settings__title">Settings</h1>
@@ -50,4 +56,8 @@ export const Settings: React.FC = () => {
       })}
     </div>
   );
+};
+
+const dispatchUserSettings = (data: any) => {
+  return { type: "settings__update", payload: { settings: data } };
 };

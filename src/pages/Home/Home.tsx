@@ -1,13 +1,21 @@
+import { useContext } from "react";
+
+import { Context } from "reducer";
 import man from "../../assets/icon/man.svg";
 import "./home.css";
 
 export const Home: React.FC = () => {
+  const { state } = useContext(Context);
+  const { login, user } = state;
+
   return (
     <div className="App">
       <main className="main">
         <div className="content">
           <div className="banner">
-            <h1 className="banner__title">Hello Guest</h1>
+            <h1 className="banner__title">
+              Hello {login ? user.name : "Guest"}
+            </h1>
             <span className="banner__text">It's good to see you again.</span>
             <img className="banner__img" src={man} alt="icon" />
           </div>
@@ -23,10 +31,10 @@ export const Home: React.FC = () => {
               </div>
               <button className="statistic__button">Continue</button>
             </div>
-            <div className="button-groups">
+            {/* <div className="button-groups">
               <button className="button-groups__button-prev"></button>
               <button className="button-groups__button-next"></button>
-            </div>
+            </div> */}
           </div>
           <div className="dictionary">
             <h2 className="dictionary__title">Dictionary</h2>
@@ -74,13 +82,7 @@ export const Home: React.FC = () => {
           </div>
         </div>
         <div className="block">
-          <div className="block__profile">
-            <div className="search">
-              <input type="text"></input>
-            </div>
-            <div className="account"></div>
-          </div>
-          <h3>Games</h3>
+          <h3 className="block__game-title">Games</h3>
           <div className="block__game"></div>
           <div className="block__game"></div>
           <div className="block__game"></div>

@@ -5,14 +5,14 @@ export const userWords = {
     axios.get(`users/${userId}/words`);
   },
 
-  addUserWords(
+  async addUserWords(
     userId: string,
     wordId: string,
     difficulty: boolean,
     deleted: boolean
   ) {
     const body = addWordsBodyObj(difficulty, deleted);
-
+    // TODO: Подумать над этим сервисом
     return axios
       .post(`users/${userId}/words/${wordId}`, body)
       .then(({ status, data }) => {

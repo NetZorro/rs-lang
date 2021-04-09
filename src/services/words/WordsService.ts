@@ -12,7 +12,7 @@ export const wordsService = {
     category: string,
     unit: string
   ): Promise<{ status: number; data: IWord[] }> {
-    return axios.get(`${baseURL}words?group=${category}&page=${unit}`);
+    return axios.get(`words?group=${category}&page=${unit}`);
   },
   getWordById: async (id: string): Promise<IWord> => {
     let result;

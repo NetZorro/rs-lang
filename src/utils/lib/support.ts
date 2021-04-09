@@ -4,3 +4,8 @@ export const userAuthObj = () =>
   JSON.parse(sessionStorage.getItem("user") || "{}");
 
 export const removeUserSessionStorage = () => sessionStorage.removeItem("user");
+
+export const loginUser = (userObj: Object) => ({
+  type: "user__authorization",
+  payload: userObj,
+});

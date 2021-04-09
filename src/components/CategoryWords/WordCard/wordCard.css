@@ -6,6 +6,7 @@
   background: #f5f5f7;
   border-radius: 14px;
   padding: 8px;
+  overflow: hidden;
 }
 .word__block {
   height: 100%;

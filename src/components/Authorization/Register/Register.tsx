@@ -1,6 +1,5 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 
-import { Context } from "reducer";
 import { authorization } from "services";
 import { IUserReg } from "Entities/IAuthorization";
 import "./register.css";
@@ -13,12 +12,13 @@ import "./register.css";
  * @returns JSX
  */
 export const Register = () => {
-  const { dispatch } = useContext(Context);
+  const { register } = authorization;
   const [data, setData] = useState<IUserReg>({
     name: "",
     email: "",
     password: "",
   });
+
   const handleChange = ({ target }: React.SyntheticEvent) => {
     let t = target as HTMLInputElement;
     setData({
@@ -26,10 +26,12 @@ export const Register = () => {
       [t.name]: t.value,
     } as IUserReg);
   };
+
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    authorization.userReg(data);
+    register(data);
   };
+
   return (
     <div className="authorization__register">
       <form className="register__form" onSubmit={handleSubmit}>
