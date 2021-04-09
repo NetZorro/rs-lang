@@ -26,6 +26,7 @@ export const AudioCallGame: React.FC = () => {
   const [hiddenWord, setHiddenWord] = useState<IWord | undefined>();
   const [selected, setSelected] = useState<IWord|undefined>();
   const [fullScreen, setFullScreen] = useState(false)
+  const [screenMood, setScreenMood] = useState('full screen')
 
   useEffect(() => {
     if (!category) return;
@@ -73,8 +74,13 @@ export const AudioCallGame: React.FC = () => {
     setPage((parseInt(page) + 1).toString());
   }
 
+  const toggleScreen = () => {
+    setFullScreen(!fullScreen)
+    setScreenMood('exit')
+  }
+
   return (
-    <div className='audioCallGame-container'>
+    <div className={'audioCallGame-container fullScreen' + fullScreen}>
       <AudioCallGameWords
         hiddenWord={hiddenWord}
         fiveRandom={fiveRandom}
@@ -83,6 +89,7 @@ export const AudioCallGame: React.FC = () => {
         setSelected={setSelected}
       />
       <button className='button-next' onClick={nextWord}>next</button>
+      <button type="button" onClick={toggleScreen}>{screenMood}</button>
     </div>
   );
 }
