@@ -12,16 +12,19 @@ interface IAudioCallGameWords {
   hiddenWord: IWord,
   fiveRandom: Array<IWord>,
   stats: IStats
+  selected: any,
+  setSelected: any
 }
 
-export const AudioCallGameWords = ({hiddenWord, fiveRandom, stats}: IAudioCallGameWords) => {
+export const AudioCallGameWords = ({hiddenWord, fiveRandom, stats, selected, setSelected}: IAudioCallGameWords) => {
 
-  const [selected, setSelected] = useState<IWord|undefined>();
+
 
   const checkWord = (e: any, word: IWord) => {
     setSelected(word);
-    word.word ===  hiddenWord.word ? stats.success++ : stats.fail++;
+    word.word === hiddenWord.word ? stats.success++ : stats.fail++;
   }
+
 
   const wordsJsx = fiveRandom.map((word: IWord) => {
     let icon;
@@ -35,6 +38,7 @@ export const AudioCallGameWords = ({hiddenWord, fiveRandom, stats}: IAudioCallGa
       <div className='word-container'>
         {icon}
         <span
+          key={word.id}
           className='option-word'
           data-word={word.word}
           onClick={(e) => selected ? '' : checkWord(e, word)}
@@ -44,7 +48,6 @@ export const AudioCallGameWords = ({hiddenWord, fiveRandom, stats}: IAudioCallGa
       </div>
     );
   });
-
 
   return (
     <>

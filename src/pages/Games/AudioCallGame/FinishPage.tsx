@@ -1,3 +1,5 @@
+import './FinishPage.css'
+
 interface IFinishPage{
   stats: any,
 }
@@ -23,7 +25,7 @@ export const FinishPage = ({stats}: IFinishPage) => {
 
 
   return(
-    <div className='finish-page-container'>
+    <div className='finishPage-container'>
       <h2>{result}</h2>
       <p>
         Количество правильных ответов: {stats.success} из 10.

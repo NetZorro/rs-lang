@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {wordsService} from "../../../services";
 import {IWord} from "../../../interfaces";
 import {playAudio} from "../../../components/CategoryWords/playAudio";
@@ -18,24 +18,41 @@ const defaultStats: IStats = {
 };
 
 export const AudioCallGame: React.FC = () => {
-  const [words, setWords] = useState<Array<IWord>>([]);
   const [category, setCategory] = useState<string>('');
   const [page, setPage] = useState<string>('0');
   const [finish, setFinish] = useState<boolean>(false);
   const [stats, setStats] = useState<IStats>({...defaultStats});
+  const [fiveRandom, setFiveRandom] = useState<Array<IWord>>([]);
+  const [hiddenWord, setHiddenWord] = useState<IWord | undefined>();
+  const [selected, setSelected] = useState<IWord|undefined>();
+  const [fullScreen, setFullScreen] = useState(false)
 
   useEffect(() => {
     if (!category) return;
 
-    if(parseInt(page) === 10) {
-      setFinish(true);
+    if (parseInt(page) === 10) {
+      return setFinish(true);
     }
 
     wordsService
       .getWords(category, page)
       .then((words) => {
-          if (words) return setWords(words);
-          setFinish(true);
+
+          if (!words) return setFinish(true);
+          const randomWords: Array<IWord> = [];
+          for (const word of words) {
+            const random = Math.floor(Math.random() * words.length);
+            if (!randomWords.includes(words[random])) {
+              randomWords.push (words[random]);
+            }
+            if (randomWords.length === 5) break
+          }
+
+          const hiddenWord = randomWords[Math.floor(Math.random() * randomWords.length)];
+          playAudio(hiddenWord.audio);
+          setFiveRandom(randomWords);
+          setHiddenWord(hiddenWord);
+          setSelected(undefined)
         }
       );
   }, [page, category]);
@@ -48,25 +65,11 @@ export const AudioCallGame: React.FC = () => {
     return <ChooseLevel setCategory={setCategory}/>;
   }
 
-  if (words.length === 0) {
+  if (fiveRandom.length === 0 || !hiddenWord) {
     return <div>Loading...</div>;
   }
 
-  const fiveRandom: Array<IWord> = [];
-
-  for (const word of words) {
-    const random = Math.floor(Math.random() * words.length);
-    if (!fiveRandom.includes(words[random])) {
-      fiveRandom.push(words[random]);
-    }
-    if (fiveRandom.length === 5) break
-  }
-
-  const hiddenWord = fiveRandom[Math.floor(Math.random() * fiveRandom.length)];
-  playAudio(hiddenWord.audio);
-
   const nextWord = () => {
-    setWords([]);
     setPage((parseInt(page) + 1).toString());
   }
 
@@ -76,6 +79,8 @@ export const AudioCallGame: React.FC = () => {
         hiddenWord={hiddenWord}
         fiveRandom={fiveRandom}
         stats={stats}
+        selected={selected}
+        setSelected={setSelected}
       />
       <button className='button-next' onClick={nextWord}>next</button>
     </div>
