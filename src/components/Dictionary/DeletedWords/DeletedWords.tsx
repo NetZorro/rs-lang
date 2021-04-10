@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { Context } from "reducer";
-import { IWord } from "interfaces";
+import { IWord } from "Entities";
 import { WordCard } from "components/CategoryWords/WordCard";
 
 export const DeletedWords = () => {
@@ -8,8 +8,8 @@ export const DeletedWords = () => {
   const { deleted } = state.dictionary;
   return (
     <div>
-      {deleted.map((item: IWord) => {
-        return <WordCard item={item} />;
+      {deleted.map((item: IWord, index: number) => {
+        return <WordCard item={item} key={index} />;
       })}
     </div>
   );

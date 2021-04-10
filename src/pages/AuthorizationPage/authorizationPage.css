@@ -1,0 +1,18 @@
+.authorization {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  background-image: url(assets/icon/background-login.svg);
+  background-position: left;
+  background-size: 70%;
+  background-repeat: no-repeat;
+  max-height: 680px;
+}
+.authorization__handler-login {
+  padding-top: 8px;
+  margin-right: 160px;
+  transform: translateX(50%);
+  font-family: "Baloo Bhai";
+}

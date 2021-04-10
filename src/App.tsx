@@ -14,21 +14,22 @@ import {
   Settings,
   Statistics,
   Games,
-  // DictionaryPage,
   AuthorizationPage,
+  DictionaryPage,
 } from "pages";
 import { SideBar } from "components/SideBar";
+import { authorization } from "services";
+import { initialState, reducer, Context } from "reducer";
 import "./App.css";
 
-import { initialState, reducer, Context } from "reducer";
-import SavannahPage from "./components/Savanna/SavannahPage";
-import SpeakitPage from "components/SpeakIt/SpeakitPage";
-
-const App: React.FC = () => {
+export const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { axiosSettings } = authorization;
+
+  axiosSettings(state, dispatch);
+
   return (
     <div className="body">
-      <>{/* <SpeakitPage /> */}</>
       <Context.Provider value={{ state, dispatch }}>
         <Router>
           <div className="body__sidebar">
@@ -40,6 +41,7 @@ const App: React.FC = () => {
               <Route exact component={Settings} path="/settings" />
               <Route exact component={TextBook} path="/textbook" />
               <Route exact component={Statistics} path="/statistics" />
+              {/*FIXME: Not Working <Route exact component={DictionaryPage} path="/dictionary" /> */}
               <Route exact component={Games} path="/games" />
               <Route
                 exact
@@ -63,5 +65,3 @@ const App: React.FC = () => {
     </div>
   );
 };
-
-export default App;

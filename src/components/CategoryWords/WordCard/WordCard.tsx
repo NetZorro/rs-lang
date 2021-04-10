@@ -1,11 +1,13 @@
 import { useContext } from "react";
+import cl from 'classnames'
 
 import { Context } from "reducer";
 import { baseURL } from "constants/baseURL";
 import { playAudio } from "../playAudio";
+import "./wordCard.css";
 
 export const WordCard = (props: any) => {
-  const { item, deleted, difficult } = props;
+  const { item, deleted, difficult , hard } = props;
   const { state } = useContext(Context);
   const { settings } = state;
   const {
@@ -21,10 +23,13 @@ export const WordCard = (props: any) => {
     audioExample,
     audioMeaning,
   } = item;
+
   const keysObjSettings = Object.keys(settings);
+
   const transformText = (text: string) => {
-    return { __html: text }
-  }
+    return { __html: text };
+  };
+
   return (
     <div className="word__card">
       <div
@@ -33,7 +38,7 @@ export const WordCard = (props: any) => {
       ></div>
       <div className="word__block">
         <div className="word__name">
-          <span className="word__title" >{word}</span>
+          <span className={cl("word__title", {"word__hard" : hard})}>{word}</span>
           <span className="word__transcription">{transcription}</span>
           <span className="word__word-translate">
             {!settings[keysObjSettings[0]] ? `${wordTranslate}` : null}
@@ -43,11 +48,9 @@ export const WordCard = (props: any) => {
             onClick={() => playAudio(audio, audioExample, audioMeaning)}
           ></span>
         </div>
-        <p className="word__meaning" >
-          <span dangerouslySetInnerHTML={transformText(textMeaning)} ></span>
-          {/* {textMeaning} */}
+        <p className="word__meaning">
+          <span dangerouslySetInnerHTML={transformText(textMeaning)}></span>
           <br />
-          textMeaningTranslate
           {!settings[keysObjSettings[1]] ? (
             <span
               dangerouslySetInnerHTML={transformText(textMeaningTranslate)}
@@ -55,7 +58,7 @@ export const WordCard = (props: any) => {
           ) : null}
         </p>
         <p className="word__example">
-        <span dangerouslySetInnerHTML={transformText(textExample)} ></span>
+          <span dangerouslySetInnerHTML={transformText(textExample)}></span>
           <br />
           {!settings[keysObjSettings[2]] ? textExampleTranslate : null}
         </p>
@@ -64,7 +67,7 @@ export const WordCard = (props: any) => {
         <div className="word__btn-groups">
           {deleted ? (
             <button
-              onClick={() => deleted(item)}
+              onClick={() => difficult(item)}
               className="btn-groups__difficult"
             >
               difficult
@@ -72,7 +75,7 @@ export const WordCard = (props: any) => {
           ) : null}
           {difficult ? (
             <button
-              onClick={() => difficult(item)}
+              onClick={() => deleted(item)}
               className="btn-groups__delete"
             >
               delete
