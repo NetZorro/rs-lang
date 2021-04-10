@@ -16,7 +16,7 @@ export const Home: React.FC = () => {
             <h1 className="banner__title">
               Hello {login ? user.name : "Guest"}
             </h1>
-            <span className="banner__text">It's good to see you again.</span>
+            <span className="banner__text">{login ? "How are you?" : "It's good to see you again."}</span>
             <img className="banner__img" src={man} alt="icon" />
           </div>
           <div className="statistic">

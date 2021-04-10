@@ -2,11 +2,13 @@
   max-width: 1200px;
   margin: auto;
   display: flex;
+  height: 100%;
 }
 .body__content {
   padding-top: 24px;
   width: 1020px;
   position: relative;
+  height: 100%;
 }
 .body__sidebar {
   padding-top: 24px;
@@ -128,6 +130,14 @@
   }
   .banner__img {
     right: 5%;
+  }
+  .authorization {
+    align-items: center;
+    background: none;
+  }
+  .authorization__handler-login {
+    margin-right: 0;
+    transform: none;
   }
   .authorization__block {
     display: none;

@@ -1,4 +1,5 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import cl from "classnames";
 import { Formik } from "formik";
 
 import { Context } from "reducer";
@@ -17,6 +18,7 @@ type AuthorizationContext = {
  */
 export const Authorization: React.FC = () => {
   const { dispatch } = useContext<AuthorizationContext>(Context);
+  const [showMessage, setShowMessage] = useState<any>();
   const { sigIn } = authorization;
 
   const handlerSubmit = (
@@ -29,72 +31,109 @@ export const Authorization: React.FC = () => {
       if (status === 200) {
         dispatch(loginUser(data));
         sessionStorage.setItem("user", JSON.stringify(data));
-        setSubmitting(false);
+        setShowMessage(messageAuthorization[0]);
+      } else if (status === 403) {
+        setShowMessage(messageAuthorization[1]);
+      } else if (status === 404) {
+        setShowMessage(messageAuthorization[2]);
       }
+      setSubmitting(false);
     });
   };
 
   const handlerValidate = (values: { email: string; password: string }) => {
-    const errors: { email?: string } = {};
-    // TODO: доделать валидацию и сделать в регистрацие 
-    if (!values.email) {
+    const errors: { email?: string; password?: string } = {};
+    const { email, password } = values;
+
+    if (!email) {
       errors.email = "Required";
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
       errors.email = "Invalid email address";
     }
-    if (values.password) console.log("yes");
+    if (!password) {
+      errors.password = "Required";
+    } else if (
+      !/(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}/g.test(
+        password
+      )
+    ) {
+      errors.password =
+        "The password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
+    }
     return errors;
   };
 
   return (
-    <div className="authorization__login">
-      <Formik
-        initialValues={{ email: "", password: "" }}
-        validate={handlerValidate}
-        onSubmit={handlerSubmit}
-      >
-        {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          isSubmitting,
-        }) => (
-          <form className="login__form" onSubmit={handleSubmit}>
-            <h1>Login</h1>
-            <div className="login__block">
-              <label>Email</label>
-              <input
-                className="login__input-email"
-                type="email"
-                name="email"
-                placeholder="Email"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.email}
-              />
+    <Formik
+      initialValues={{ email: "", password: "" }}
+      validate={handlerValidate}
+      onSubmit={handlerSubmit}
+    >
+      {({
+        values,
+        errors,
+        touched,
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        isSubmitting,
+      }) => (
+        <form className="login__form" onSubmit={handleSubmit}>
+          <h1>Login</h1>
+          <div className="login__block">
+            <label>Email</label>
+            <input
+              className="login__input-email"
+              type="email"
+              name="email"
+              placeholder="Email"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.email}
+            />
+            <span
+              className={cl("login__warning-block_off", {
+                "login__warning-block": errors.email && touched.email,
+              })}
+            >
               {errors.email && touched.email && errors.email}
-            </div>
-            <div className="login__block">
-              <label>Password</label>
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.password}
-              />
+            </span>
+          </div>
+          <div className="login__block">
+            <label>Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.password}
+            />
+            <span
+              className={cl("login__warning-block_off", {
+                "login__warning-block": touched.password && errors.password,
+              })}
+            >
               {errors.password && touched.password && errors.password}
-            </div>
-            <button type="submit" disabled={isSubmitting}>
-              Submit
-            </button>
-          </form>
-        )}
-      </Formik>
-    </div>
+            </span>
+          </div>
+          {showMessage}
+          <button
+            className="login__submit-button"
+            type="submit"
+            disabled={isSubmitting}
+          >
+            Submit
+          </button>
+        </form>
+      )}
+    </Formik>
   );
 };
+
+
+const messageAuthorization = [
+  <span className="login__message-okey">You entered</span>,
+  <span className="login__message-error">Invalid Password</span>,
+  <span className="login__message-error">No such user found</span>,
+];

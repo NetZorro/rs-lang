@@ -1,5 +1,5 @@
 .word__card {
-  height: 132px;
+  height: auto;
   margin-bottom: 16px;
   display: flex;
   align-items: center;
@@ -45,8 +45,8 @@
   display: block;
   width: 8px;
   height: 8px;
-  background-color: #ff0000c9;
-  box-shadow: 0 0 1px 1px #ff0000c9;
+  background-color: #3b5af7;
+  box-shadow: 0 0 1px 1px #3b5af7;
   border-radius: 50%;
   margin-right: 8px;
   animation: animate-shadow 5s ease-in infinite;
@@ -54,10 +54,10 @@
 
 @keyframes animate-shadow {
     0% {
-        box-shadow: 0 0 1px 1px #ff0000c9;
+        box-shadow: 0 0 1px 1px #3b5af7;
     }
     50% {
-        box-shadow: 0 0 2px 2px #ff0000c9;
+        box-shadow: 0 0 2px 2px #3b5af7;
     }
 }
 .word__transcription {

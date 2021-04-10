@@ -18,6 +18,7 @@ export const authorization = {
       headers: { Authorization: `Bearer ${refreshToken}` },
     });
   },
+
   axiosSettings(state: any, dispatch: any) {
     const { userNewToken } = authorization;
     const { login, user } = state;
@@ -36,21 +37,27 @@ export const authorization = {
       headers.common["Authorization"] = `Bearer ${state.user.token}`;
     }
 
-    interceptors.response.use(undefined, (error) => {
-      const { status, data } = error.response;
-      if (status === 401) {
-        userNewToken(userId, refreshToken).then(({ status, data }) => {
-          if (status === 200) {
-            dispatch(loginUser(data));
-            sessionStorage.setItem("user", JSON.stringify(data));
+    interceptors.response.use(undefined, async (error) => {
+      const axiosApiInstance = axios.create();
+      const originalRequest = error.config;
+      if (error.response.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
+        const access_token = await userNewToken(userId, refreshToken).then(
+          ({ status, data }) => {
+            if (status === 200) {
+              dispatch(loginUser(data));
+              sessionStorage.setItem("user", JSON.stringify(data));
+              return data.token;
+            }
+            console.log(access_token)
+            axios.defaults.headers.common["Authorization"] =
+              "Bearer " + access_token;
           }
-        });
+        );
+        return axiosApiInstance(originalRequest);
       }
-      if (status === 404) {
-        console.log("yes");
-        return Promise.reject(status);
-      }
-      return { status, data };
+
+      return Promise.resolve(error.response);
     });
   },
 };

@@ -34,12 +34,10 @@
 }
 .btn-groups__difficult {
   margin-bottom: 8px;
-  background-color: #9c9c9e;
-  border: 1px solid rgb(255 255 255 / 78%);
+  background-color: #3b5af7;
   box-sizing: border-box;
 }
 .btn-groups__delete {
   background-color: #000000ea;
-  border : 1px solid rgb(255 255 255 / 78%);
   box-sizing: border-box;
 }

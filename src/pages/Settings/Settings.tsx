@@ -38,22 +38,26 @@ export const Settings: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="settings">
       <h1 className="settings__title">Settings</h1>
-      {settingsText.map((item, index) => {
-        return (
-          <div key={index}>
-            <label className="settings__label">
-              {item}
-              <input
-                onChange={() => dispatchSettingStatus(nameObjProperties[index])}
-                checked={settings[nameObjProperties[index]]}
-                type="checkbox"
-              />
-            </label>
-          </div>
-        );
-      })}
+      <div className="settings__block">
+        {settingsText.map((item, index) => {
+          return (
+            <div key={index}>
+              <label className="settings__label">
+                {item}
+                <input
+                  onChange={() =>
+                    dispatchSettingStatus(nameObjProperties[index])
+                  }
+                  checked={settings[nameObjProperties[index]]}
+                  type="checkbox"
+                />
+              </label>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

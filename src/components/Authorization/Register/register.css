@@ -1,20 +1,68 @@
-.authorization__register {
-  height: 640px;
-  width: 400px;
-}
 .register__form {
   width: 320px;
-  height: 320px;
+  height: 60%;
   box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
+  padding: 0 16px;
 }
 .register__block {
   margin-bottom: 8px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
 }
 .register__block label {
   margin-right: 8px;
+}
+.register__warning {
+  position: absolute;
+  top: 127%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
+  z-index: 5;
+  font-size: 12px;
+  line-height: 16px;
+}
+.register__warning::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: block;
+  width: 16px;
+  height: 16px;
+  border: 8px solid transparent;
+  border-bottom: 8px solid rgba(0, 0, 0, 0.2);
+}
+.register__warning_off {
+  position: absolute;
+}
+.register__submit-button {
+  color: white;
+  background-color: black;
+  width: 80px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  font-family: Roboto;
+}
+.register__message-error {
+  color: red;
+  font-weight: bold;
+  font-family: Roboto;
+}
+.register__message-okey {
+  color: green;
+  font-weight: bold;
+  font-family: Roboto;
 }

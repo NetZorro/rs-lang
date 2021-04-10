@@ -9,7 +9,7 @@ export const AuthorizationPage = () => {
   return (
     <div className="authorization">
       {formRegister ? <Register /> : <Authorization />}
-      <span onClick={() => setFormRegister(!formRegister)}>
+      <span className="authorization__handler-login" onClick={() => setFormRegister(!formRegister)}>
         {formRegister ? "Login" : "Register"}
       </span>
     </div>
