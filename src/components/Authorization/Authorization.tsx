@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import cl from "classnames";
+import { useHistory } from "react-router";
 import { Formik } from "formik";
 
 import { Context } from "reducer";
@@ -20,6 +21,7 @@ export const Authorization: React.FC = () => {
   const { dispatch } = useContext<AuthorizationContext>(Context);
   const [showMessage, setShowMessage] = useState<any>();
   const { sigIn } = authorization;
+  let history = useHistory();
 
   const handlerSubmit = (
     values: { email: string; password: string },
@@ -32,6 +34,7 @@ export const Authorization: React.FC = () => {
         dispatch(loginUser(data));
         sessionStorage.setItem("user", JSON.stringify(data));
         setShowMessage(messageAuthorization[0]);
+        history.push("/");
       } else if (status === 403) {
         setShowMessage(messageAuthorization[1]);
       } else if (status === 404) {
@@ -130,7 +133,6 @@ export const Authorization: React.FC = () => {
     </Formik>
   );
 };
-
 
 const messageAuthorization = [
   <span className="login__message-okey">You entered</span>,
