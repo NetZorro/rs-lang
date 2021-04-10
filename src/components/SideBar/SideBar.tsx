@@ -2,10 +2,10 @@ import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { Context } from "reducer";
-import home from "../../assets/icon/home.svg";
-import hat from "../../assets/icon/hat.svg";
-import message from "../../assets/icon/message.svg";
-import settings from "../../assets/icon/settings.svg";
+import home from "assets/icon/home.svg";
+import hat from "assets/icon/hat.svg";
+import message from "assets/icon/message.svg";
+import settings from "assets/icon/settings.svg";
 import cl from "classnames";
 import "./sideBar.css";
 

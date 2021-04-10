@@ -1,5 +1,6 @@
 import { useContext, useLayoutEffect } from "react";
 
+
 import { Context } from "reducer";
 import { settingsText } from "constants/data";
 import { serviceSettings } from "services";
@@ -36,7 +37,6 @@ export const Settings: React.FC = () => {
 
     dispatch(result);
   };
-
   return (
     <div className="settings">
       <h1 className="settings__title">Settings</h1>
