@@ -67,7 +67,13 @@ export const AudioCallGame: React.FC = () => {
   }
 
   if (fiveRandom.length === 0 || !hiddenWord) {
-    return <div>Loading...</div>;
+    return (
+      <div className='preloader-container'>
+        <div className="mk-spinner-wrap">
+          <div className="mk-spinner-ring"></div>
+        </div>
+      </div>
+    );
   }
 
   const nextWord = () => {
