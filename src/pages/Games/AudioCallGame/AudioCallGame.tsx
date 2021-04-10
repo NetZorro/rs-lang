@@ -6,6 +6,9 @@ import './AudioCallGame.css';
 import {AudioCallGameWords} from "./AudioCallGameWords";
 import {ChooseLevel} from "./ChooseLevel";
 import {FinishPage} from "./FinishPage";
+import fullScreenIcon from '../../../assets/icon/fullscreen.png';
+import fullScreenExitIcon from '../../../assets/icon/fullscreen-exit.png';
+
 
 export interface IStats {
   success: number
@@ -25,8 +28,12 @@ export const AudioCallGame: React.FC = () => {
   const [fiveRandom, setFiveRandom] = useState<Array<IWord>>([]);
   const [hiddenWord, setHiddenWord] = useState<IWord | undefined>();
   const [selected, setSelected] = useState<IWord|undefined>();
-  const [fullScreen, setFullScreen] = useState<boolean>(false)
-  const [screenMood, setScreenMood] = useState<string>('full screen')
+  const [fullScreen, setFullScreen] = useState<boolean>(false);
+
+  let screenIcon;
+  const pathToIcon = fullScreen ? fullScreenExitIcon : fullScreenIcon;
+  screenIcon = <img className='screenIcon-icon' src={pathToIcon} alt='screen icon'/>;
+
 
   useEffect(() => {
     if (!category) return;
@@ -82,7 +89,6 @@ export const AudioCallGame: React.FC = () => {
 
   const toggleScreen = () => {
     setFullScreen(!fullScreen)
-    setScreenMood('exit')
   }
 
   return (
@@ -95,7 +101,9 @@ export const AudioCallGame: React.FC = () => {
         setSelected={setSelected}
       />
       <button className='button-next' onClick={nextWord}>next</button>
-      <button type="button" onClick={toggleScreen}>{screenMood}</button>
+      <button className='screenIconButton' type="button" onClick={toggleScreen}>
+        {screenIcon}
+      </button>
     </div>
   );
 }

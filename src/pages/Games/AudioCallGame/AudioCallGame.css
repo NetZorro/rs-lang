@@ -81,6 +81,15 @@
   background-color: aliceblue;
 }
 
+.screenIconButton{
+  border: none;
+  background-color: transparent;
+}
+
+.screenIcon-icon{
+  width: 30px;
+}
+
 .preloader-container{
   display: flex;
   align-items: center;
