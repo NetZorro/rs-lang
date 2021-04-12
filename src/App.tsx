@@ -41,7 +41,7 @@ export const App: React.FC = () => {
               <Route exact component={Settings} path="/settings" />
               <Route exact component={TextBook} path="/textbook" />
               <Route exact component={Statistics} path="/statistics" />
-              {/*FIXME: Not Working <Route exact component={DictionaryPage} path="/dictionary" /> */}
+              <Route exact component={DictionaryPage} path="/dictionary" />
               <Route exact component={Games} path="/games" />
               <Route
                 exact
@@ -51,11 +51,20 @@ export const App: React.FC = () => {
               <Route
                 exact
                 component={Units}
-                path="/textbook/category-:categoryId/"
+                path="/textbook/category-:optional-:categoryId/"
               />
               <Route
                 component={Words}
-                path="/textbook/category-:categoryId/unit-:unitId"
+                path="/textbook/category-:optional-:categoryId/unit-:unitId"
+              />
+              <Route
+                exact
+                component={Units}
+                path="/dictionary/category-:optional-:categoryId/"
+              />
+              <Route
+                component={Words}
+                path="/dictionary/category-:optional-:categoryId/unit-:unitId"
               />
               <Redirect from="/" to="/" />
             </Switch>

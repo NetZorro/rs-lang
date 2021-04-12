@@ -45,8 +45,8 @@
   display: block;
   width: 8px;
   height: 8px;
-  background-color: #3b5af7;
-  box-shadow: 0 0 1px 1px #3b5af7;
+  background-color: #0d6efd;
+  box-shadow: 0 0 1px 1px #0d6efd;
   border-radius: 50%;
   margin-right: 8px;
   animation: animate-shadow 5s ease-in infinite;
@@ -54,10 +54,10 @@
 
 @keyframes animate-shadow {
     0% {
-        box-shadow: 0 0 1px 1px #3b5af7;
+        box-shadow: 0 0 1px 1px #0d6efd;
     }
     50% {
-        box-shadow: 0 0 2px 2px #3b5af7;
+        box-shadow: 0 0 2px 2px #0d6efd;
     }
 }
 .word__transcription {

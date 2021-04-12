@@ -1,15 +1,18 @@
-import { useContext } from "react";
-import { Context } from "reducer";
-import { IWord } from "Entities";
-import { WordCard } from "components/CategoryWords/WordCard";
+import { Link } from "react-router-dom";
 
-export const DeletedWords = () => {
-  const { state } = useContext(Context);
-  const { deleted } = state.dictionary;
+import { category } from "constants/data";
+
+export const DeletedWords: React.FC = () => {
   return (
     <div>
-      {deleted.map((item: IWord, index: number) => {
-        return <WordCard item={item} key={index} />;
+      {category.map((unit: number, index: number) => {
+        return (
+          <div key={index} className="dictionary__item-block">
+            <Link to={`/dictionary/category-deleted-${index}`}>
+              {index + 1} Collection
+            </Link>
+          </div>
+        );
       })}
     </div>
   );

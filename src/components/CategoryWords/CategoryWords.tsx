@@ -9,6 +9,7 @@ import "./categoryWords.css";
 type CategoryWordsProps = {
   unit: string;
   category: string;
+  optional: string;
 };
 
 /**
@@ -17,11 +18,12 @@ type CategoryWordsProps = {
 export const CategoryWords: React.FC<CategoryWordsProps> = ({
   unit,
   category,
+  optional,
 }) => {
   const { state, dispatch } = useContext(Context);
   const { words, login, user } = state;
   const { userId } = user;
-  const { addUserWords, getUserAggregatedWords } = userWords;
+  const { addUserWords, getUserAggregatedWords, setUserWords } = userWords;
   const { getWords } = wordsService;
 
   useEffect(() => {
@@ -29,9 +31,10 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
   }, []);
 
   const fetchLoginWords = async () => {
-    await getUserAggregatedWords(userId, category, unit, null).then(
+    await getUserAggregatedWords(userId, category, unit, optional).then(
       ({ status, data: [{ paginatedResults }] }) => {
         if (status === 200) {
+          console.log(paginatedResults);
           dispatch(actionAddWords(paginatedResults));
         }
       }
@@ -52,7 +55,7 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
 
       const addDeleteUserWordServer = async () => {
         await addUserWords(userId, _id!, false, true);
-        setTimeout(fetchLoginWords, 500);
+        setTimeout(fetchLoginWords, 300);
       };
 
       addDeleteUserWordServer();
@@ -68,7 +71,7 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
 
       const addDifficultServer = async () => {
         await addUserWords(user.userId, _id!, true, false);
-        setTimeout(fetchLoginWords, 500);
+        setTimeout(fetchLoginWords, 300);
       };
 
       addDifficultServer();
@@ -86,18 +89,63 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
     }
   };
 
+  const handlerRestoreWordDelete = (item: any) => {
+    const { _id } = item;
+    let result = `{"optional" : {"delete" : false}}`;
+
+    return setUserWords(userId, _id, result).then(({ status, data }) => {
+      if (status === 200) {
+        setTimeout(fetchLoginWords, 300);
+      }
+    });
+  };
+
+  const handlerRestoreWordDifficult = (item: any) => {
+    const { _id } = item;
+    let result = `{"difficulty" : "easy"}`;
+
+    return setUserWords(userId, _id, result).then(({ status, data }) => {
+      if (status === 200) {
+        setTimeout(fetchLoginWords, 300);
+      }
+    });
+  };
+
   return (
     <div className="word">
       {words.map((item: IWord, index: number) => {
-        return (
-          <WordCard
-            item={item}
-            deleted={handlerDelete}
-            difficult={handlerDifficult}
-            key={index}
-            hard={item?.userWord?.difficulty}
-          />
-        );
+        if (optional === "textbook") {
+          return (
+            <WordCard
+              item={item}
+              button2={handlerDelete}
+              button1={handlerDifficult}
+              button1Name={"Difficult"}
+              key={index}
+              hard={item?.userWord?.difficulty}
+            />
+          );
+        } else if (optional === "deleted") {
+          return (
+            <WordCard
+              item={item}
+              button1={handlerRestoreWordDelete}
+              button1Name={"Restore"}
+              key={index}
+              hard={item?.userWord?.difficulty}
+            />
+          );
+        } else if (optional === "difficult") {
+          return (
+            <WordCard
+              item={item}
+              button1={handlerRestoreWordDifficult}
+              button1Name={"Restore"}
+              key={index}
+              hard={item?.userWord?.difficulty}
+            />
+          );
+        }
       })}
     </div>
   );

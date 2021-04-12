@@ -12,7 +12,6 @@ export const userWords = {
     deleted: boolean
   ) {
     const body = addWordsBodyObj(difficulty, deleted);
-    // TODO: Подумать над этим сервисом
     return axios
       .post(`users/${userId}/words/${wordId}`, body)
       .then(({ status, data }) => {
@@ -30,30 +29,47 @@ export const userWords = {
     userId: string,
     group: string,
     page: string,
-    deleted: true | null
+    optional: string
   ) {
-    const filter = filterMongo(group, page, deleted);
+    const filter = switchOptional(+group, +page, optional);
     return axios.get(
       `users/${userId}/aggregatedWords?wordsPerPage=20&filter=${filter}`
     );
   },
+
+  getUserStudyWords(userId: string): any {
+    const filter = encodeURIComponent('{ "userWord.optional.study": true }');
+    return axios.get(
+      `users/${userId}/aggregatedWords?wordsPerPage=3600&filter=${filter}`
+    );
+  },
 };
 
-export const filterMongo = (
-  group: string,
-  page: string,
-  deleted: true | null
+export const switchOptional = (
+  group: number,
+  page: number,
+  optional: string
 ) => {
-  return encodeURIComponent(
-    `{"$and" : [{"group":${Number(group)} , "page" : ${Number(
-      page
-    )},"userWord.optional.delete" : ${deleted}}]}`
-  );
+  switch (optional) {
+    case "textbook":
+      return encodeURIComponent(
+        `{"$and" : [{"group":${group} , "page" : ${page},"$or" : [{"userWord.optional.delete" : null}, {"userWord.optional.delete" : false}]}
+      ]}`
+      );
+    case "difficult":
+      return encodeURIComponent(
+        `{"$and" : [{"group":${group} , "page" : ${page},"$or" : [{"userWord.optional.delete" : null}, {"userWord.optional.delete" : false}], "userWord.difficulty": "hard"}]}`
+      );
+    case "deleted":
+      return encodeURIComponent(
+        `{"$and" : [{"group":${group} , "page" : ${page},"userWord.optional.delete" : true}]}`
+      );
+  }
 };
 
 export const addWordsBodyObj = (difficulty: boolean, deleted: boolean) => {
   if (difficulty) {
-    return { difficulty: "hard" };
+    return { difficulty: "hard", optional: { study: true } };
   } else if (deleted) {
     return { optional: { delete: true } };
   }
