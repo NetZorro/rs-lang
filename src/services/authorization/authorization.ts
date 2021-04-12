@@ -1,57 +1,63 @@
+import axios from "axios";
+
+import { IUserReg, IUserAuth } from "Entities/IAuthorization";
 import { baseURL } from "constants/baseURL";
-import { IUserReg, IUserAuth } from "interfaces/IAuthorization";
+import { loginUser } from "utils/lib";
 
 export const authorization = {
-  async userAuth(user: IUserAuth, dispatch: any) {
-    let result;
-    try {
-      console.log(user);
-      result = await fetch(`${baseURL}signin`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          accept: "application/json",
-        },
-        body: JSON.stringify(user),
-      });
-      if (result.status === 200) {
-        let reply: Promise<JSON> = await result.json();
-        await dispatch(loginUser(reply));
-        await dispatch({ type: "user__logIn" });
-        sessionStorage.setItem("user", JSON.stringify(reply));
-        return true;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      result = error;
-    }
+  async sigIn(user: IUserAuth) {
+    return axios.post("signin", user);
   },
-  async userReg(user: IUserReg) {
-    let result;
-    try {
-      result = await fetch(`${baseURL}users`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          accept: "application/json",
-        },
-        body: JSON.stringify(user),
-      });
-      if (result.status > 400) {
-        return "Направильный адрес электорнной почты";
-      } else {
-        console.log("okey");
-        return "Все окей вы зарегистрированы";
-      }
-    } catch (error) {
-      console.log("Error Register", error);
-      result = error;
+
+  async register(user: IUserReg) {
+    return axios.post("users", user);
+  },
+
+  async userNewToken(userId: string, refreshToken: string) {
+    return axios.get(`users/${userId}/tokens`, {
+      headers: { Authorization: `Bearer ${refreshToken}` },
+    });
+  },
+
+  axiosSettings(state: any, dispatch: any) {
+    const { userNewToken } = authorization;
+    const { login, user } = state;
+    const { userId, refreshToken } = user;
+    const { defaults, interceptors } = axios;
+    const { headers } = defaults;
+
+    defaults.baseURL = baseURL;
+
+    for (let name in headers) {
+      headers[name]["Content-Type"] = "application/json";
+      headers[name]["Accept"] = "application/json";
     }
+
+    if (login) {
+      headers.common["Authorization"] = `Bearer ${state.user.token}`;
+    }
+
+    interceptors.response.use(undefined, async (error) => {
+      const axiosApiInstance = axios.create();
+      const originalRequest = error.config;
+      if (error.response.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
+        const access_token = await userNewToken(userId, refreshToken).then(
+          ({ status, data }) => {
+            if (status === 200) {
+              dispatch(loginUser(data));
+              sessionStorage.setItem("user", JSON.stringify(data));
+              return data.token;
+            }
+            console.log(access_token)
+            axios.defaults.headers.common["Authorization"] =
+              "Bearer " + access_token;
+          }
+        );
+        return axiosApiInstance(originalRequest);
+      }
+
+      return Promise.resolve(error.response);
+    });
   },
 };
-
-const loginUser = (userObj: Object) => ({
-  type: "user__authorization",
-  payload: userObj,
-});

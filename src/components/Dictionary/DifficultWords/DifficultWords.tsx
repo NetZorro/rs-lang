@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { Context } from "reducer";
-import { IWord } from "interfaces";
+import { IWord } from "Entities";
 import { WordCard } from "components/CategoryWords/WordCard";
 
 export const DifficultWords = () => {
