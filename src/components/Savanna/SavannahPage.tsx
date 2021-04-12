@@ -141,32 +141,18 @@ const SavannahPage: React.FC = () => {
     const getWordDataNewRound = async () => {
         setSelectWordId('');
 
-        await userWords.getUserAggregatedWords(userId, '1', '1', 'textbook').then(
-            ({ status, data: [{ paginatedResults }] }) => {
-                if (status === 200) {
-                    const wordsListWithSuccess = WordServices.setFalseToSuccessField(paginatedResults);
+        // const wordsList = await WordServices.getWordList(0, 20); // - получаем IWord из вне, а дальше делаем все что надо
+        const wordsList = await WordServices.getWordListAPI(userId, '0', '0', 'textbook');
 
-                    const idx = getRandomInt(wordsListWithSuccess.length - 1);
+        const wordsListWithSuccess = WordServices.setFalseToSuccessField(wordsList);
+        const idx = getRandomInt(wordsList.length - 1);
 
-                    const xRoundWordArray = WordServices.getRoundWordsArray(wordsListWithSuccess, wordsListWithSuccess[idx], idx, 3);
+        const xRoundWordArray = WordServices.getRoundWordsArray(wordsListWithSuccess, wordsListWithSuccess[idx], idx, 3);
 
-                    changeGameState({type: 'ADDWORD', payload: {...gameState, gameWordArray:  [...gameState.gameWordArray as IWordWithSuccess[], wordsListWithSuccess[idx]] }})
-                    changeGameState({type: 'NEWROUND', payload: {...gameState, roundWordArray:  xRoundWordArray }})
-                }
-            }
-        );
-
-        // let wordsList = await WordServices.getWordList(userId, '1', '1', 'textbook'); // - получаем IWord из вне, а дальше делаем все что надо
-
-        // const wordsListWithSuccess = WordServices.setFalseToSuccessField(wordsList);
-        //
-        // const idx = getRandomInt(wordsList.length - 1);
-        //
-        // const xRoundWordArray = WordServices.getRoundWordsArray(wordsListWithSuccess, wordsListWithSuccess[idx], idx, 3);
-        //
-        // changeGameState({type: 'ADDWORD', payload: {...gameState, gameWordArray:  [...gameState.gameWordArray as IWordWithSuccess[], wordsListWithSuccess[idx]] }})
-        // changeGameState({type: 'NEWROUND', payload: {...gameState, roundWordArray:  xRoundWordArray }})
+        changeGameState({type: 'ADDWORD', payload: {...gameState, gameWordArray:  [...gameState.gameWordArray as IWordWithSuccess[], wordsListWithSuccess[idx]] }})
+        changeGameState({type: 'NEWROUND', payload: {...gameState, roundWordArray:  xRoundWordArray }})
     };
+
 
     useEffect(() => {
         console.log('refreshRound useEffect >>', refreshRound);

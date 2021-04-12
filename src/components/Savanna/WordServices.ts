@@ -4,19 +4,33 @@ import {IWord, IWordWithSuccess} from "./interfacesSavannah";
 import {userWords} from "../../services/userWords";
 
 export default class WordServices {
-    static async getWordList(userId: string, group: string, page: string, optional: string): Promise<IWord[]> {
+    static async getWordList(begin: number, end: number): Promise<IWord[]> {
         try {
             const page = getRandomInt(20);
 
-            // const res = await fetch(templatesURL.getWordListURL(page, 0));
-            // let data = await res.json();
+            const res = await fetch(templatesURL.getWordListURL(page, 0));
+            let data = await res.json();
 
-            const res = await userWords.getUserAggregatedWords(userId, '1', '1', 'textbook');
-            const data = await res.data;
-
-            console.log('data >>', data);
+            data = data.slice(begin, end);
 
             return data;
+        } catch (err) {
+            console.log('Error getWordList', err);
+            return [];
+        }
+    }
+
+    static async getWordListAPI(userId: string, group: string, p: string, optional: string): Promise<IWord[]> {
+        try {
+            const page = getRandomInt(20);
+
+            const res = await userWords.getUserAggregatedWords(userId, group, p, optional);
+            let data = await res.data[0].paginatedResults;
+
+            return data.map((item: any) => ({
+                ...item,
+                id: item._id
+            }));
 
         } catch (err) {
             console.log('Error getWordList', err);
