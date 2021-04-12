@@ -41,7 +41,6 @@ export const App: React.FC = () => {
               <Route exact component={Settings} path="/settings" />
               <Route exact component={TextBook} path="/textbook" />
               <Route exact component={Statistics} path="/statistics" />
-              <Route exact component={DictionaryPage} path="/dictionary" />
               <Route exact component={Games} path="/games" />
               <Route
                 exact
@@ -57,6 +56,7 @@ export const App: React.FC = () => {
                 component={Words}
                 path="/textbook/category-:optional-:categoryId/unit-:unitId"
               />
+              <Route exact component={DictionaryPage} path="/dictionary" />
               <Route
                 exact
                 component={Units}
@@ -66,7 +66,7 @@ export const App: React.FC = () => {
                 component={Words}
                 path="/dictionary/category-:optional-:categoryId/unit-:unitId"
               />
-              <Redirect from="/" to="/" />
+              {/* <Redirect from="/" to="/" /> */}
             </Switch>
           </div>
         </Router>
