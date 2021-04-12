@@ -21,6 +21,7 @@ import { SideBar } from "components/SideBar";
 import { authorization } from "services";
 import { initialState, reducer, Context } from "reducer";
 import "./App.css";
+import SavannahPage from "./components/Savanna/SavannahPage";
 
 export const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -42,7 +43,8 @@ export const App: React.FC = () => {
               <Route exact component={TextBook} path="/textbook" />
               <Route exact component={Statistics} path="/statistics" />
               <Route exact component={DictionaryPage} path="/dictionary" />
-              <Route exact component={Games} path="/games" />
+              {/*<Route exact component={Games} path="/games" />*/}
+              <Route exact component={SavannahPage} path="/games" />
               <Route
                 exact
                 component={AuthorizationPage}

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useReducer, useState} from "react";
+import React, {useCallback, useContext, useEffect, useReducer, useState} from "react";
 import {ISavannahAction, ISavannahState, IWordWithSuccess} from "./interfacesSavannah";
 import cl from "classnames"
 
@@ -12,6 +12,8 @@ import audio from "./images/audio.svg";
 import correctAudio from './audio/correct.mp3'
 // @ts-ignore
 import errorAudio from "./audio/error.mp3";
+import {Context} from "../../reducer";
+import {userWords} from "../../services/userWords";
 
 
 
@@ -73,6 +75,9 @@ const initialState = {
 
 
 const SavannahPage: React.FC = () => {
+    const { state, dispatch } = useContext(Context);
+    const { user } = state;
+    const { userId } = user;
 
     const [gameState, changeGameState] = useReducer<React.Reducer<ISavannahState, ISavannahAction>>(savannahReducer, initialState);
     const [selectWordId, setSelectWordId] = useState<string>('');
@@ -136,15 +141,31 @@ const SavannahPage: React.FC = () => {
     const getWordDataNewRound = async () => {
         setSelectWordId('');
 
-        const wordsList = await WordServices.getWordList(0, 20); // - получаем IWord из вне, а дальше делаем все что надо
+        await userWords.getUserAggregatedWords(userId, '1', '1', 'textbook').then(
+            ({ status, data: [{ paginatedResults }] }) => {
+                if (status === 200) {
+                    const wordsListWithSuccess = WordServices.setFalseToSuccessField(paginatedResults);
 
-        const wordsListWithSuccess = WordServices.setFalseToSuccessField(wordsList);
-        const idx = getRandomInt(wordsList.length - 1);
+                    const idx = getRandomInt(wordsListWithSuccess.length - 1);
 
-        const xRoundWordArray = WordServices.getRoundWordsArray(wordsListWithSuccess, wordsListWithSuccess[idx], idx, 3);
+                    const xRoundWordArray = WordServices.getRoundWordsArray(wordsListWithSuccess, wordsListWithSuccess[idx], idx, 3);
 
-        changeGameState({type: 'ADDWORD', payload: {...gameState, gameWordArray:  [...gameState.gameWordArray as IWordWithSuccess[], wordsListWithSuccess[idx]] }})
-        changeGameState({type: 'NEWROUND', payload: {...gameState, roundWordArray:  xRoundWordArray }})
+                    changeGameState({type: 'ADDWORD', payload: {...gameState, gameWordArray:  [...gameState.gameWordArray as IWordWithSuccess[], wordsListWithSuccess[idx]] }})
+                    changeGameState({type: 'NEWROUND', payload: {...gameState, roundWordArray:  xRoundWordArray }})
+                }
+            }
+        );
+
+        // let wordsList = await WordServices.getWordList(userId, '1', '1', 'textbook'); // - получаем IWord из вне, а дальше делаем все что надо
+
+        // const wordsListWithSuccess = WordServices.setFalseToSuccessField(wordsList);
+        //
+        // const idx = getRandomInt(wordsList.length - 1);
+        //
+        // const xRoundWordArray = WordServices.getRoundWordsArray(wordsListWithSuccess, wordsListWithSuccess[idx], idx, 3);
+        //
+        // changeGameState({type: 'ADDWORD', payload: {...gameState, gameWordArray:  [...gameState.gameWordArray as IWordWithSuccess[], wordsListWithSuccess[idx]] }})
+        // changeGameState({type: 'NEWROUND', payload: {...gameState, roundWordArray:  xRoundWordArray }})
     };
 
     useEffect(() => {
@@ -291,7 +312,6 @@ const SavannahPage: React.FC = () => {
 
     return (
         <div className="main-savannah mt-0">
-
             { !gameState.inProgress &&
 
                 <div className="start-page d-flex align-items-center">
