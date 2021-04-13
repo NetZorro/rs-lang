@@ -1,24 +1,13 @@
 import React from "react";
-import {IWord} from "../../../interfaces";
 import trueIcon from "../../../assets/icon/true.png";
 import falseIcon from "../../../assets/icon/false.png";
 import volume from "../../../assets/icon/volume-up.svg";
 import {playAudio} from "../../../components/CategoryWords/playAudio";
 import {baseURL} from "../../../constants/baseURL";
-import {IStats} from "./AudioCallGame";
-
-
-interface IAudioCallGameWords {
-  hiddenWord: IWord,
-  fiveRandom: Array<IWord>,
-  stats: IStats
-  selected: IWord | undefined,
-  setSelected: any,
-}
+import {IWord} from "../../../Entities";
+import {IAudioCallGameWords} from "./IAudioCallGame";
 
 export const AudioCallGameWords = ({hiddenWord, fiveRandom, stats, selected, setSelected}: IAudioCallGameWords) => {
-
-
 
   const checkWord = (e: React.MouseEvent, word: IWord) => {
     setSelected(word);

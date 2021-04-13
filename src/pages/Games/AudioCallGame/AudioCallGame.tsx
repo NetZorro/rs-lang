@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {wordsService} from "../../../services";
-import {IWord} from "../../../interfaces";
 import {playAudio} from "../../../components/CategoryWords/playAudio";
 import './AudioCallGame.css';
 import {AudioCallGameWords} from "./AudioCallGameWords";
@@ -8,12 +7,8 @@ import {ChooseLevel} from "./ChooseLevel";
 import {FinishPage} from "./FinishPage";
 import fullScreenIcon from '../../../assets/icon/fullscreen.png';
 import fullScreenExitIcon from '../../../assets/icon/fullscreen-exit.png';
-
-
-export interface IStats {
-  success: number
-  fail: number
-}
+import {IWord} from "../../../Entities";
+import {IStats} from "./IAudioCallGame";
 
 const defaultStats: IStats = {
   success: 0,
@@ -44,11 +39,11 @@ export const AudioCallGame: React.FC = () => {
 
     wordsService
       .getWords(category, page)
-      .then((words) => {
+      .then(({data: words, status}) => {
 
           if (!words) return setFinish(true);
           const randomWords: Array<IWord> = [];
-          for (const word of words) {
+        for (const word of words) {
             const random = Math.floor(Math.random() * words.length);
             if (!randomWords.includes(words[random])) {
               randomWords.push (words[random]);
