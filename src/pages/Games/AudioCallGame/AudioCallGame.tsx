@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from "react";
-import {wordsService} from "../../../services";
-import {playAudio} from "../../../components/CategoryWords/playAudio";
+import {wordsService} from "services";
+import {playAudio} from "components/CategoryWords/playAudio";
 import './AudioCallGame.css';
 import {AudioCallGameWords} from "./AudioCallGameWords";
 import {ChooseLevel} from "./ChooseLevel";
 import {FinishPage} from "./FinishPage";
-import fullScreenIcon from '../../../assets/icon/fullscreen.png';
-import fullScreenExitIcon from '../../../assets/icon/fullscreen-exit.png';
-import {IWord} from "../../../Entities";
+import fullScreenIcon from 'assets/icon/fullscreen.png';
+import fullScreenExitIcon from 'assets/icon/fullscreen-exit.png';
+import {IWord} from "Entities";
 import {IStats} from "./IAudioCallGame";
 
 const defaultStats: IStats = {
@@ -25,9 +25,8 @@ export const AudioCallGame: React.FC = () => {
   const [selected, setSelected] = useState<IWord|undefined>();
   const [fullScreen, setFullScreen] = useState<boolean>(false);
 
-  let screenIcon;
   const pathToIcon = fullScreen ? fullScreenExitIcon : fullScreenIcon;
-  screenIcon = <img className='screenIcon-icon' src={pathToIcon} alt='screen icon'/>;
+  const screenIcon = <img className='screenIcon-icon' src={pathToIcon} alt='screen icon'/>;
 
 
   useEffect(() => {

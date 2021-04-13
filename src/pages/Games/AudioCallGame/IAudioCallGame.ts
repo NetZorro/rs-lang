@@ -1,4 +1,4 @@
-import {IWord} from "../../../Entities";
+import {IWord} from "Entities";
 
 export interface IAudioCallGameWords {
   hiddenWord: IWord,

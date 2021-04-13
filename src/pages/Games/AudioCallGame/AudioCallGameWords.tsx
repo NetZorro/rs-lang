@@ -1,10 +1,10 @@
 import React from "react";
-import trueIcon from "../../../assets/icon/true.png";
-import falseIcon from "../../../assets/icon/false.png";
-import volume from "../../../assets/icon/volume-up.svg";
-import {playAudio} from "../../../components/CategoryWords/playAudio";
-import {baseURL} from "../../../constants/baseURL";
-import {IWord} from "../../../Entities";
+import trueIcon from "assets/icon/true.png";
+import falseIcon from "assets/icon/false.png";
+import volume from "assets/icon/volume-up.svg";
+import {playAudio} from "components/CategoryWords/playAudio";
+import {baseURL} from "constants/baseURL";
+import {IWord} from "Entities";
 import {IAudioCallGameWords} from "./IAudioCallGame";
 
 export const AudioCallGameWords = ({hiddenWord, fiveRandom, stats, selected, setSelected}: IAudioCallGameWords) => {
