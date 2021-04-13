@@ -1,6 +1,6 @@
 import { useEffect, useContext, useState } from "react";
 import ReactPaginate from "react-paginate";
-import { useHistory , useParams} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import { wordsService, userWords } from "services";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -37,6 +37,7 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
   }, [unitId]);
 
   const fetchLoginWords = async () => {
+    console.log("fetch");
     await getUserAggregatedWords(userId, category, unitId, optional).then(
       ({ status, data: [{ paginatedResults }] }) => {
         if (status === 200) {
@@ -60,7 +61,7 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
       const { _id } = item;
 
       const addDeleteUserWordServer = async () => {
-        await addUserWords(userId, _id!, false, true);
+        await addUserWords(userId, _id!, "deleted");
         setTimeout(fetchLoginWords, 300);
       };
 
@@ -76,7 +77,7 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
       const { _id } = item;
 
       const addDifficultServer = async () => {
-        await addUserWords(user.userId, _id!, true, false);
+        await addUserWords(user.userId, _id!, "difficulty");
         setTimeout(fetchLoginWords, 300);
       };
 
@@ -122,11 +123,15 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
   };
   const handlePageClick = (data: any) => {
     const { selected } = data;
-    console.log(history.location);
-    // setUnitId(selected);
+    const { location } = history;
+    const { pathname } = location;
+
+    let result = pathname.slice(0, pathname.length - unitId.length);
+    history.replace(`${result}${selected + 1}`);
+
+    setUnitId(String(selected));
   };
 
-  console.log(useParams());
   return (
     <div className="word">
       {loading ? (
@@ -166,19 +171,21 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
             );
           }
         })
-        )}
-      <ReactPaginate
-        previousLabel={"previous"}
-        nextLabel={"next"}
-        breakLabel={"..."}
-        breakClassName={"break-me"}
-        pageCount={30}
-        marginPagesDisplayed={2}
-        pageRangeDisplayed={6}
-        onPageChange={handlePageClick}
-        containerClassName={"pagination__container"}
-        activeClassName={"active"}
-      />
+      )}
+      {loading ? null : (
+        <ReactPaginate
+          previousLabel={"previous"}
+          nextLabel={"next"}
+          breakLabel={"..."}
+          breakClassName={"break-me"}
+          pageCount={30}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={6}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination__container"}
+          activeClassName={"active"}
+        />
+      )}
     </div>
   );
 };

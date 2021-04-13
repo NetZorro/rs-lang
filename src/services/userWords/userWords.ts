@@ -8,15 +8,15 @@ export const userWords = {
   async addUserWords(
     userId: string,
     wordId: string,
-    difficulty: boolean,
-    deleted: boolean
+    optional: string,
+    arrWinLos?: [number, number]
   ) {
-    const body = addWordsBodyObj(difficulty, deleted);
+    const filter = switchOptionalSetWord(optional, arrWinLos);
     return axios
-      .post(`users/${userId}/words/${wordId}`, body)
+      .post(`users/${userId}/words/${wordId}`, filter)
       .then(({ status, data }) => {
         if (status === 417) {
-          userWords.setUserWords(userId, wordId, body);
+          userWords.setUserWords(userId, wordId, filter);
         }
       });
   },
@@ -45,11 +45,7 @@ export const userWords = {
   },
 };
 
-export const switchOptional = (
-  group: number,
-  page: number,
-  optional: string
-) => {
+const switchOptional = (group: number, page: number, optional: string) => {
   switch (optional) {
     case "textbook":
       return encodeURIComponent(
@@ -67,10 +63,13 @@ export const switchOptional = (
   }
 };
 
-export const addWordsBodyObj = (difficulty: boolean, deleted: boolean) => {
-  if (difficulty) {
-    return { difficulty: "hard", optional: { study: true } };
-  } else if (deleted) {
-    return { optional: { delete: true } };
+const switchOptionalSetWord = (optional: string, count?: any) => {
+  switch (optional) {
+    case "difficulty":
+      return { difficulty: "hard", optional: { study: true } };
+    case "deleted":
+      return { optional: { delete: true } };
+    case "games":
+      return { optional: { study: true, won: count.won, lost: count.lost } };
   }
 };

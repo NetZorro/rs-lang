@@ -28,6 +28,27 @@ export const App: React.FC = () => {
 
   axiosSettings(state, dispatch);
 
+  const PrivateRoute = ({children, ...rest}: {children: any, path: string, exact: boolean}) => {
+    let auth = state.login;
+    return (
+      <Route
+        {...rest}
+        render={({ location }) =>
+          auth ? (
+            children
+          ) : (
+            <Redirect
+              to={{
+                pathname: "/authorization",
+                state: { from: location },
+              }}
+            />
+          )
+        }
+      />
+    );
+  };
+
   return (
     <div className="body">
       <Context.Provider value={{ state, dispatch }}>
@@ -53,20 +74,26 @@ export const App: React.FC = () => {
                 path="/textbook/category-:optional-:categoryId/"
               />
               <Route
+                exact
                 component={Words}
                 path="/textbook/category-:optional-:categoryId/unit-:unitId"
               />
-              <Route exact component={DictionaryPage} path="/dictionary" />
+              {/* <PrivateRoute exact path="/dictionary" > */}
+                  {/* <DictionaryPage /> */}
+              {/* </PrivateRoute> */}
+              
+                <Route exact component={DictionaryPage} path="/dictionary" />
               <Route
                 exact
                 component={Units}
                 path="/dictionary/category-:optional-:categoryId/"
               />
               <Route
+                exact
                 component={Words}
                 path="/dictionary/category-:optional-:categoryId/unit-:unitId"
               />
-              {/* <Redirect from="/" to="/" /> */}
+              <Redirect from="/" to="/" />
             </Switch>
           </div>
         </Router>
