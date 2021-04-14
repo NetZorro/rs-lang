@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import cl from 'classnames'
+import cl from "classnames";
 
 import { Context } from "reducer";
 import { baseURL } from "constants/baseURL";
@@ -7,7 +7,7 @@ import { playAudio } from "../playAudio";
 import "./wordCard.css";
 
 export const WordCard = (props: any) => {
-  const { item, deleted, difficult , hard } = props;
+  const { item, hard, button1, button2, button1Name } = props;
   const { state } = useContext(Context);
   const { settings } = state;
   const {
@@ -38,7 +38,9 @@ export const WordCard = (props: any) => {
       ></div>
       <div className="word__block">
         <div className="word__name">
-          <span className={cl("word__title", {"word__hard" : hard})}>{word}</span>
+          <span className={cl("word__title", { word__hard: hard === "hard"})}>
+            {word}
+          </span>
           <span className="word__transcription">{transcription}</span>
           <span className="word__word-translate">
             {!settings[keysObjSettings[0]] ? `${wordTranslate}` : null}
@@ -63,22 +65,22 @@ export const WordCard = (props: any) => {
           {!settings[keysObjSettings[2]] ? textExampleTranslate : null}
         </p>
       </div>
-      {!settings[keysObjSettings[3]] ? (
+      {!settings[keysObjSettings[3]] || button1Name === "Restore" ? (
         <div className="word__btn-groups">
-          {deleted ? (
+          {button1 ? (
             <button
-              onClick={() => difficult(item)}
+              onClick={() => button1(item)}
               className="btn-groups__difficult"
             >
-              difficult
+              {button1Name}
             </button>
           ) : null}
-          {difficult ? (
+          {button2 ? (
             <button
-              onClick={() => deleted(item)}
+              onClick={() => button2(item)}
               className="btn-groups__delete"
             >
-              delete
+              Delete
             </button>
           ) : null}
         </div>

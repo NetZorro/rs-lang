@@ -1,15 +1,18 @@
-import { useContext } from "react";
-import { Context } from "reducer";
-import { IWord } from "Entities";
-import { WordCard } from "components/CategoryWords/WordCard";
+import { Link } from "react-router-dom";
 
-export const DifficultWords = () => {
-  const { state} = useContext(Context);
-  const { difficult } = state.dictionary;
+import { category } from "constants/data";
+
+export const DifficultWords: React.FC = () => {
   return (
     <div>
-      {difficult.map((item: IWord, index: number) => {
-        return <WordCard item={item} key={index} />;
+      {category.map((unit: number, index: number) => {
+        return (
+          <div key={index} className="dictionary__item-block">
+            <Link to={`/dictionary/category-difficult-${index}`}>
+              {index + 1} Collection
+            </Link>
+          </div>
+        );
       })}
     </div>
   );

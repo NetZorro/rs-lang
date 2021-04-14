@@ -22,7 +22,7 @@ export const authorization = {
   axiosSettings(state: any, dispatch: any) {
     const { userNewToken } = authorization;
     const { login, user } = state;
-    const { userId, refreshToken } = user;
+    const { userId, refreshToken, token } = user;
     const { defaults, interceptors } = axios;
     const { headers } = defaults;
 
@@ -42,18 +42,13 @@ export const authorization = {
       const originalRequest = error.config;
       if (error.response.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
-        const access_token = await userNewToken(userId, refreshToken).then(
-          ({ status, data }) => {
-            if (status === 200) {
-              dispatch(loginUser(data));
-              sessionStorage.setItem("user", JSON.stringify(data));
-              return data.token;
-            }
-            console.log(access_token)
-            axios.defaults.headers.common["Authorization"] =
-              "Bearer " + access_token;
+        await userNewToken(userId, refreshToken).then(({ status, data }) => {
+          if (status === 200) {
+            dispatch(loginUser(data));
+            sessionStorage.setItem("user", JSON.stringify(data));
+            axios.defaults.headers.common["Authorization"] = "Bearer " + token;
           }
-        );
+        });
         return axiosApiInstance(originalRequest);
       }
 

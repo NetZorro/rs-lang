@@ -31,6 +31,27 @@ export const App: React.FC = () => {
 
   axiosSettings(state, dispatch);
 
+  const PrivateRoute = ({children, ...rest}: {children: any, path: string, exact: boolean}) => {
+    let auth = state.login;
+    return (
+      <Route
+        {...rest}
+        render={({ location }) =>
+          auth ? (
+            children
+          ) : (
+            <Redirect
+              to={{
+                pathname: "/authorization",
+                state: { from: location },
+              }}
+            />
+          )
+        }
+      />
+    );
+  };
+
   return (
     <div className="body">
       <Context.Provider value={{ state, dispatch }}>
@@ -44,7 +65,6 @@ export const App: React.FC = () => {
               <Route exact component={Settings} path="/settings" />
               <Route exact component={TextBook} path="/textbook" />
               <Route exact component={Statistics} path="/statistics" />
-              {/*FIXME: Not Working <Route exact component={DictionaryPage} path="/dictionary" /> */}
               <Route exact component={Games} path="/games" />
               <Route exact component={AudioCallGame} path="/games/audiocall" />
               <Route
@@ -55,11 +75,27 @@ export const App: React.FC = () => {
               <Route
                 exact
                 component={Units}
-                path="/textbook/category-:categoryId/"
+                path="/textbook/category-:optional-:categoryId/"
               />
               <Route
+                exact
                 component={Words}
-                path="/textbook/category-:categoryId/unit-:unitId"
+                path="/textbook/category-:optional-:categoryId/unit-:unitId"
+              />
+              {/* <PrivateRoute exact path="/dictionary" > */}
+                  {/* <DictionaryPage /> */}
+              {/* </PrivateRoute> */}
+              
+                <Route exact component={DictionaryPage} path="/dictionary" />
+              <Route
+                exact
+                component={Units}
+                path="/dictionary/category-:optional-:categoryId/"
+              />
+              <Route
+                exact
+                component={Words}
+                path="/dictionary/category-:optional-:categoryId/unit-:unitId"
               />
               <Redirect from="/" to="/" />
             </Switch>
