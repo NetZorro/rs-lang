@@ -19,3 +19,5 @@ export interface IWord {
     optional?: { study?: boolean; delete?: boolean; won?: number; lost?: number };
   };
 }
+
+

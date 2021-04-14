@@ -22,8 +22,7 @@ export default class WordServices {
 
     static async getWordListAPI(userId: string, group: string, p: string, optional: string): Promise<IWord[]> {
         try {
-            const page = getRandomInt(20);
-
+            console.log('getWordListAPI >>', group, p);
             const res = await userWords.getUserAggregatedWords(userId, group, p, optional);
             let data = await res.data[0].paginatedResults;
 
