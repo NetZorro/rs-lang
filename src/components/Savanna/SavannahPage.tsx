@@ -1,7 +1,8 @@
-import React, {useCallback, useEffect, useReducer, useState} from "react";
-import {ISavannahAction, ISavannahState, IWordWithSuccess} from "./interfacesSavannah";
+import React, {useCallback, useContext, useEffect, useReducer, useState} from "react";
+import {ISavannahAction, ISavannahState, IWordWithSuccess, IWord} from "Entities/IWordsService";
 import cl from "classnames"
 
+import { useParams } from "react-router-dom";
 import './savanna.scss'
 import WordServices from "./WordServices";
 import {getRandomInt, playAudio} from "./helpers";
@@ -12,6 +13,8 @@ import audio from "./images/audio.svg";
 import correctAudio from './audio/correct.mp3'
 // @ts-ignore
 import errorAudio from "./audio/error.mp3";
+import {Context} from "../../reducer";
+import {userWords} from "../../services/userWords";
 
 
 
@@ -73,15 +76,21 @@ const initialState = {
 
 
 const SavannahPage: React.FC = () => {
+    const { state, dispatch } = useContext(Context);
+    const { user, login } = state;
+    const { userId } = user;
 
     const [gameState, changeGameState] = useReducer<React.Reducer<ISavannahState, ISavannahAction>>(savannahReducer, initialState);
+
     const [selectWordId, setSelectWordId] = useState<string>('');
     const [refreshRound, setRefreshRound] = useState<boolean>(false);
     const [errorWords, setErrorWords] = useState<number>(0);
     const [successWords, setSuccessWords] = useState<number>(0);
     const [timeLeft, setTimeLeft] = useState<number>(0);
     const [myIntervalId, setMyIntervalId] = useState<any>(0);
-    const [pressKey, setPressKey] = useState<number>(0)
+    const [pressKey, setPressKey] = useState<number>(0);
+    const [category, setCategory] = useState<string>('0');
+    const { group, page, source } = useParams<{ group: string, page: string, source: string }>();
 
     // const [isGuessed, setIsGuessed] = useState<boolean>(false);
 
@@ -136,16 +145,67 @@ const SavannahPage: React.FC = () => {
     const getWordDataNewRound = async () => {
         setSelectWordId('');
 
-        const wordsList = await WordServices.getWordList(0, 20); // - получаем IWord из вне, а дальше делаем все что надо
+        // const wordsList = await WordServices.getWordList(0, 20); // - получаем IWord из вне, а дальше делаем все что надо
+        let wordsList = [] as IWord[]; // с учебника
+
+        if (login) {
+            if ((source === 'textbook') && (group === undefined) && (page === undefined)) {
+                // Главная
+                while (wordsList.length === 0) {
+                    const p = getRandomInt(30);
+                    wordsList = await WordServices.getWordListAPI(userId, category, String(p), 'textbook')
+                }
+            } else if ((source === 'textbook') && (group !== undefined) && (page !== undefined)) {
+
+                wordsList = await WordServices.getWordListAPI(userId, group, page, 'textbook')
+            } else if ((source === 'difficult') && (group !== undefined) && (page !== undefined)) {
+
+                wordsList = await WordServices.getWordListAPI(userId, group, page, 'difficult')
+            }
+
+        } else {
+            if ((source === 'textbook') && (group === undefined) && (page === undefined)) {
+                // Главная
+                while (wordsList.length === 0) {
+                    const p = getRandomInt(30);
+                    wordsList = await WordServices.getWordList(Number(category), p);
+                }
+            }
+        }
 
         const wordsListWithSuccess = WordServices.setFalseToSuccessField(wordsList);
-        const idx = getRandomInt(wordsList.length - 1);
+        let idx = 0;
 
-        const xRoundWordArray = WordServices.getRoundWordsArray(wordsListWithSuccess, wordsListWithSuccess[idx], idx, 3);
+        /* Делаем проверку что бы слова не повторялись */
+        if (gameState.gameWordArray.length === wordsListWithSuccess.length) {
+            changeGameState({type: 'SETATTEMPT', payload: {...gameState, attempt: 0}})
+        } else {
+            let b = false;
+            let count = 0;
+            while (!b || count !== 100) {
+                idx = getRandomInt(wordsList.length);
 
-        changeGameState({type: 'ADDWORD', payload: {...gameState, gameWordArray:  [...gameState.gameWordArray as IWordWithSuccess[], wordsListWithSuccess[idx]] }})
-        changeGameState({type: 'NEWROUND', payload: {...gameState, roundWordArray:  xRoundWordArray }})
+                const index = gameState.gameWordArray.findIndex((item) => item.id === wordsListWithSuccess[idx].id);
+
+                if (index === -1) {
+                    const xRoundWordArray = WordServices.getRoundWordsArray(wordsListWithSuccess, wordsListWithSuccess[idx], idx, 3);
+
+                    changeGameState({type: 'ADDWORD', payload: {...gameState, gameWordArray:  [...gameState.gameWordArray as IWordWithSuccess[], wordsListWithSuccess[idx]] }})
+                    changeGameState({type: 'NEWROUND', payload: {...gameState, roundWordArray:  xRoundWordArray }})
+
+                    b = true
+                }
+
+                count = count + 1;
+
+                if (count === 1000) {
+                    changeGameState({type: 'SETATTEMPT', payload: {...gameState, attempt: 0}});
+                    console.log('Привышение кол-ва интераций!');
+                }
+            }
+        }
     };
+
 
     useEffect(() => {
         console.log('refreshRound useEffect >>', refreshRound);
@@ -230,6 +290,14 @@ const SavannahPage: React.FC = () => {
         if (gameState.result) {
             setErrorWords(WordServices.getCountError(gameState.gameWordArray));
             setSuccessWords(WordServices.getCountSuccess(gameState.gameWordArray));
+
+            /* На этом этапе мы должны отправить инфу на сервак */
+            gameState.gameWordArray.forEach((item) => {
+                if (item.success) {
+                    userWords.addUserWords(userId, item.id, 'games',[1,0]).then(r => console.log('ok'));
+                }
+            })
+
         }
     }, [gameState.result])
 
@@ -291,7 +359,6 @@ const SavannahPage: React.FC = () => {
 
     return (
         <div className="main-savannah mt-0">
-
             { !gameState.inProgress &&
 
                 <div className="start-page d-flex align-items-center">
@@ -302,6 +369,23 @@ const SavannahPage: React.FC = () => {
                             more
                             experience points you'll get.
                         </p>
+                        {
+                            (group === undefined) &&
+                            <div>
+                              <h2>Choose category</h2>
+                              <select onChange={(e) => {
+                                  setCategory(e.target.value)
+                              }}>
+                                <option value="" >Select Category</option>
+                                <option value="0">Category 1</option>
+                                <option value="1">Category 2</option>
+                                <option value="2">Category 3</option>
+                                <option value="3">Category 4</option>
+                                <option value="4">Category 5</option>
+                                <option value="5">Category 6</option>
+                              </select>
+                            </div>                        }
+
                         <a href="#" onClick={() => changeGameState({type: 'INPROGRESS', payload: {...gameState, inProgress: true}})}
                            className="btn btn-lg btn-primary mt-2 start-page__intro-btn">Start</a>
                     </div>

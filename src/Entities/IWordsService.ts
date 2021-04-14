@@ -14,5 +14,40 @@ export interface IWord {
   textMeaningTranslate: string;
   textExampleTranslate: string;
   _id?: string;
-  userWord?: { difficulty?: string; optional?: { delete?: true } };
+  userWord?: {
+    difficulty?: string;
+    optional?: { study?: boolean; delete?: boolean; won?: number; lost?: number };
+  };
 }
+
+export interface IWordWithSuccess extends IWord {
+  success: boolean
+}
+
+export interface ISavannahState {
+  inProgress: boolean,
+  attempt: number,
+  gameWordArray: IWordWithSuccess[],
+  roundWordArray: IWordWithSuccess[],
+  result: boolean
+
+}
+
+export interface ISavannahAction {
+  type: string,
+  payload: ISavannahState
+}
+
+export interface ISpeakitState {
+  inProgress: boolean,
+  roundWordArray: IWordWithSuccess[],
+  result: boolean,
+  microphoneOn: boolean
+
+}
+
+export interface ISpeakitAction {
+  type: string,
+  payload: ISpeakitState
+}
+

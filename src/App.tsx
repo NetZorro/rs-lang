@@ -75,6 +75,8 @@ export const App: React.FC = () => {
               {/*FIXME: Not Working <Route exact component={DictionaryPage} path="/dictionary" /> */}
 
               <Route exact component={Games} path="/games" />
+              <Route exact component={SavannahPage} path="/games/savannah/:source?/:group?/:page?" />
+              <Route exact component={SpeakitPage} path="/games/speakit/:source?/:group?/:page?" />
               <Route exact component={AudioCallGame} path="/games/audiocall" />
               <Route
                 exact
@@ -95,7 +97,8 @@ export const App: React.FC = () => {
               {/* <DictionaryPage /> */}
               {/* </PrivateRoute> */}
 
-              <Route exact component={DictionaryPage} path="/dictionary" />
+                <Route exact component={DictionaryPage} path="/dictionary" />
+
               <Route
                 exact
                 component={Units}

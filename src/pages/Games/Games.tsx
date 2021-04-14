@@ -7,6 +7,12 @@ export const Games: React.FC = () => {
         <p>
             <Link to={'/games/audiocall'}>
                 AudioCall
+            </Link><br/>
+            <Link to={'/games/speakit/textbook'}>
+                Speak It
+            </Link><br/>
+            <Link to={'/games/savannah/textbook'}>
+                Savannah
             </Link>
         </p>
     </div>

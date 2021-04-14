@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, {useContext, useEffect, useReducer, useState} from "react";
 import cl from "classnames";
 import SpeechRecognition, {
   useSpeechRecognition,
@@ -14,13 +14,18 @@ import audio from "./images/audio.svg";
 import blank from "./images/blank.jpg";
 
 import {
+  IWord,
   ISpeakitAction,
   ISpeakitState,
   IWordWithSuccess,
-} from "./interfacesSpeakit";
+} from "Entities/IWordsService";
 import WordServices from "./WordServices";
 import { playAudio } from "./helpers";
 import templatesURL from "./templatesURL";
+import {Context} from "../../reducer";
+import {userWords} from "../../services/userWords";
+import {getRandomInt} from "../Savanna/helpers";
+import {useParams} from "react-router-dom";
 
 function speakitReducer(
   state: ISpeakitState,
@@ -83,22 +88,53 @@ const initialState = {
 };
 
 const SpeakitPage: React.FC = () => {
-  const [gameState, changeGameState] = useReducer<
-    React.Reducer<ISpeakitState, ISpeakitAction>
-  >(speakitReducer, initialState);
-  const [selectWord, setSelectWord] = useState<IWordWithSuccess>(
-    {} as IWordWithSuccess
-  );
+  const { state, dispatch } = useContext(Context);
+  const { user, login } = state;
+  const { userId } = user;
+
+  const [gameState, changeGameState] = useReducer<React.Reducer<ISpeakitState, ISpeakitAction>>(speakitReducer, initialState);
+  const [selectWord, setSelectWord] = useState<IWordWithSuccess>({} as IWordWithSuccess);
   const {
     interimTranscript,
     finalTranscript,
     resetTranscript,
   } = useSpeechRecognition();
+
   const [message, setMessage] = useState<string>("");
   const [restart, setRestart] = useState<boolean>(false);
 
+  const [category, setCategory] = useState<string>('0');
+  const { group, page, source } = useParams<{ group: string, page: string, source: string }>();
+
+
   const getWordDataNewRound = async () => {
-    const wordsList = await WordServices.getWordList(0, 20); // - получаем IWord из вне, а дальше делаем все что надо
+//    const wordsList = await WordServices.getWordList(0, 20); // - получаем IWord из вне, а дальше делаем все что надо
+    let wordsList = [] as IWord[]; // с учебника
+
+    if (login) {
+      if ((source === 'textbook') && (group === undefined) && (page === undefined)) {
+        // Главная
+        while (wordsList.length === 0) {
+          const p = getRandomInt(30);
+          wordsList = await WordServices.getWordListAPI(userId, category, String(p), 'textbook')
+        }
+      } else if ((source === 'textbook') && (group !== undefined) && (page !== undefined)) {
+
+        wordsList = await WordServices.getWordListAPI(userId, group, page, 'textbook')
+      } else if ((source === 'difficult') && (group !== undefined) && (page !== undefined)) {
+
+        wordsList = await WordServices.getWordListAPI(userId, group, page, 'difficult')
+      }
+
+    } else {
+      if ((source === 'textbook') && (group === undefined) && (page === undefined)) {
+        // Главная
+        while (wordsList.length === 0) {
+          const p = getRandomInt(30);
+          wordsList = await WordServices.getWordList(Number(category), p);
+        }
+      }
+    }
 
     const wordsListWithSuccess = WordServices.setFalseToSuccessField(wordsList);
 
@@ -144,6 +180,14 @@ const SpeakitPage: React.FC = () => {
           type: "RESULT",
           payload: { ...gameState, result: true },
         });
+
+        /* На этом этапе мы должны отправить инфу на сервак */
+        gameState.roundWordArray.forEach((item) => {
+          if (item.success) {
+            userWords.addUserWords(userId, item.id, 'games',[1,0]).then(r => console.log('ok'));
+          }
+        })
+
       }
     }
   }, [message]);
@@ -279,6 +323,24 @@ const SpeakitPage: React.FC = () => {
               get. Click on a word in order to hear word pronunciation before
               start the game. Turn on microphone and say words.
             </p>
+
+            {
+              (group === undefined) &&
+              <div>
+                <h2>Choose category</h2>
+                <select onChange={(e) => {
+                  setCategory(e.target.value)
+                }}>
+                  <option value="" >Select Category</option>
+                  <option value="0">Category 1</option>
+                  <option value="1">Category 2</option>
+                  <option value="2">Category 3</option>
+                  <option value="3">Category 4</option>
+                  <option value="4">Category 5</option>
+                  <option value="5">Category 6</option>
+                </select>
+              </div>                        }
+
             <a
               href="#"
               className="startpage--intro-btn btn btn-info btn-lg mt-2"

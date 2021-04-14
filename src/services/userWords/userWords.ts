@@ -26,10 +26,10 @@ export const userWords = {
   },
 
   getUserAggregatedWords(
-    userId: string,
-    group: string,
-    page: string,
-    optional: string
+      userId: string,
+      group: string,
+      page: string,
+      optional: string
   ) {
     const filter = switchOptional(+group, +page, optional);
     return axios.get(
