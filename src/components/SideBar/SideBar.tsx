@@ -2,10 +2,15 @@ import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { Context } from "reducer";
+
 import home from "assets/icon/home.svg";
 import hat from "assets/icon/hat.svg";
 import message from "assets/icon/message.svg";
 import children from "assets/icon/children.svg";
+import dictionary from "assets/icon/dictionary.svg";
+import controller from "assets/icon/joystick.svg";
+import book from "assets/icon/book.svg";
+
 import settings from "assets/icon/settings.svg";
 import cl from "classnames";
 import "./sideBar.css";
@@ -38,13 +43,13 @@ export const SideBar: React.FC = () => {
         </div>
         <div className={cl("menu", { menu_show: showMenuMobile })}>
           <Link to="/textbook">
-            <img className="menu__item" src={home} alt="icon" />
-          </Link>
-          <Link to="/games">
-            <img className="menu__item" src={hat} alt="icon" />
+            <img className="menu__item" src={book} alt="icon" />
           </Link>
           <Link to="/dictionary">
-            <img className="menu__item" src={message} alt="icon" />
+            <img className="menu__item" src={dictionary} alt="icon" />
+          </Link>
+          <Link to="/games">
+            <img className="menu__item" src={controller} alt="icon" />
           </Link>
           <Link to="/settings">
             <img className="menu__item" src={settings} alt="icon" />

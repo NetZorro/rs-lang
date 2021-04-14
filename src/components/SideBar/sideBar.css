@@ -30,7 +30,11 @@
   max-width: 26px;
 }
 .menu__item {
-  margin-bottom: 64px;
+  margin-bottom: 32px;
+  padding-top: 32px;
+}
+.menu a:first-child .menu__item {
+  padding-top: 0;
 }
 .login {
   margin-bottom: 40px;

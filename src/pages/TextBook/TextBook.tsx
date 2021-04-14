@@ -1,19 +1,18 @@
 import { Link } from "react-router-dom";
 
+import { category } from "constants/data";
 import "./textBook.css";
 
 /**
  *
-  Страница отвечает вывод категорий учебника
-  и отображения ссылок для перехода в юнит
+  Компонент ссылок на юниты
  */
 export const TextBook: React.FC = () => {
-  const category = [0, 1, 2, 3, 4, 5];
   return (
     <div className="textBook">
       <div className="textBook__list">
         {category.map((item) => (
-          <Link key={item} to={`/textbook/category-${item}`}>
+          <Link key={item} to={`/textbook/category-textbook-${item}`}>
             <div className="textBook__item">{item + 1} Collection</div>
           </Link>
         ))}
