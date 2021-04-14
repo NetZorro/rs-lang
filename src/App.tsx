@@ -16,6 +16,7 @@ import {
   Games,
   AuthorizationPage,
   DictionaryPage,
+  Team,
 } from "pages";
 import { SideBar } from "components/SideBar";
 import { authorization } from "services";
@@ -65,6 +66,9 @@ export const App: React.FC = () => {
               <Route exact component={Settings} path="/settings" />
               <Route exact component={TextBook} path="/textbook" />
               <Route exact component={Statistics} path="/statistics" />
+              <Route exact component={Team} path="/team" />
+              {/*FIXME: Not Working <Route exact component={DictionaryPage} path="/dictionary" /> */}
+
               <Route exact component={Games} path="/games" />
               <Route exact component={AudioCallGame} path="/games/audiocall" />
               <Route

@@ -16,7 +16,9 @@ export const Home: React.FC = () => {
             <h1 className="banner__title">
               Hello {login ? user.name : "Guest"}
             </h1>
-            <span className="banner__text">{login ? "How are you?" : "It's good to see you again."}</span>
+            <span className="banner__text">
+              {login ? "How are you?" : "It's good to see you again."}
+            </span>
             <img className="banner__img" src={man} alt="icon" />
           </div>
           <div className="statistic">
@@ -37,45 +39,43 @@ export const Home: React.FC = () => {
             </div> */}
           </div>
           <div className="dictionary">
-            <h2 className="dictionary__title">Dictionary</h2>
-            <div className="dictionary__tabs">
-              <span>Tab</span>
-              <span>Tab</span>
-              <span>Tab</span>
-            </div>
+            <h2 className="dictionary__title">Application pros</h2>
             <div className="dictionary__card">
-              <div className="dictionary__img-block"></div>
               <div className="dictionary__text-block">
-                <h3 className="text-block__title">lorem</h3>
+                <h3 className="text-block__title">Friendly interface</h3>
                 <span className="text-block__description">
-                  lorem lorem lorem
+                  Простой и дружественный интерфейс
                 </span>
               </div>
             </div>
             <div className="dictionary__card">
-              <div className="dictionary__img-block"></div>
               <div className="dictionary__text-block">
-                <h3 className="text-block__title">lorem</h3>
+                <h3 className="text-block__title">Games</h3>
                 <span className="text-block__description">
-                  lorem lorem lorem
+                  <div>
+                    * Мини-игра «Саванна» - создана для активной тренировки
+                    словарного запаса
+                  </div>
+                  <div>
+                    * Мини-игра «Аудиовызов» - создана для тренировки слухового
+                    восприятия слов
+                  </div>
                 </span>
               </div>
             </div>
             <div className="dictionary__card">
-              <div className="dictionary__img-block"></div>
               <div className="dictionary__text-block">
-                <h3 className="text-block__title">lorem</h3>
+                <h3 className="text-block__title">Dictionary</h3>
                 <span className="text-block__description">
-                  lorem lorem lorem
+                  Большой словарь с возможность запоминания трудных слов
                 </span>
               </div>
             </div>
             <div className="dictionary__card">
-              <div className="dictionary__img-block"></div>
               <div className="dictionary__text-block">
-                <h3 className="text-block__title">lorem</h3>
+                <h3 className="text-block__title">Personal settings</h3>
                 <span className="text-block__description">
-                  lorem lorem lorem
+                  Возможность индивидуальной настройки приложения
                 </span>
               </div>
             </div>
