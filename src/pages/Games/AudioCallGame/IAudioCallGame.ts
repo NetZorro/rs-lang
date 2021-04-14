@@ -1,5 +1,8 @@
 import {IWord} from "Entities";
 
+export interface IFinishPage{
+  stats: any,
+}
 export interface IAudioCallGameWords {
   hiddenWord: IWord,
   fiveRandom: Array<IWord>,

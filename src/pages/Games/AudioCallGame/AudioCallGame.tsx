@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {wordsService} from "services";
 import {playAudio} from "components/CategoryWords/playAudio";
 import './AudioCallGame.css';

@@ -1,4 +1,3 @@
-import React from "react";
 import trueIcon from "assets/icon/true.png";
 import falseIcon from "assets/icon/false.png";
 import volume from "assets/icon/volume-up.svg";
