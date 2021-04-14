@@ -44,7 +44,7 @@ export const Home: React.FC = () => {
               <div className="dictionary__text-block">
                 <h3 className="text-block__title">Friendly interface</h3>
                 <span className="text-block__description">
-                  Простой и дружественный интерфейс.
+                  Простой и дружественный интерфейс
                 </span>
               </div>
             </div>
@@ -52,7 +52,14 @@ export const Home: React.FC = () => {
               <div className="dictionary__text-block">
                 <h3 className="text-block__title">Games</h3>
                 <span className="text-block__description">
-                  4 интересные игры позволяют разнообразить процесс обучения
+                  <div>
+                    * Мини-игра «Саванна» - создана для активной тренировки
+                    словарного запаса
+                  </div>
+                  <div>
+                    * Мини-игра «Аудиовызов» - создана для тренировки слухового
+                    восприятия слов
+                  </div>
                 </span>
               </div>
             </div>
