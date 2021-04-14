@@ -42,26 +42,33 @@ export const Home: React.FC = () => {
             <h2 className="dictionary__title">Application pros</h2>
             <div className="dictionary__card">
               <div className="dictionary__text-block">
-                <h3 className="text-block__title">Huge word base</h3>
-                <span className="text-block__description">
-                  Word base contains more than 3600 words
-                </span>
-              </div>
-            </div>
-            <div className="dictionary__card">
-              <div className="dictionary__text-block">
                 <h3 className="text-block__title">Friendly interface</h3>
                 <span className="text-block__description">
-                  Our designer tried to make the application as user friendly as
-                  possible
+                  Простой и дружественный интерфейс.
                 </span>
               </div>
             </div>
             <div className="dictionary__card">
               <div className="dictionary__text-block">
-                <h3 className="text-block__title">Interesting games</h3>
+                <h3 className="text-block__title">Games</h3>
                 <span className="text-block__description">
-                  Learning languages in game form is an exciting activity!
+                  4 интересные игры позволяют разнообразить процесс обучения
+                </span>
+              </div>
+            </div>
+            <div className="dictionary__card">
+              <div className="dictionary__text-block">
+                <h3 className="text-block__title">Dictionary</h3>
+                <span className="text-block__description">
+                  Большой словарь с возможность запоминания трудных слов
+                </span>
+              </div>
+            </div>
+            <div className="dictionary__card">
+              <div className="dictionary__text-block">
+                <h3 className="text-block__title">Personal settings</h3>
+                <span className="text-block__description">
+                  Возможность индивидуальной настройки приложения
                 </span>
               </div>
             </div>
