@@ -1,5 +1,5 @@
 import React, {useCallback, useContext, useEffect, useReducer, useState} from "react";
-import {ISavannahAction, ISavannahState, IWordWithSuccess, IWord} from "./interfacesSavannah";
+import {ISavannahAction, ISavannahState, IWordWithSuccess, IWord} from "Entities/IWordsService";
 import cl from "classnames"
 
 import { useParams } from "react-router-dom";
@@ -15,7 +15,6 @@ import correctAudio from './audio/correct.mp3'
 import errorAudio from "./audio/error.mp3";
 import {Context} from "../../reducer";
 import {userWords} from "../../services/userWords";
-import {wordsService} from "../../services/words";
 
 
 

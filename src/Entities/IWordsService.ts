@@ -20,4 +20,34 @@ export interface IWord {
   };
 }
 
+export interface IWordWithSuccess extends IWord {
+  success: boolean
+}
+
+export interface ISavannahState {
+  inProgress: boolean,
+  attempt: number,
+  gameWordArray: IWordWithSuccess[],
+  roundWordArray: IWordWithSuccess[],
+  result: boolean
+
+}
+
+export interface ISavannahAction {
+  type: string,
+  payload: ISavannahState
+}
+
+export interface ISpeakitState {
+  inProgress: boolean,
+  roundWordArray: IWordWithSuccess[],
+  result: boolean,
+  microphoneOn: boolean
+
+}
+
+export interface ISpeakitAction {
+  type: string,
+  payload: ISpeakitState
+}
 

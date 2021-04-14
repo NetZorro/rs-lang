@@ -1,6 +1,6 @@
 import {getRandomInt, shuffleArray} from "./helpers";
 import templatesURL from "./templatesURL";
-import {IWord, IWordWithSuccess} from "./interfacesSpeakit";
+import {IWord, IWordWithSuccess} from "Entities/IWordsService";
 import {userWords} from "../../services/userWords";
 
 export default class WordServices {

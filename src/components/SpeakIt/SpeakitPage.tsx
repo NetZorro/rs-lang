@@ -14,16 +14,16 @@ import audio from "./images/audio.svg";
 import blank from "./images/blank.jpg";
 
 import {
+  IWord,
   ISpeakitAction,
   ISpeakitState,
   IWordWithSuccess,
-} from "./interfacesSpeakit";
+} from "Entities/IWordsService";
 import WordServices from "./WordServices";
 import { playAudio } from "./helpers";
 import templatesURL from "./templatesURL";
 import {Context} from "../../reducer";
 import {userWords} from "../../services/userWords";
-import {IWord} from "../Savanna/interfacesSavannah";
 import {getRandomInt} from "../Savanna/helpers";
 import {useParams} from "react-router-dom";
 

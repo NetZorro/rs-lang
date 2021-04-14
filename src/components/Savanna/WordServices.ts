@@ -1,6 +1,6 @@
 import {getRandomInt, shuffleArray} from "./helpers";
 import templatesURL from "./templatesURL";
-import {IWord, IWordWithSuccess} from "./interfacesSavannah";
+import {IWord, IWordWithSuccess} from "Entities/IWordsService";
 import {userWords} from "../../services/userWords";
 
 export default class WordServices {
@@ -22,7 +22,6 @@ export default class WordServices {
 
     static async getWordListAPI(userId: string, group: string, p: string, optional: string): Promise<IWord[]> {
         try {
-            console.log('getWordListAPI >>', group, p);
             const res = await userWords.getUserAggregatedWords(userId, group, p, optional);
             let data = await res.data[0].paginatedResults;
 
