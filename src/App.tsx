@@ -66,6 +66,7 @@ export const App: React.FC = () => {
               <Route exact component={TextBook} path="/textbook" />
               <Route exact component={Statistics} path="/statistics" />
               <Route exact component={Games} path="/games" />
+              <Route exact component={SavannahPage} path="/games/savannah" />
               <Route exact component={AudioCallGame} path="/games/audiocall" />
               <Route
                 exact
@@ -85,7 +86,7 @@ export const App: React.FC = () => {
               {/* <PrivateRoute exact path="/dictionary" > */}
                   {/* <DictionaryPage /> */}
               {/* </PrivateRoute> */}
-              
+
                 <Route exact component={DictionaryPage} path="/dictionary" />
               <Route
                 exact

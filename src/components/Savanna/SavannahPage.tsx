@@ -142,15 +142,39 @@ const SavannahPage: React.FC = () => {
         setSelectWordId('');
 
         // const wordsList = await WordServices.getWordList(0, 20); // - получаем IWord из вне, а дальше делаем все что надо
-        const wordsList = await WordServices.getWordListAPI(userId, '0', '0', 'textbook');
+        const wordsList = await WordServices.getWordListAPI(userId, '0', '10', 'textbook');
 
         const wordsListWithSuccess = WordServices.setFalseToSuccessField(wordsList);
-        const idx = getRandomInt(wordsList.length - 1);
+        let idx = 0;
 
-        const xRoundWordArray = WordServices.getRoundWordsArray(wordsListWithSuccess, wordsListWithSuccess[idx], idx, 3);
+        /* Делаем проверку что бы слова не повторялись */
+        if (gameState.gameWordArray.length === wordsListWithSuccess.length) {
+            changeGameState({type: 'SETATTEMPT', payload: {...gameState, attempt: 0}})
+        } else {
+            let b = false;
+            let count = 0;
+            while (!b || count !== 100) {
+                idx = getRandomInt(wordsList.length);
 
-        changeGameState({type: 'ADDWORD', payload: {...gameState, gameWordArray:  [...gameState.gameWordArray as IWordWithSuccess[], wordsListWithSuccess[idx]] }})
-        changeGameState({type: 'NEWROUND', payload: {...gameState, roundWordArray:  xRoundWordArray }})
+                const index = gameState.gameWordArray.findIndex((item) => item.id === wordsListWithSuccess[idx].id);
+
+                if (index === -1) {
+                    const xRoundWordArray = WordServices.getRoundWordsArray(wordsListWithSuccess, wordsListWithSuccess[idx], idx, 3);
+
+                    changeGameState({type: 'ADDWORD', payload: {...gameState, gameWordArray:  [...gameState.gameWordArray as IWordWithSuccess[], wordsListWithSuccess[idx]] }})
+                    changeGameState({type: 'NEWROUND', payload: {...gameState, roundWordArray:  xRoundWordArray }})
+
+                    b = true
+                }
+
+                count = count + 1;
+
+                if (count === 1000) {
+                    changeGameState({type: 'SETATTEMPT', payload: {...gameState, attempt: 0}});
+                    console.log('Привышение кол-ва интераций!');
+                }
+            }
+        }
     };
 
 
@@ -237,6 +261,14 @@ const SavannahPage: React.FC = () => {
         if (gameState.result) {
             setErrorWords(WordServices.getCountError(gameState.gameWordArray));
             setSuccessWords(WordServices.getCountSuccess(gameState.gameWordArray));
+
+            /* На этом этапе мы должны отправить инфу на сервак */
+            gameState.gameWordArray.forEach((item) => {
+                if (item.success) {
+                    userWords.addUserWords(userId, item.id, 'game').then(r => console.log('ok'));
+                }
+            })
+
         }
     }, [gameState.result])
 
