@@ -265,7 +265,7 @@ const SavannahPage: React.FC = () => {
             /* На этом этапе мы должны отправить инфу на сервак */
             gameState.gameWordArray.forEach((item) => {
                 if (item.success) {
-                    userWords.addUserWords(userId, item.id, 'game').then(r => console.log('ok'));
+                    userWords.addUserWords(userId, item.id, 'games',[1,0]).then(r => console.log('ok'));
                 }
             })
 
