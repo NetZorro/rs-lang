@@ -67,6 +67,7 @@ export const App: React.FC = () => {
               <Route exact component={Statistics} path="/statistics" />
               <Route exact component={Games} path="/games" />
               <Route exact component={SavannahPage} path="/games/savannah" />
+              <Route exact component={SpeakitPage} path="/games/speakit" />
               <Route exact component={AudioCallGame} path="/games/audiocall" />
               <Route
                 exact

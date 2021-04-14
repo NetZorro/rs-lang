@@ -1,6 +1,7 @@
 import {getRandomInt, shuffleArray} from "./helpers";
 import templatesURL from "./templatesURL";
 import {IWord, IWordWithSuccess} from "./interfacesSpeakit";
+import {userWords} from "../../services/userWords";
 
 export default class WordServices {
     static async getWordList(begin: number, end: number): Promise<IWord[]> {
@@ -13,6 +14,24 @@ export default class WordServices {
             data = data.slice(begin, end);
 
             return data;
+        } catch (err) {
+            console.log('Error getWordList', err);
+            return [];
+        }
+    }
+
+    static async getWordListAPI(userId: string, group: string, p: string, optional: string): Promise<IWord[]> {
+        try {
+            const page = getRandomInt(20);
+
+            const res = await userWords.getUserAggregatedWords(userId, group, p, optional);
+            let data = await res.data[0].paginatedResults;
+
+            return data.map((item: any) => ({
+                ...item,
+                id: item._id
+            }));
+
         } catch (err) {
             console.log('Error getWordList', err);
             return [];

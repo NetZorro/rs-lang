@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, {useContext, useEffect, useReducer, useState} from "react";
 import cl from "classnames";
 import SpeechRecognition, {
   useSpeechRecognition,
@@ -21,6 +21,8 @@ import {
 import WordServices from "./WordServices";
 import { playAudio } from "./helpers";
 import templatesURL from "./templatesURL";
+import {Context} from "../../reducer";
+import {userWords} from "../../services/userWords";
 
 function speakitReducer(
   state: ISpeakitState,
@@ -83,22 +85,24 @@ const initialState = {
 };
 
 const SpeakitPage: React.FC = () => {
-  const [gameState, changeGameState] = useReducer<
-    React.Reducer<ISpeakitState, ISpeakitAction>
-  >(speakitReducer, initialState);
-  const [selectWord, setSelectWord] = useState<IWordWithSuccess>(
-    {} as IWordWithSuccess
-  );
+  const { state, dispatch } = useContext(Context);
+  const { user } = state;
+  const { userId } = user;
+
+  const [gameState, changeGameState] = useReducer<React.Reducer<ISpeakitState, ISpeakitAction>>(speakitReducer, initialState);
+  const [selectWord, setSelectWord] = useState<IWordWithSuccess>({} as IWordWithSuccess);
   const {
     interimTranscript,
     finalTranscript,
     resetTranscript,
   } = useSpeechRecognition();
+
   const [message, setMessage] = useState<string>("");
   const [restart, setRestart] = useState<boolean>(false);
 
   const getWordDataNewRound = async () => {
-    const wordsList = await WordServices.getWordList(0, 20); // - получаем IWord из вне, а дальше делаем все что надо
+//    const wordsList = await WordServices.getWordList(0, 20); // - получаем IWord из вне, а дальше делаем все что надо
+    const wordsList = await WordServices.getWordListAPI(userId, '1', '2', 'textbook');
 
     const wordsListWithSuccess = WordServices.setFalseToSuccessField(wordsList);
 
@@ -144,6 +148,14 @@ const SpeakitPage: React.FC = () => {
           type: "RESULT",
           payload: { ...gameState, result: true },
         });
+
+        /* На этом этапе мы должны отправить инфу на сервак */
+        gameState.roundWordArray.forEach((item) => {
+          if (item.success) {
+            userWords.addUserWords(userId, item.id, 'games',[1,0]).then(r => console.log('ok'));
+          }
+        })
+
       }
     }
   }, [message]);
