@@ -20,6 +20,9 @@ import {
 import { SideBar } from "components/SideBar";
 import { authorization } from "services";
 import { initialState, reducer, Context } from "reducer";
+import {AudioCallGame} from "./pages/Games/AudioCallGame/AudioCallGame";
+import SavannahPage from "./components/Savanna/SavannahPage";
+import SpeakitPage from "components/SpeakIt/SpeakitPage";
 import "./App.css";
 
 export const App: React.FC = () => {
@@ -43,6 +46,7 @@ export const App: React.FC = () => {
               <Route exact component={Statistics} path="/statistics" />
               {/*FIXME: Not Working <Route exact component={DictionaryPage} path="/dictionary" /> */}
               <Route exact component={Games} path="/games" />
+              <Route exact component={AudioCallGame} path="/games/audiocall" />
               <Route
                 exact
                 component={AuthorizationPage}
