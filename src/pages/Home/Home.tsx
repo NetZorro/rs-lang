@@ -16,7 +16,9 @@ export const Home: React.FC = () => {
             <h1 className="banner__title">
               Hello {login ? user.name : "Guest"}
             </h1>
-            <span className="banner__text">{login ? "How are you?" : "It's good to see you again."}</span>
+            <span className="banner__text">
+              {login ? "How are you?" : "It's good to see you again."}
+            </span>
             <img className="banner__img" src={man} alt="icon" />
           </div>
           <div className="statistic">
@@ -37,45 +39,29 @@ export const Home: React.FC = () => {
             </div> */}
           </div>
           <div className="dictionary">
-            <h2 className="dictionary__title">Dictionary</h2>
-            <div className="dictionary__tabs">
-              <span>Tab</span>
-              <span>Tab</span>
-              <span>Tab</span>
-            </div>
+            <h2 className="dictionary__title">Application pros</h2>
             <div className="dictionary__card">
-              <div className="dictionary__img-block"></div>
               <div className="dictionary__text-block">
-                <h3 className="text-block__title">lorem</h3>
+                <h3 className="text-block__title">Huge word base</h3>
                 <span className="text-block__description">
-                  lorem lorem lorem
+                  Word base contains more than 3600 words
                 </span>
               </div>
             </div>
             <div className="dictionary__card">
-              <div className="dictionary__img-block"></div>
               <div className="dictionary__text-block">
-                <h3 className="text-block__title">lorem</h3>
+                <h3 className="text-block__title">Friendly interface</h3>
                 <span className="text-block__description">
-                  lorem lorem lorem
+                  Our designer tried to make the application as user friendly as
+                  possible
                 </span>
               </div>
             </div>
             <div className="dictionary__card">
-              <div className="dictionary__img-block"></div>
               <div className="dictionary__text-block">
-                <h3 className="text-block__title">lorem</h3>
+                <h3 className="text-block__title">Interesting games</h3>
                 <span className="text-block__description">
-                  lorem lorem lorem
-                </span>
-              </div>
-            </div>
-            <div className="dictionary__card">
-              <div className="dictionary__img-block"></div>
-              <div className="dictionary__text-block">
-                <h3 className="text-block__title">lorem</h3>
-                <span className="text-block__description">
-                  lorem lorem lorem
+                  Learning languages in game form is an exciting activity!
                 </span>
               </div>
             </div>
