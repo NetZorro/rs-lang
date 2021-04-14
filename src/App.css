@@ -13,6 +13,12 @@
 .body__sidebar {
   padding-top: 24px;
 }
+.css-1rpz77w {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 @media (max-width: 1230px) {
   .body {
     flex-direction: column;
@@ -45,6 +51,7 @@
   .menu__item {
     margin-bottom: 0;
     margin-right: 64px;
+    padding-top: 0;
   }
   .menu a:last-child .menu__item {
     margin-right: 0px;

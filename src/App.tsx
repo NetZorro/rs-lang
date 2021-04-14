@@ -20,14 +20,37 @@ import {
 import { SideBar } from "components/SideBar";
 import { authorization } from "services";
 import { initialState, reducer, Context } from "reducer";
-import "./App.css";
+import {AudioCallGame} from "./pages/Games/AudioCallGame/AudioCallGame";
 import SavannahPage from "./components/Savanna/SavannahPage";
+import SpeakitPage from "components/SpeakIt/SpeakitPage";
+import "./App.css";
 
 export const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { axiosSettings } = authorization;
 
   axiosSettings(state, dispatch);
+
+  const PrivateRoute = ({children, ...rest}: {children: any, path: string, exact: boolean}) => {
+    let auth = state.login;
+    return (
+      <Route
+        {...rest}
+        render={({ location }) =>
+          auth ? (
+            children
+          ) : (
+            <Redirect
+              to={{
+                pathname: "/authorization",
+                state: { from: location },
+              }}
+            />
+          )
+        }
+      />
+    );
+  };
 
   return (
     <div className="body">
@@ -42,9 +65,8 @@ export const App: React.FC = () => {
               <Route exact component={Settings} path="/settings" />
               <Route exact component={TextBook} path="/textbook" />
               <Route exact component={Statistics} path="/statistics" />
-              <Route exact component={DictionaryPage} path="/dictionary" />
-              {/*<Route exact component={Games} path="/games" />*/}
-              <Route exact component={SavannahPage} path="/games" />
+              <Route exact component={Games} path="/games" />
+              <Route exact component={AudioCallGame} path="/games/audiocall" />
               <Route
                 exact
                 component={AuthorizationPage}
@@ -56,15 +78,22 @@ export const App: React.FC = () => {
                 path="/textbook/category-:optional-:categoryId/"
               />
               <Route
+                exact
                 component={Words}
                 path="/textbook/category-:optional-:categoryId/unit-:unitId"
               />
+              {/* <PrivateRoute exact path="/dictionary" > */}
+                  {/* <DictionaryPage /> */}
+              {/* </PrivateRoute> */}
+              
+                <Route exact component={DictionaryPage} path="/dictionary" />
               <Route
                 exact
                 component={Units}
                 path="/dictionary/category-:optional-:categoryId/"
               />
               <Route
+                exact
                 component={Words}
                 path="/dictionary/category-:optional-:categoryId/unit-:unitId"
               />

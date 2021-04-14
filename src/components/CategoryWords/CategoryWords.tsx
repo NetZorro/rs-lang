@@ -1,6 +1,9 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
+import ReactPaginate from "react-paginate";
+import { useHistory } from "react-router-dom";
 
 import { wordsService, userWords } from "services";
+import ClipLoader from "react-spinners/ClipLoader";
 import { Context } from "reducer";
 import { WordCard } from "./WordCard";
 import { IWord } from "Entities";
@@ -25,24 +28,28 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
   const { userId } = user;
   const { addUserWords, getUserAggregatedWords, setUserWords } = userWords;
   const { getWords } = wordsService;
+  const [loading, setLoading] = useState(true);
+  const [unitId, setUnitId] = useState(unit);
+  const history = useHistory();
 
   useEffect(() => {
-    login ? fetchLoginWords() : fetchNoLoginWords(category, unit);
-  }, []);
+    login ? fetchLoginWords() : fetchNoLoginWords(category, unitId);
+  }, [unitId]);
 
   const fetchLoginWords = async () => {
-    await getUserAggregatedWords(userId, category, unit, optional).then(
+    console.log("fetch");
+    await getUserAggregatedWords(userId, category, unitId, optional).then(
       ({ status, data: [{ paginatedResults }] }) => {
         if (status === 200) {
-          console.log(paginatedResults);
           dispatch(actionAddWords(paginatedResults));
+          setLoading(false);
         }
       }
     );
   };
 
-  const fetchNoLoginWords = (category: string, unit: string) => {
-    getWords(category, unit).then(({ status, data }) => {
+  const fetchNoLoginWords = (category: string, unitId: string) => {
+    getWords(category, unitId).then(({ status, data }) => {
       if (status === 200) {
         dispatch(actionAddWords(data));
       }
@@ -54,7 +61,7 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
       const { _id } = item;
 
       const addDeleteUserWordServer = async () => {
-        await addUserWords(userId, _id!, false, true);
+        await addUserWords(userId, _id!, "deleted");
         setTimeout(fetchLoginWords, 300);
       };
 
@@ -70,7 +77,7 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
       const { _id } = item;
 
       const addDifficultServer = async () => {
-        await addUserWords(user.userId, _id!, true, false);
+        await addUserWords(user.userId, _id!, "difficulty");
         setTimeout(fetchLoginWords, 300);
       };
 
@@ -90,63 +97,95 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
   };
 
   const handlerRestoreWordDelete = (item: any) => {
-    const { _id } = item;
-    let result = `{"optional" : {"delete" : false}}`;
+    if (login) {
+      const { _id } = item;
+      let result = `{"optional" : {"delete" : false}}`;
 
-    return setUserWords(userId, _id, result).then(({ status, data }) => {
-      if (status === 200) {
-        setTimeout(fetchLoginWords, 300);
-      }
-    });
+      return setUserWords(userId, _id, result).then(({ status, data }) => {
+        if (status === 200) {
+          setTimeout(fetchLoginWords, 300);
+        }
+      });
+    }
   };
 
   const handlerRestoreWordDifficult = (item: any) => {
-    const { _id } = item;
-    let result = `{"difficulty" : "easy"}`;
+    if (login) {
+      const { _id } = item;
+      let result = `{"difficulty" : "easy"}`;
 
-    return setUserWords(userId, _id, result).then(({ status, data }) => {
-      if (status === 200) {
-        setTimeout(fetchLoginWords, 300);
-      }
-    });
+      return setUserWords(userId, _id, result).then(({ status, data }) => {
+        if (status === 200) {
+          setTimeout(fetchLoginWords, 300);
+        }
+      });
+    }
+  };
+  const handlePageClick = (data: any) => {
+    const { selected } = data;
+    const { location } = history;
+    const { pathname } = location;
+
+    let result = pathname.slice(0, pathname.length - unitId.length);
+    history.replace(`${result}${selected + 1}`);
+
+    setUnitId(String(selected));
   };
 
   return (
     <div className="word">
-      {words.map((item: IWord, index: number) => {
-        if (optional === "textbook") {
-          return (
-            <WordCard
-              item={item}
-              button2={handlerDelete}
-              button1={handlerDifficult}
-              button1Name={"Difficult"}
-              key={index}
-              hard={item?.userWord?.difficulty}
-            />
-          );
-        } else if (optional === "deleted") {
-          return (
-            <WordCard
-              item={item}
-              button1={handlerRestoreWordDelete}
-              button1Name={"Restore"}
-              key={index}
-              hard={item?.userWord?.difficulty}
-            />
-          );
-        } else if (optional === "difficult") {
-          return (
-            <WordCard
-              item={item}
-              button1={handlerRestoreWordDifficult}
-              button1Name={"Restore"}
-              key={index}
-              hard={item?.userWord?.difficulty}
-            />
-          );
-        }
-      })}
+      {loading ? (
+        <ClipLoader />
+      ) : (
+        words.map((item: IWord, index: number) => {
+          if (optional === "textbook") {
+            return (
+              <WordCard
+                item={item}
+                button2={handlerDelete}
+                button1={handlerDifficult}
+                button1Name={"Difficult"}
+                key={index}
+                hard={item?.userWord?.difficulty}
+              />
+            );
+          } else if (optional === "deleted") {
+            return (
+              <WordCard
+                item={item}
+                button1={handlerRestoreWordDelete}
+                button1Name={"Restore"}
+                key={index}
+                hard={item?.userWord?.difficulty}
+              />
+            );
+          } else if (optional === "difficult") {
+            return (
+              <WordCard
+                item={item}
+                button1={handlerRestoreWordDifficult}
+                button1Name={"Restore"}
+                key={index}
+                hard={item?.userWord?.difficulty}
+              />
+            );
+          }
+        })
+      )}
+      {loading ? null : (
+        <ReactPaginate
+          previousLabel={"previous"}
+          nextLabel={"next"}
+          breakLabel={"..."}
+          breakClassName={"break-me"}
+          pageCount={30}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={6}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination__container"}
+          activeClassName={"active"}
+        />
+      )}
     </div>
   );
 };

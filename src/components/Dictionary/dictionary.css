@@ -15,8 +15,11 @@
   font-family: "Baloo Bhai";
   font-size: 16px;
   line-height: 32px;
-  flex: 0 0 33.333%;
+  flex: 0 1 33.333%;
   text-align: center;
+}
+.dictionary__tabs-block span:last-child {
+margin-right: 0;
 }
 .dictionary__tab {
   display: none;
