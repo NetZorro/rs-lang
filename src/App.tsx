@@ -21,9 +21,7 @@ import {
 import { SideBar } from "components/SideBar";
 import { authorization } from "services";
 import { initialState, reducer, Context } from "reducer";
-import {AudioCallGame} from "./pages/Games/AudioCallGame/AudioCallGame";
-import SavannahPage from "./components/Savanna/SavannahPage";
-import SpeakitPage from "components/SpeakIt/SpeakitPage";
+import { AudioCallGame } from "./pages/Games/AudioCallGame/AudioCallGame";
 import "./App.css";
 
 export const App: React.FC = () => {
@@ -32,7 +30,14 @@ export const App: React.FC = () => {
 
   axiosSettings(state, dispatch);
 
-  const PrivateRoute = ({children, ...rest}: {children: any, path: string, exact: boolean}) => {
+  const PrivateRoute = ({
+    children,
+    ...rest
+  }: {
+    children: any;
+    path: string;
+    exact: boolean;
+  }) => {
     let auth = state.login;
     return (
       <Route
@@ -87,10 +92,10 @@ export const App: React.FC = () => {
                 path="/textbook/category-:optional-:categoryId/unit-:unitId"
               />
               {/* <PrivateRoute exact path="/dictionary" > */}
-                  {/* <DictionaryPage /> */}
+              {/* <DictionaryPage /> */}
               {/* </PrivateRoute> */}
-              
-                <Route exact component={DictionaryPage} path="/dictionary" />
+
+              <Route exact component={DictionaryPage} path="/dictionary" />
               <Route
                 exact
                 component={Units}

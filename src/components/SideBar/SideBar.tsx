@@ -6,7 +6,7 @@ import { Context } from "reducer";
 import home from "assets/icon/home.svg";
 import hat from "assets/icon/hat.svg";
 import message from "assets/icon/message.svg";
-import children from "assets/icon/children.svg";
+import people from "assets/icon/people.svg";
 import dictionary from "assets/icon/dictionary.svg";
 import controller from "assets/icon/joystick.svg";
 import book from "assets/icon/book.svg";
@@ -55,7 +55,7 @@ export const SideBar: React.FC = () => {
             <img className="menu__item" src={settings} alt="icon" />
           </Link>
           <Link to="/team">
-            <img className="menu__item" src={children} alt="icon" />
+            <img className="menu__item" src={people} alt="icon" />
           </Link>
         </div>
         <div
