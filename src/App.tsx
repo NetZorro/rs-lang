@@ -16,13 +16,12 @@ import {
   Games,
   AuthorizationPage,
   DictionaryPage,
+  Team,
 } from "pages";
 import { SideBar } from "components/SideBar";
 import { authorization } from "services";
 import { initialState, reducer, Context } from "reducer";
-import {AudioCallGame} from "./pages/Games/AudioCallGame/AudioCallGame";
-import SavannahPage from "./components/Savanna/SavannahPage";
-import SpeakitPage from "components/SpeakIt/SpeakitPage";
+import { AudioCallGame } from "./pages/Games/AudioCallGame/AudioCallGame";
 import "./App.css";
 
 export const App: React.FC = () => {
@@ -31,7 +30,14 @@ export const App: React.FC = () => {
 
   axiosSettings(state, dispatch);
 
-  const PrivateRoute = ({children, ...rest}: {children: any, path: string, exact: boolean}) => {
+  const PrivateRoute = ({
+    children,
+    ...rest
+  }: {
+    children: any;
+    path: string;
+    exact: boolean;
+  }) => {
     let auth = state.login;
     return (
       <Route
@@ -65,6 +71,9 @@ export const App: React.FC = () => {
               <Route exact component={Settings} path="/settings" />
               <Route exact component={TextBook} path="/textbook" />
               <Route exact component={Statistics} path="/statistics" />
+              <Route exact component={Team} path="/team" />
+              {/*FIXME: Not Working <Route exact component={DictionaryPage} path="/dictionary" /> */}
+
               <Route exact component={Games} path="/games" />
               <Route exact component={SavannahPage} path="/games/savannah/:source?/:group?/:page?" />
               <Route exact component={SpeakitPage} path="/games/speakit/:source?/:group?/:page?" />
@@ -85,10 +94,11 @@ export const App: React.FC = () => {
                 path="/textbook/category-:optional-:categoryId/unit-:unitId"
               />
               {/* <PrivateRoute exact path="/dictionary" > */}
-                  {/* <DictionaryPage /> */}
+              {/* <DictionaryPage /> */}
               {/* </PrivateRoute> */}
 
                 <Route exact component={DictionaryPage} path="/dictionary" />
+
               <Route
                 exact
                 component={Units}
