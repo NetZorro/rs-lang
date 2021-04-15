@@ -5,14 +5,20 @@ import {playAudio} from "components/CategoryWords/playAudio";
 import {baseURL} from "constants/baseURL";
 import {IWord} from "Entities";
 import {IAudioCallGameWords} from "./IAudioCallGame";
+import {userWords} from "../../../services";
+import {useContext} from "react";
+import {Context} from "../../../reducer";
 
 export const AudioCallGameWords = ({hiddenWord, fiveRandom, stats, selected, setSelected}: IAudioCallGameWords) => {
+
+  const {state, dispatch} = useContext(Context);
+  const {user} = state;
+  const {userId} = user;
 
   const checkWord = (e: React.MouseEvent, word: IWord) => {
     setSelected(word);
     word.word === hiddenWord.word ? stats.success++ : stats.fail++;
   }
-
 
   const wordsJsx = fiveRandom.map((word: IWord) => {
     let icon;
@@ -20,6 +26,9 @@ export const AudioCallGameWords = ({hiddenWord, fiveRandom, stats, selected, set
     if (selected && selected.word === word.word) {
       const pathToIcon = selected.word === hiddenWord.word ? trueIcon : falseIcon;
       icon = <img className='result-icon' src={pathToIcon} alt='result icon'/>;
+      userWords.addUserWords(userId, word.id, 'games',[1, 0]).then(r => console.log(r));
+    } else if (selected && selected.word !== word.word) {
+      userWords.addUserWords(userId, word.id, 'games',[0, 1]).then(r => console.log(r));
     }
 
     return (
