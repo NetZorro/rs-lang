@@ -38,8 +38,15 @@ export const authorization = {
 
     if (login) {
       headers.common["Authorization"] = `Bearer ${state.user.token}`;
+      alert(headers.common["Authorization"]);
     }
 
-    
+    interceptors.response.use(undefined, (error) => {
+      if (error.response.status === 417) {
+        return Promise.resolve(error.response);
+      }
+
+      return Promise.reject(error);
+    });
   },
 };

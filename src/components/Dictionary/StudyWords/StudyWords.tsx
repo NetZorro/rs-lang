@@ -12,7 +12,7 @@ export const StudyWords: React.FC = () => {
   const { userId } = state.user;
   const { getUserStudyWords } = userWords;
   const { requestCancel } = authorization;
-  const [words, setWords] = useState<[[]]>([[]]);
+  const [words, setWords] = useState<[][]>([[]]);
   const [wordsLength, setWordsLength] = useState(0);
   const [loading, setLoading] = useState(true);
 
@@ -42,12 +42,13 @@ export const StudyWords: React.FC = () => {
 
     setWordsLength(selected);
   };
-
   return (
     <div>
       {loading ? (
         <ClipLoader />
       ) : (
+        words &&
+        words.length > 0 &&
         words[wordsLength].map((item: IWord, index: number) => {
           return (
             <WordCard

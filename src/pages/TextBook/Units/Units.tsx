@@ -84,7 +84,6 @@ export const Units: React.FC<UnitsProps> = (props) => {
     let result = pathname.slice(0, pathname.length - catId.toString().length);
 
     setLoading(true);
-    console.log(selected);
     history.replace(`${result}${selected}`);
     setCatId(selected);
   };

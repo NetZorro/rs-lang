@@ -15,7 +15,7 @@ export const Home: React.FC = () => {
         <div className="content">
           <div className="banner">
             <h1 className="banner__title">
-              Hello {login ? user?.name.slice(0,9) : "Guest"}
+              Hello {login ? user?.name.slice(0, 9) : "Guest"}
             </h1>
             <span className="banner__text">
               {login ? "How are you?" : "It's good to see you again."}
@@ -79,7 +79,7 @@ export const Home: React.FC = () => {
               <Link to={`/games/speakit/textbook`}></Link>
             </div>
             <div className="word__game word__game-sprint">
-              <Link to={`/games/savannah/textbook`}></Link>
+              <Link to={`/games/sprint/textbook`}></Link>
             </div>
             <div className="word__game word__game-savanna">
               <Link to={`/games/savannah/textbook`}></Link>
