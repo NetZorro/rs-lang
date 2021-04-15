@@ -268,7 +268,7 @@ const SprintPage: React.FC = () => {
                 if (gameState.attempt > 0) {
                     setRefreshRound(true);
                 }
-            }, 2000);
+            }, 500);
         }
     }, [selectWordId])
 
