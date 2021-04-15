@@ -105,7 +105,20 @@ const SpeakitPage: React.FC = () => {
 
   const [category, setCategory] = useState<string>('0');
   const { group, page, source } = useParams<{ group: string, page: string, source: string }>();
+  const [isFullScreen, setIsFullScree] = useState(false);
 
+
+  function toggleFullScreen() {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+      setIsFullScree(false);
+    } else {
+      document.getElementById('fsArea')!.requestFullscreen().catch((e) => {
+        console.log('Full Screen error >>', e);
+      })
+      setIsFullScree(true);
+    }
+  }
 
   const getWordDataNewRound = async () => {
 //    const wordsList = await WordServices.getWordList(0, 20); // - получаем IWord из вне, а дальше делаем все что надо
@@ -184,7 +197,9 @@ const SpeakitPage: React.FC = () => {
         /* На этом этапе мы должны отправить инфу на сервак */
         gameState.roundWordArray.forEach((item) => {
           if (item.success) {
-            userWords.addUserWords(userId, item.id, 'games',[1,0]).then(r => console.log('ok'));
+            userWords.addUserWords(userId, item.id, 'games',{won: (item.userWord?.optional?.won || 0) + 1 , lost: (item.userWord?.optional?.won || 0)}).then(r => console.log('ok'));
+          } else {
+            userWords.addUserWords(userId, item.id, 'games',{won: (item.userWord?.optional?.won || 0), lost: (item.userWord?.optional?.won || 0) + 1}).then(r => console.log('ok'));
           }
         })
 
@@ -312,7 +327,7 @@ const SpeakitPage: React.FC = () => {
   }
 
   return (
-    <div className="main-speakit mt-0">
+    <div className="main-speakit mt-0" id="fsArea">
       {!gameState.inProgress && (
         <div className="startpage d-flex align-items-center">
           <div className="container px-5 text-center">
@@ -512,6 +527,9 @@ const SpeakitPage: React.FC = () => {
           </div>
         </div>
       )}
+      <div className="fullScreen" onClick={() => toggleFullScreen()}>
+        {isFullScreen ? 'Выйти из полноэкранного режима' : 'Развернуть на весь экран'}
+      </div>
 
       <audio className="audio" />
     </div>

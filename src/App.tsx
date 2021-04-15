@@ -25,6 +25,7 @@ import { AudioCallGame } from "./pages/Games/AudioCallGame/AudioCallGame";
 import "./App.css";
 import SavannahPage from "components/Savanna/SavannahPage";
 import SpeakitPage from "components/SpeakIt/SpeakitPage";
+import SprintPage from "./components/Sprint/SprintPage";
 
 export const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -81,6 +82,11 @@ export const App: React.FC = () => {
                 exact
                 component={SavannahPage}
                 path="/games/savannah/:source?/:group?/:page?"
+              />
+              <Route
+                  exact
+                  component={SprintPage}
+                  path="/games/sprint/:source?/:group?/:page?"
               />
               <Route
                 exact
