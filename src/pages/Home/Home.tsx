@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { Link } from "react-router-dom";
 
 import { Context } from "reducer";
 import man from "../../assets/icon/man.svg";
@@ -14,27 +15,12 @@ export const Home: React.FC = () => {
         <div className="content">
           <div className="banner">
             <h1 className="banner__title">
-              Hello {login ? user.name : "Guest"}
+              Hello {login ? user?.name.slice(0,9) : "Guest"}
             </h1>
-            <span className="banner__text">{login ? "How are you?" : "It's good to see you again."}</span>
+            <span className="banner__text">
+              {login ? "How are you?" : "It's good to see you again."}
+            </span>
             <img className="banner__img" src={man} alt="icon" />
-          </div>
-          <div className="statistic">
-            <div className="statistic__container">
-              <div className="statistic__block"></div>
-              <div className="statistic__text">
-                <h2 className="statistic__title">English A2</h2>
-                <p className="statistic__author">by Rodion Khahush</p>
-              </div>
-              <div className="statistic__progress">
-                <span className="progress__procent">0%</span>
-              </div>
-              <button className="statistic__button">Continue</button>
-            </div>
-            {/* <div className="button-groups">
-              <button className="button-groups__button-prev"></button>
-              <button className="button-groups__button-next"></button>
-            </div> */}
           </div>
           <div className="dictionary">
             <h2 className="dictionary__title">Dictionary</h2>
@@ -83,10 +69,20 @@ export const Home: React.FC = () => {
         </div>
         <div className="block">
           <h3 className="block__game-title">Games</h3>
-          <div className="block__game"></div>
-          <div className="block__game"></div>
-          <div className="block__game"></div>
-          <div className="block__game"></div>
+          <div className="word__games">
+            <div className="word__game word__game-audiovyzov">
+              <Link to={`/games/audiocall/textbook`}></Link>
+            </div>
+            <div className="word__game word__game-speakIt">
+              <Link to={`/games/speakit/textbook`}></Link>
+            </div>
+            <div className="word__game word__game-sprint">
+              <Link to={`/games/savannah/textbook`}></Link>
+            </div>
+            <div className="word__game word__game-savanna">
+              <Link to={`/games/savannah/textbook`}></Link>
+            </div>
+          </div>
         </div>
       </main>
     </div>

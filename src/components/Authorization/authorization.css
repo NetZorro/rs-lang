@@ -57,6 +57,10 @@
   border-radius: 8px;
   font-family: Roboto;
 }
+.login__submit-button:hover{
+  transition: 1s all ease-in;
+  background-color: darkblue;
+}
 .login__message-error {
   color: red;
   font-weight: bold;

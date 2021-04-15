@@ -14,5 +14,8 @@ export interface IWord {
   textMeaningTranslate: string;
   textExampleTranslate: string;
   _id?: string;
-  userWord?: { difficulty?: string; optional?: { delete?: true } };
+  userWord?: {
+    difficulty?: string;
+    optional?: { study?: boolean; delete?: boolean; won?: number; lost?: number };
+  };
 }

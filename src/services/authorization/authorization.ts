@@ -2,7 +2,9 @@ import axios from "axios";
 
 import { IUserReg, IUserAuth } from "Entities/IAuthorization";
 import { baseURL } from "constants/baseURL";
-import { loginUser } from "utils/lib";
+
+const CancelToken = axios.CancelToken;
+const source = CancelToken.source();
 
 export const authorization = {
   async sigIn(user: IUserAuth) {
@@ -19,15 +21,16 @@ export const authorization = {
     });
   },
 
-  axiosSettings(state: any, dispatch: any) {
-    const { userNewToken } = authorization;
-    const { login, user } = state;
-    const { userId, refreshToken, token } = user;
+  requestCancel() {
+    source.cancel();
+  },
+
+  axiosSettings(state: any, dispatch: any, history: any) {
+    const { login } = state;
     const { defaults, interceptors } = axios;
     const { headers } = defaults;
 
     defaults.baseURL = baseURL;
-
     for (let name in headers) {
       headers[name]["Content-Type"] = "application/json";
       headers[name]["Accept"] = "application/json";
@@ -37,22 +40,6 @@ export const authorization = {
       headers.common["Authorization"] = `Bearer ${state.user.token}`;
     }
 
-    interceptors.response.use(undefined, async (error) => {
-      const axiosApiInstance = axios.create();
-      const originalRequest = error.config;
-      if (error.response.status === 401 && !originalRequest._retry) {
-        originalRequest._retry = true;
-        await userNewToken(userId, refreshToken).then(({ status, data }) => {
-          if (status === 200) {
-            dispatch(loginUser(data));
-            sessionStorage.setItem("user", JSON.stringify(data));
-            axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-          }
-        });
-        return axiosApiInstance(originalRequest);
-      }
-
-      return Promise.resolve(error.response);
-    });
+    
   },
 };

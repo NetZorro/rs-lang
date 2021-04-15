@@ -1,9 +1,9 @@
 import { useContext, useLayoutEffect } from "react";
 
-
 import { Context } from "reducer";
 import { settingsText } from "constants/data";
 import { serviceSettings } from "services";
+import { dispatchUserSettings } from "utils/lib";
 import "./settings.css";
 
 export const Settings: React.FC = () => {
@@ -60,8 +60,4 @@ export const Settings: React.FC = () => {
       </div>
     </div>
   );
-};
-
-const dispatchUserSettings = (data: any) => {
-  return { type: "settings__update", payload: { settings: data } };
 };

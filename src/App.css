@@ -77,11 +77,14 @@
     width: 100%;
     margin-bottom: 8px;
   }
-  .statistic {
+  .banner {
     width: 100%;
   }
-  .statistic__container {
-    width: 100%;
+  .block .word__games  {
+    flex-direction: row;
+  }
+  .block .word__games .word__game {
+    margin-right: 8px;
   }
 }
 @media (max-width: 768px) {
@@ -123,6 +126,9 @@
     align-items: unset;
     flex-direction: row;
     justify-content: space-evenly;
+  }
+  .word__game {
+    flex :0 0 calc(50% - 8px);
   }
   .btn-groups__difficult {
     margin-right: 8px;

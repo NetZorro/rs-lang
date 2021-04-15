@@ -42,3 +42,7 @@ margin-right: 0;
     color: black;
     box-sizing: border-box;
 }
+.dictionary__item-block a {
+  display: flex;
+  justify-content: space-between;
+}

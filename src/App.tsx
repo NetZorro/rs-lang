@@ -1,10 +1,12 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useEffect } from "react";
 import {
   Switch,
   Route,
   Redirect,
   BrowserRouter as Router,
+  useHistory,
 } from "react-router-dom";
+import axios from "axios";
 
 import {
   TextBook,
@@ -25,29 +27,18 @@ import "./App.css";
 export const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { axiosSettings } = authorization;
+  const history = useHistory();
 
-  axiosSettings(state, dispatch);
+  useEffect(() => {}, []);
+  axiosSettings(state, dispatch, history);
 
-  const PrivateRoute = ({children, ...rest}: {children: any, path: string, exact: boolean}) => {
-    let auth = state.login;
-    return (
-      <Route
-        {...rest}
-        render={({ location }) =>
-          auth ? (
-            children
-          ) : (
-            <Redirect
-              to={{
-                pathname: "/authorization",
-                state: { from: location },
-              }}
-            />
-          )
-        }
-      />
-    );
-  };
+  axios.interceptors.response.use(undefined, (error) => {
+    if (error.response.status === 417) {
+      return Promise.resolve(error.response);
+    }
+
+    return Promise.reject(error);
+  });
 
   return (
     <div className="body">
@@ -78,21 +69,31 @@ export const App: React.FC = () => {
                 component={Words}
                 path="/textbook/category-:optional-:categoryId/unit-:unitId"
               />
-              {/* <PrivateRoute exact path="/dictionary" > */}
-                  {/* <DictionaryPage /> */}
-              {/* </PrivateRoute> */}
-              
-                <Route exact component={DictionaryPage} path="/dictionary" />
               <Route
                 exact
-                component={Units}
-                path="/dictionary/category-:optional-:categoryId/"
+                render={() =>
+                  state.login ? (
+                    <DictionaryPage />
+                  ) : (
+                    <Redirect to="/authorization" />
+                  )
+                }
+                path="/dictionary"
               />
-              <Route
-                exact
-                component={Words}
-                path="/dictionary/category-:optional-:categoryId/unit-:unitId"
-              />
+              {state.login && (
+                <>
+                  <Route
+                    exact
+                    component={Units}
+                    path="/dictionary/category-:optional-:categoryId/"
+                  />
+                  <Route
+                    exact
+                    component={Words}
+                    path="/dictionary/category-:optional-:categoryId/unit-:unitId"
+                  />
+                </>
+              )}
               <Redirect from="/" to="/" />
             </Switch>
           </div>
