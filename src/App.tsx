@@ -23,8 +23,10 @@ import { authorization } from "services";
 import { initialState, reducer, Context } from "reducer";
 import { AudioCallGame } from "./pages/Games/AudioCallGame/AudioCallGame";
 import "./App.css";
-import SavannahPage from "./components/Savanna/SavannahPage";
-import SpeakitPage from "./components/SpeakIt/SpeakitPage";
+
+import SavannahPage from "components/Savanna/SavannahPage";
+import SpeakitPage from "components/SpeakIt/SpeakitPage";
+
 
 export const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -80,6 +82,7 @@ export const App: React.FC = () => {
               <Route exact component={SavannahPage} path="/games/savannah/:source?/:group?/:page?" />
               <Route exact component={SpeakitPage} path="/games/speakit/:source?/:group?/:page?" />
               <Route exact component={AudioCallGame} path="/games/audiocall/:source?/:group?/:page?" />
+
               <Route
                 exact
                 component={AuthorizationPage}
@@ -99,7 +102,7 @@ export const App: React.FC = () => {
               {/* <DictionaryPage /> */}
               {/* </PrivateRoute> */}
 
-                <Route exact component={DictionaryPage} path="/dictionary" />
+              <Route exact component={DictionaryPage} path="/dictionary" />
 
               <Route
                 exact
