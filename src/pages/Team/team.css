@@ -1,0 +1,26 @@
+.team_member__card {
+  height: 180px;
+  width: 100%;
+  background: #f5f5f7;
+  border-radius: 14px;
+  margin-bottom: 16px;
+  padding: 8px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+.team_member__img-block {
+  width: 164px;
+  height: 164px;
+  margin-right: 24px;
+  background: #ffffff;
+  border-radius: 12px;
+}
+.team_member_text-block__title {
+  font-family: Baloo Bhai;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 26px;
+  line-height: 26px;
+  margin: 0;
+}

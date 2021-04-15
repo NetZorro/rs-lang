@@ -22,8 +22,6 @@ export default class WordServices {
 
     static async getWordListAPI(userId: string, group: string, p: string, optional: string): Promise<IWord[]> {
         try {
-            const page = getRandomInt(20);
-
             const res = await userWords.getUserAggregatedWords(userId, group, p, optional);
             let data = await res.data[0].paginatedResults;
 
@@ -45,31 +43,23 @@ export default class WordServices {
         }));
     }
 
-    static getRoundWordsArray(wordWithSuccessArray: IWordWithSuccess[], count: number): IWordWithSuccess[] {
+    static getRoundWordsArray(wordWithSuccessArray: IWordWithSuccess[], wordInGame: IWordWithSuccess,   excludeIdx: number, count: number, withGameWord: boolean = true): IWordWithSuccess[] {
         let result = [];
-        let arr: number[] = [];
 
         while (result.length < count) {
             const i = getRandomInt(wordWithSuccessArray.length - 1);
 
-            if (arr.indexOf(i) === -1) {
+            if (i !== excludeIdx) {
                 result.push(wordWithSuccessArray[i]);
-
-                arr.push(i);
             }
         }
 
-        shuffleArray(result);
+        if (withGameWord) {
+            result.push(wordInGame);
+            shuffleArray(result);
+        }
 
         return result;
-    }
-
-    static getWordByWord(wordWithSuccessArray: IWordWithSuccess[], word: string): IWordWithSuccess  {
-        return  <IWordWithSuccess>wordWithSuccessArray.find((item) => {
-            if (item.word.toUpperCase() === word.toUpperCase()) {
-                return item;
-            }
-        });
     }
 
     static getCountError(wordArray: IWordWithSuccess[]): number {

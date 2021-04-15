@@ -10,10 +10,13 @@ import {
 } from "services";
 import { dispatchUserSettings } from "utils/lib";
 import ClipLoader from "react-spinners/ClipLoader";
+        
 import { Context } from "reducer";
 import { WordCard } from "./WordCard";
 import { IWord } from "Entities";
 import "./categoryWords.css";
+import ReactPaginate from "react-paginate";
+import { ClipLoader } from "react-spinners";
 
 type CategoryWordsProps = {
   unit: string;

@@ -3,7 +3,7 @@ import {ISavannahAction, ISavannahState, IWordWithSuccess, IWord} from "Entities
 import cl from "classnames"
 
 import { useParams } from "react-router-dom";
-import './savanna.scss'
+import './sprint.scss'
 import WordServices from "./WordServices";
 import {getRandomInt, playAudio} from "./helpers";
 
@@ -18,7 +18,7 @@ import {userWords} from "../../services/userWords";
 
 
 
-function savannahReducer(state: ISavannahState, action: ISavannahAction): ISavannahState {
+function sprintReducer(state: ISavannahState, action: ISavannahAction): ISavannahState {
     switch (action.type) {
         case 'INPROGRESS': {
             return {
@@ -74,13 +74,15 @@ const initialState = {
     result: false
 }
 
+const variantArray = ["<- Неверно", "Верно ->"];
 
-const SavannahPage: React.FC = () => {
+
+const SprintPage: React.FC = () => {
     const { state, dispatch } = useContext(Context);
     const { user, login } = state;
     const { userId } = user;
 
-    const [gameState, changeGameState] = useReducer<React.Reducer<ISavannahState, ISavannahAction>>(savannahReducer, initialState);
+    const [gameState, changeGameState] = useReducer<React.Reducer<ISavannahState, ISavannahAction>>(sprintReducer, initialState);
 
     const [selectWordId, setSelectWordId] = useState<string>('');
     const [refreshRound, setRefreshRound] = useState<boolean>(false);
@@ -88,16 +90,16 @@ const SavannahPage: React.FC = () => {
     const [successWords, setSuccessWords] = useState<number>(0);
     const [timeLeft, setTimeLeft] = useState<number>(0);
     const [myIntervalId, setMyIntervalId] = useState<any>(0);
-    const [pressKey, setPressKey] = useState<number>(0);
     const [category, setCategory] = useState<string>('0');
     const { group, page, source } = useParams<{ group: string, page: string, source: string }>();
+    const [delta, setDelta] = useState<number>(10);
+    const [deltaCount, setDeltaCount] = useState<number>(0);
+    const [score, setScore] = useState<number>(0);
     const [isFullScreen, setIsFullScree] = useState(false);
 
-    // const [isGuessed, setIsGuessed] = useState<boolean>(false);
 
-    const isGuessed = selectWordId === gameState.gameWordArray[gameState.gameWordArray.length - 1]?.id;
 
-    const b = getRandomInt(1);
+    const isGuessed = selectWordId === 'true';
 
     function toggleFullScreen() {
         if (document.fullscreenElement) {
@@ -112,16 +114,34 @@ const SavannahPage: React.FC = () => {
     }
 
     const handleUserKeyPress = useCallback(event => {
-        const { key, keyCode } = event;
-        console.log('key >> ', key)
+        const { key } = event;
 
+        let varTrueOrFalse = '';
 
-        if (key === '1') { setPressKey(0)}
-        if (key === '2') { setPressKey(1)}
-        if (key === '3') { setPressKey(2)}
-        if (key === '4') { setPressKey(3)}
+        if (key === 'ArrowLeft') {
+            varTrueOrFalse = gameState.gameWordArray[gameState.gameWordArray.length - 1]?.id !== gameState.roundWordArray[gameState.roundWordArray.length - 1]?.id ? 'true' : 'false';
+        }
 
-    }, []);
+        if (key === 'ArrowRight') {
+            varTrueOrFalse = gameState.gameWordArray[gameState.gameWordArray.length - 1]?.id === gameState.roundWordArray[gameState.roundWordArray.length - 1]?.id ? 'true' : 'false';
+        }
+
+        let arr = gameState.gameWordArray;
+
+        console.log('arr >>', arr, varTrueOrFalse, gameState);
+
+        if (selectWordId === '') {
+            setSelectWordId(varTrueOrFalse);
+
+            if (varTrueOrFalse === 'true') {
+                playAudio('audio', correctAudio);
+                arr[arr.length - 1].success = true;
+                changeGameState({type: 'ADDWORD', payload: {...gameState, gameWordArray: arr}})
+            } else {
+                playAudio('audio', errorAudio);
+            }
+        }
+    }, [gameState.roundWordArray]);
 
     useEffect(() => {
         document.addEventListener('keyup', handleUserKeyPress);
@@ -131,34 +151,11 @@ const SavannahPage: React.FC = () => {
         };
     }, [handleUserKeyPress]);
 
-    useEffect(() => {
-        console.log(pressKey, gameState.roundWordArray);
-
-        if (gameState.roundWordArray.length > 0) {
-            const wordId = gameState.roundWordArray[pressKey].id;
-
-            let arr = gameState.gameWordArray;
-
-            if (selectWordId === '') {
-                setSelectWordId(wordId);
-
-                clearInterval(myIntervalId);
-
-                if (wordId === gameState.gameWordArray[gameState.gameWordArray.length - 1].id) {
-                    playAudio('audio', correctAudio);
-                    arr[arr.length - 1].success = true;
-                    changeGameState({type: 'ADDWORD', payload: {...gameState, gameWordArray: arr}})
-                } else {
-                    playAudio('audio', errorAudio);
-                    changeGameState({type: 'SETATTEMPT', payload: {...gameState, attempt: gameState.attempt - 1}})
-                }
-            }
-        }
-
-    }, [pressKey])
 
     const getWordDataNewRound = async () => {
         setSelectWordId('');
+
+        const wordSelection = getRandomInt(2); // 0 - неверное, 1 - верное
 
         // const wordsList = await WordServices.getWordList(0, 20); // - получаем IWord из вне, а дальше делаем все что надо
         let wordsList = [] as IWord[]; // с учебника
@@ -189,7 +186,12 @@ const SavannahPage: React.FC = () => {
         }
 
         const wordsListWithSuccess = WordServices.setFalseToSuccessField(wordsList);
+
+        console.log('wordsListWithSuccess >>', wordsListWithSuccess);
+
         let idx = 0;
+
+        let xRoundWordArray = [] as IWordWithSuccess[];
 
         /* Делаем проверку что бы слова не повторялись */
         if (gameState.gameWordArray.length === wordsListWithSuccess.length) {
@@ -197,18 +199,33 @@ const SavannahPage: React.FC = () => {
         } else {
             let b = false;
             let count = 0;
-            while (!b || count !== 100) {
+            while (!b) {
                 idx = getRandomInt(wordsList.length);
 
                 const index = gameState.gameWordArray.findIndex((item) => item.id === wordsListWithSuccess[idx].id);
 
                 if (index === -1) {
-                    const xRoundWordArray = WordServices.getRoundWordsArray(wordsListWithSuccess, wordsListWithSuccess[idx], idx, 3);
 
-                    changeGameState({type: 'ADDWORD', payload: {...gameState, gameWordArray:  [...gameState.gameWordArray as IWordWithSuccess[], wordsListWithSuccess[idx]] }})
-                    changeGameState({type: 'NEWROUND', payload: {...gameState, roundWordArray:  xRoundWordArray }})
+                    if (wordSelection === 0) {
+                        xRoundWordArray = WordServices.getRoundWordsArray(wordsListWithSuccess, wordsListWithSuccess[idx], idx, 1, false);
+
+                    } else {
+                        xRoundWordArray.push(wordsListWithSuccess[idx]);
+                    }
 
                     b = true
+
+                    console.log('xRoundWordArray >>', xRoundWordArray);
+
+
+                    changeGameState({type: 'ADDWORD',
+                        payload: {
+                            ...gameState,
+                            gameWordArray: [...gameState.gameWordArray as IWordWithSuccess[], wordsListWithSuccess[idx]]
+                        }
+                    })
+                    changeGameState({type: 'NEWROUND', payload: {...gameState, roundWordArray: xRoundWordArray}})
+
                 }
 
                 count = count + 1;
@@ -216,6 +233,7 @@ const SavannahPage: React.FC = () => {
                 if (count === 1000) {
                     changeGameState({type: 'SETATTEMPT', payload: {...gameState, attempt: 0}});
                     console.log('Привышение кол-ва интераций!');
+                    return;
                 }
             }
         }
@@ -240,13 +258,33 @@ const SavannahPage: React.FC = () => {
         console.log('selectWordId useEffect >>', selectWordId);
 
         if (selectWordId !== '') {
+
+            if (selectWordId === 'true') {
+                setDeltaCount(prevState => prevState + 1);
+                setScore(prevState => prevState + delta);
+            }
+
             setTimeout(() => {
                 if (gameState.attempt > 0) {
                     setRefreshRound(true);
                 }
-            }, 2000);
+            }, 500);
         }
     }, [selectWordId])
+
+    useEffect(() => {
+        if ((deltaCount === 3) && (delta === 10)) {
+            setDelta(20);
+            setDeltaCount(0);
+        } else if ((deltaCount === 3) && (delta === 20)) {
+            setDelta(40)
+            setDeltaCount(0);
+        } else if ((deltaCount === 3) && (delta === 40)) {
+            setDelta(80)
+            setDeltaCount(0);
+        }
+    }, [delta, deltaCount])
+
 
     useEffect(() => {
         console.log('gameState.inProgress useEffect >>', gameState.inProgress);
@@ -255,51 +293,35 @@ const SavannahPage: React.FC = () => {
             setRefreshRound(true);
         }
 
+        setTimeLeft(60);
+
+        const timerID = setInterval(() => {
+            setTimeLeft((prevValue) => {
+                if (prevValue === 0) {
+                    clearInterval(timerID);
+                    clearInterval(myIntervalId);
+                    setSelectWordId('');
+                    setRefreshRound(false);
+                    playAudio('audio', errorAudio);
+                    changeGameState({type: 'RESULT', payload: {...gameState, result:  true }})
+                    return 0;
+                }
+
+                return prevValue - 1;
+            });
+        }, 1000);
+
+        setMyIntervalId(timerID);
+
+        const cleanup = () => {
+            console.log('CLEAR TIMER')
+
+            clearInterval(timerID);
+        };
+
+        return cleanup;
+
     },[gameState.inProgress]);
-
-
-    useEffect(() => {
-        // Добавились новые слова для ирры в массив, запускаем таймер
-        console.log('gameState.roundWordArray >>', gameState.roundWordArray);
-        setTimeLeft(5);
-
-        if (gameState.roundWordArray.length > 0) {
-            const timerID = setInterval(() => {
-                setTimeLeft((prevValue) => {
-                    if (prevValue === 0) {
-                        clearInterval(timerID);
-                        playAudio('audio', errorAudio);
-                        changeGameState({type: 'SETATTEMPT', payload: {...gameState, attempt: gameState.attempt - 1}})
-                        setRefreshRound(true);
-                        return 0;
-                    }
-
-                    return prevValue - 1;
-                });
-            }, 1000);
-
-            setMyIntervalId(timerID);
-
-            const cleanup = () => {
-                console.log('CLEAR TIMER')
-
-                clearInterval(timerID);
-            };
-
-            return cleanup;
-        }
-    }, [gameState.roundWordArray])
-
-    useEffect(() => {
-        console.log('gameState.attempt useEffect >>', gameState.attempt);
-
-        if (gameState.attempt === 0) {
-            clearInterval(myIntervalId);
-            setSelectWordId('');
-            setRefreshRound(false);
-            changeGameState({type: 'RESULT', payload: {...gameState, result:  true }})
-        }
-    }, [gameState.attempt]);
 
     useEffect(() => {
         if (gameState.result) {
@@ -307,7 +329,7 @@ const SavannahPage: React.FC = () => {
             setSuccessWords(WordServices.getCountSuccess(gameState.gameWordArray));
 
             /* На этом этапе мы должны отправить инфу на сервак */
-            gameState.gameWordArray.forEach((item) => {
+            gameState.gameWordArray.forEach((item: IWordWithSuccess) => {
                 if (item.success) {
                     userWords.addUserWords(userId, item.id, 'games',{won: (item.userWord?.optional?.won || 0) + 1 , lost: (item.userWord?.optional?.won || 0)}).then(r => console.log('ok'));
                 } else {
@@ -319,20 +341,18 @@ const SavannahPage: React.FC = () => {
     }, [gameState.result])
 
 
-    function Card(word: IWordWithSuccess, idx: number) {
-        let isSelected = selectWordId === word.id;
+    function variantCard(variant: string, varTrueOrFalse: string) {
+        let isSelected = selectWordId === varTrueOrFalse;
 
         return (
             <div className={cl('cards__item', {
-                'activeCard': (isSelected && isGuessed) || (selectWordId !== '' && !isGuessed && word.id === gameState.gameWordArray[gameState.gameWordArray.length - 1].id),
-                'activeCardError': (isSelected && !isGuessed) || ((timeLeft === 0) && (word.id === gameState.gameWordArray[gameState.gameWordArray.length - 1].id))
+                'activeCard': (isSelected && isGuessed),
+                'activeCardError': (isSelected && !isGuessed)
             })}
-                 data-wordid={word.id}
-                 onClick={(event) => {registerCardsClickEvent(event, word.id)}}
+                 data-value={varTrueOrFalse}
+                 onClick={(event) => {registerCardsClickEvent(event, varTrueOrFalse)}}
             >
-                <span className="cards__item-number" data-wordid={word.id}>{idx + 1}</span>
-                <p className="cards__item-word" data-wordid={word.id}>{word.wordTranslate}</p>
-                <p className="cards__item-transcription" data-wordid={word.id}>{word.transcription}</p>
+                <p className="cards__item-word" data-value={varTrueOrFalse}>{variant}</p>
             </div>
         )
     }
@@ -354,22 +374,21 @@ const SavannahPage: React.FC = () => {
     }
 
 
-    function registerCardsClickEvent(event: React.MouseEvent<HTMLDivElement>, wordId: string) {
-        console.log('event >> ', wordId);
+    function registerCardsClickEvent(event: React.MouseEvent<HTMLDivElement>, varTrueOrFalse: string) {
 
         if (selectWordId === '') {
             let arr = gameState.gameWordArray
 
-            setSelectWordId(wordId);
-            clearInterval(myIntervalId);
+            setSelectWordId(varTrueOrFalse);
+            // clearInterval(myIntervalId);
 
-            if (wordId === gameState.gameWordArray[gameState.gameWordArray.length - 1].id) {
+            if (varTrueOrFalse === 'true') {
                 playAudio('audio', correctAudio);
                 arr[arr.length - 1].success = true;
                 changeGameState({type: 'ADDWORD', payload: {...gameState, gameWordArray: arr}})
             } else {
                 playAudio('audio', errorAudio);
-                changeGameState({type: 'SETATTEMPT', payload: {...gameState, attempt: gameState.attempt - 1}})
+                // changeGameState({type: 'SETATTEMPT', payload: {...gameState, attempt: gameState.attempt - 1}})
             }
         }
     }
@@ -380,11 +399,9 @@ const SavannahPage: React.FC = () => {
 
                 <div className="start-page d-flex align-items-center">
                     <div className="container px-5 text-center">
-                        <h1 className="start-page__title">SAVANNAH</h1>
+                        <h1 className="start-page__title">SPRINT</h1>
                         <p className="start-page__intro-text">
-                            The Savannah training helps you build your vocabulary.<br/> The more words you know, the
-                            more
-                            experience points you'll get.
+                          Описание игры спринт
                         </p>
                         {
                             (group === undefined) &&
@@ -416,19 +433,29 @@ const SavannahPage: React.FC = () => {
                     <div className="savanna-wrapper d-flex flex-column align-items-center container">
                         <div className="savanna-info d-flex flex-row align-items-center justify-content-between">
                           <span className="timer">Time Left: {timeLeft}</span>
-                          <div className="savanna-info__attempt"> Attempt: {gameState.attempt} </div>
+                          <div className="savanna-info__attempt"> Score: {score} Delta: +{delta} </div>
                         </div>
 
                         <div className="current">
                           <p className={cl('current__word',  'text-primary')}>
                               {gameState.gameWordArray[gameState.gameWordArray.length - 1]?.word}
                           </p>
+                          <p className={cl('current__word',  'text-primary')}>
+                              {gameState.roundWordArray[gameState.roundWordArray.length - 1]?.wordTranslate}
+                          </p>
                         </div>
 
                       <div className="cards">
                           {
-                              gameState.roundWordArray.map((item: IWordWithSuccess, idx: number) => {
-                                return Card(item, idx);
+                              variantArray.map((item: string, idx: number) => {
+                                  let varTrueOrFalse: string = '';
+                                  if (idx === 0) {
+                                      varTrueOrFalse = gameState.gameWordArray[gameState.gameWordArray.length - 1]?.id !== gameState.roundWordArray[gameState.roundWordArray.length - 1]?.id ? 'true' : 'false';
+                                  } else {
+                                      varTrueOrFalse = gameState.gameWordArray[gameState.gameWordArray.length - 1]?.id === gameState.roundWordArray[gameState.roundWordArray.length - 1]?.id ? 'true' : 'false';
+                                  }
+
+                                  return variantCard(item, varTrueOrFalse);
                               })
 
                           }
@@ -498,4 +525,4 @@ const SavannahPage: React.FC = () => {
     );
 };
 
-export default SavannahPage;
+export default SprintPage;

@@ -8,12 +8,10 @@ import { IWord } from "Entities";
  * Группой по 20 и по id
  */
 export const wordsService = {
-  getWords(
-    category: string,
-    unit: string
-  ): Promise<{ status: number; data: IWord[] }> {
+  getWords(category: string, unit: string) {
     return axios.get(`words?group=${category}&page=${unit}`);
   },
+
   getWordById: async (id: string): Promise<IWord> => {
     let result;
     try {
