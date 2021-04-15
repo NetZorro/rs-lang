@@ -26,9 +26,9 @@ export const AudioCallGameWords = ({hiddenWord, fiveRandom, stats, selected, set
     if (selected && selected.word === word.word) {
       const pathToIcon = selected.word === hiddenWord.word ? trueIcon : falseIcon;
       icon = <img className='result-icon' src={pathToIcon} alt='result icon'/>;
-      userWords.addUserWords(userId, word.id, 'games',[1, 0]).then(r => console.log(r));
+      userWords.addUserWords(userId, word.id, 'games',{won: (word.userWord?.optional?.won || 0) + 1 , lost: (word.userWord?.optional?.won || 0)}).then(r => console.log(r));
     } else if (selected && selected.word !== word.word) {
-      userWords.addUserWords(userId, word.id, 'games',[0, 1]).then(r => console.log(r));
+      userWords.addUserWords(userId, word.id, 'games',{won: (word.userWord?.optional?.won || 0), lost: (word.userWord?.optional?.won || 0) + 1}).then(r => console.log(r));
     }
 
     return (
