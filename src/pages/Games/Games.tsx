@@ -13,6 +13,9 @@ export const Games: React.FC = () => {
             </Link><br/>
             <Link to={'/games/savannah/textbook'}>
                 Savannah
+            </Link><br/>
+            <Link to={'/games/sprint/textbook/0/0'}>
+                Sprint
             </Link>
         </p>
     </div>

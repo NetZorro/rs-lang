@@ -9,7 +9,7 @@ export const userWords = {
     userId: string,
     wordId: string,
     optional: string,
-    arrWinLos?: [number, number]
+    arrWinLos?: { won: number; lost: number }
   ) {
     const filter = switchOptionalSetWord(optional, arrWinLos);
     return axios
@@ -26,10 +26,10 @@ export const userWords = {
   },
 
   getUserAggregatedWords(
-      userId: string,
-      group: string,
-      page: string,
-      optional: string
+    userId: string,
+    group: string,
+    page: string,
+    optional: string
   ) {
     const filter = switchOptional(+group, +page, optional);
     return axios.get(
@@ -41,6 +41,13 @@ export const userWords = {
     const filter = encodeURIComponent('{ "userWord.optional.study": true }');
     return axios.get(
       `users/${userId}/aggregatedWords?wordsPerPage=3600&filter=${filter}`
+    );
+  },
+
+  getWordsWithCategoryAll(userId: string, category: string, optional: string) {
+    const filter = switchFilterGetCategoryWords(optional, category);
+    return axios.get(
+      `users/${userId}/aggregatedWords?wordsPerPage=600&filter=${filter}`
     );
   },
 };
@@ -63,13 +70,34 @@ const switchOptional = (group: number, page: number, optional: string) => {
   }
 };
 
-const switchOptionalSetWord = (optional: string, count?: any) => {
+const switchOptionalSetWord = (
+  optional: string,
+  count?: { won: number; lost: number }
+) => {
   switch (optional) {
     case "difficulty":
       return { difficulty: "hard", optional: { study: true } };
     case "deleted":
       return { optional: { delete: true } };
     case "games":
-      return { optional: { study: true, won: count.won, lost: count.lost } };
+      return { optional: { study: true, won: count?.won, lost: count?.lost } };
+  }
+};
+
+const switchFilterGetCategoryWords = (
+  optional: string,
+  category: string | number
+) => {
+  switch (optional) {
+    case "textbook":
+      return encodeURIComponent(`{"$and" : [{"group":${category} ,"$or" : [{"userWord.optional.delete" : null}, {"userWord.optional.delete" : false}]}
+  ]}`);
+    case "difficult":
+      return encodeURIComponent(`{"$and" : [{"group":${category} ,"userWord.difficulty": "hard","$or" : [{"userWord.optional.delete" : null}, {"userWord.optional.delete" : false}]}
+    ]}`);
+    case "deleted":
+      return encodeURIComponent(
+        `{"$and" : [{"group":${category} ,"userWord.optional.delete" : true}]}`
+      );
   }
 };
