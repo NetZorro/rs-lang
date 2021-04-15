@@ -41,3 +41,46 @@
   background-color: #000000ea;
   box-sizing: border-box;
 }
+.word__games {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 8px ;
+}
+.word__games .word__game:last-child {
+  margin-right: 0;
+}
+.word__game {
+  flex: 0 0 calc(25% - 8px);
+  height: 144px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  background-color: aliceblue;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+.word__game a {
+  display: block;
+  height: 100%;
+}
+.block .word__games {
+  flex-direction: column;
+  align-items: unset;
+}
+.block .word__games .word__game {
+  margin-right: 0px;
+}
+.word__game-audiovyzov{
+  background-image: url(assets/images/audiovyzov.jpg);
+}
+.word__game-speakIt { 
+  background-image: url(assets/images/speakIt.jpg);
+}
+.word__game-savanna {
+  background-image: url(assets/images/savanna.jpg);
+}
+.word__game-sprint {
+  background-image: url(assets/images/sprint.jpg);
+}

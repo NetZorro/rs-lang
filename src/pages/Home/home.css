@@ -16,7 +16,7 @@
 .banner {
   position: relative;
   height: 160px;
-  width: 100%;
+  width: 620px;
   background: #f5f5f7;
   border-radius: 14px;
   margin-bottom: 24px;
@@ -48,58 +48,7 @@
   overflow: hidden;
   width: 100%;
 }
-.statistic {
-  display: flex;
-  box-sizing: border-box;
-  height: 80px;
-  width: 620px;
-  margin-bottom: 40px;
-}
-.statistic__container {
-  display: flex;
-  align-items: center;
-  width: 500px;
-  padding: 8px;
-  background: #f5f5f7;
-  border-radius: 14px;
-  margin-right: 16px;
-}
-.statistic__block {
-  width: 64px;
-  height: 64px;
-  background: #ffffff;
-  border-radius: 12px;
-  margin-right: 24px;
-}
-.statistic__text {
-  margin-right: 40px;
-  width: 140px;
-}
-.statistic__title {
-  font-size: 16px;
-  line-height: 26px;
-  margin: 0;
-}
-.statistic__author {
-  margin: 0;
-}
-.statistic__button {
-  background: #0c0b0b;
-  border-radius: 8px;
-  width: 120px;
-  height: 40px;
-  color: white;
-  border: none;
-  font-family: Roboto;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 13px;
-  line-height: 15px;
-}
-.statistic__button:hover {
-  background: rgba(0, 0, 0, 0.8);
-  transition: 1s ease all;
-}
+
 .button-groups {
   display: flex;
   align-items: center;
@@ -122,14 +71,6 @@
 .button-groups__button-prev {
   background: no-repeat center url("../../assets/icon/arrow_prev.svg");
   margin-right: 16px;
-}
-
-.statistic__progress {
-  position: relative;
-  height: 40px;
-  width: 40px;
-  background: no-repeat center url("../../assets/icon/ellipse.svg");
-  margin-right: 40px;
 }
 
 .progress__procent {
@@ -224,10 +165,4 @@
   line-height: 32px;
   font-size: 24px;
   font-family: Baloo Bhai;
-}
-.block__game {
-  background: #f5f5f7;
-  border-radius: 14px;
-  height: 160px;
-  margin-bottom: 16px;
 }

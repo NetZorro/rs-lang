@@ -1,7 +1,16 @@
-import React, { useEffect, useContext, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useEffect, useContext, useState } from "react";
+import ReactPaginate from "react-paginate";
+import { useHistory, Link } from "react-router-dom";
 
-import { wordsService, userWords } from "services";
+import {
+  wordsService,
+  userWords,
+  serviceSettings,
+  authorization,
+} from "services";
+import { dispatchUserSettings } from "utils/lib";
+import ClipLoader from "react-spinners/ClipLoader";
+        
 import { Context } from "reducer";
 import { WordCard } from "./WordCard";
 import { IWord } from "Entities";
@@ -28,19 +37,32 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
   const { userId } = user;
   const { addUserWords, getUserAggregatedWords, setUserWords } = userWords;
   const { getWords } = wordsService;
+  const { requestCancel } = authorization;
   const [loading, setLoading] = useState(true);
   const [unitId, setUnitId] = useState(unit);
   const history = useHistory();
+  const { getSettings } = serviceSettings;
+  const responseTimeout = 300;
 
   useEffect(() => {
     login ? fetchLoginWords() : fetchNoLoginWords(category, unitId);
+    if (login) {
+      getSettings(userId).then(({ status, data }) => {
+        if (status === 200) {
+          dispatch(dispatchUserSettings(data.optional));
+        }
+      });
+    }
+    return () => requestCancel();
   }, [unitId]);
 
-  const fetchLoginWords = async () => {
-    console.log("fetch");
-    await getUserAggregatedWords(userId, category, unitId, optional).then(
+  const fetchLoginWords = () => {
+    getUserAggregatedWords(userId, category, unitId, optional).then(
       ({ status, data: [{ paginatedResults }] }) => {
         if (status === 200) {
+          if (paginatedResults.length === 0) {
+            history.goBack();
+          }
           dispatch(actionAddWords(paginatedResults));
           setLoading(false);
         }
@@ -52,6 +74,7 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
     getWords(category, unitId).then(({ status, data }) => {
       if (status === 200) {
         dispatch(actionAddWords(data));
+        setLoading(false);
       }
     });
   };
@@ -62,7 +85,7 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
 
       const addDeleteUserWordServer = async () => {
         await addUserWords(userId, _id!, "deleted");
-        setTimeout(fetchLoginWords, 300);
+        setTimeout(fetchLoginWords, responseTimeout);
       };
 
       addDeleteUserWordServer();
@@ -78,7 +101,7 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
 
       const addDifficultServer = async () => {
         await addUserWords(user.userId, _id!, "difficulty");
-        setTimeout(fetchLoginWords, 300);
+        setTimeout(fetchLoginWords, responseTimeout);
       };
 
       addDifficultServer();
@@ -103,7 +126,7 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
 
       return setUserWords(userId, _id, result).then(({ status, data }) => {
         if (status === 200) {
-          setTimeout(fetchLoginWords, 300);
+          setTimeout(fetchLoginWords, responseTimeout);
         }
       });
     }
@@ -116,7 +139,7 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
 
       return setUserWords(userId, _id, result).then(({ status, data }) => {
         if (status === 200) {
-          setTimeout(fetchLoginWords, 300);
+          setTimeout(fetchLoginWords, responseTimeout);
         }
       });
     }
@@ -127,13 +150,55 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
     const { pathname } = location;
 
     let result = pathname.slice(0, pathname.length - unitId.length);
-    history.replace(`${result}${selected + 1}`);
+    history.replace(`${result}${selected}`);
+    setLoading(true);
 
-    setUnitId(String(selected));
+    setUnitId(`${selected}`);
   };
 
   return (
     <div className="word">
+      {optional !== "deleted" && (
+        <div className="word__games">
+          <div className="word__game word__game-speakIt">
+            <Link
+              to={
+                login
+                  ? `/games/speakit/${optional}/${category}/${unitId}`
+                  : `/games/speakit/textbook`
+              }
+            ></Link>
+          </div>
+          <div className="word__game word__game-sprint">
+            <Link
+              to={
+                login
+                  ? `/games/sprint/${optional}/${category}/${unitId}`
+                  : `/games/sprint/textbook`
+              }
+            ></Link>
+          </div>
+          <div className="word__game word__game-audiovyzov">
+            <Link
+              to={
+                login
+                  ? `/games/audiocall/${optional}/${category}/${unitId}`
+                  : `/games/audiocall/textbook`
+              }
+            ></Link>
+          </div>
+          <div className="word__game word__game-savanna">
+            <Link
+              to={
+                login
+                  ? `/games/savannah/${optional}/${category}/${unitId}`
+                  : `/games/savannah/textbook`
+              }
+            ></Link>
+          </div>
+        </div>
+      )}
+
       {loading ? (
         <ClipLoader />
       ) : (
@@ -146,7 +211,9 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
                 button1={handlerDifficult}
                 button1Name={"Difficult"}
                 key={index}
-                hard={item?.userWord?.difficulty}
+                difficult={item?.userWord?.difficulty}
+                won={item?.userWord?.optional?.won}
+                lost={item?.userWord?.optional?.lost}
               />
             );
           } else if (optional === "deleted") {
@@ -156,7 +223,9 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
                 button1={handlerRestoreWordDelete}
                 button1Name={"Restore"}
                 key={index}
-                hard={item?.userWord?.difficulty}
+                difficult={item?.userWord?.difficulty}
+                won={item?.userWord?.optional?.won}
+                lost={item?.userWord?.optional?.lost}
               />
             );
           } else if (optional === "difficult") {
@@ -166,13 +235,15 @@ export const CategoryWords: React.FC<CategoryWordsProps> = ({
                 button1={handlerRestoreWordDifficult}
                 button1Name={"Restore"}
                 key={index}
-                hard={item?.userWord?.difficulty}
+                difficult={item?.userWord?.difficulty}
+                won={item?.userWord?.optional?.won}
+                lost={item?.userWord?.optional?.lost}
               />
             );
           }
         })
       )}
-      {loading ? null : (
+      {!loading && (
         <ReactPaginate
           previousLabel={"previous"}
           nextLabel={"next"}

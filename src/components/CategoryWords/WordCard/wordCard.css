@@ -91,3 +91,16 @@
   background-repeat: no-repeat;
   background-size: cover;
 }
+.word__win-los-block {
+  font-size: 14px;
+  line-height: 16px;
+  margin: 0;
+  padding-top: 8px
+}
+.word__win-los {
+  font-family: "Baloo Bhai";
+}
+.word__title .category__indicator {
+  margin-left: 0;
+  margin-right: 8px;
+}

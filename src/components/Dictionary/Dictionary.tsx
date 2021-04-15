@@ -1,11 +1,7 @@
 import { useState } from "react";
 import cl from "classnames";
 
-import {
-  StudyWords,
-  DifficultWords,
-  DeletedWords,
-} from "components/Dictionary";
+import { StudyWords, DifficultWords } from "components/Dictionary";
 import "./dictionary.css";
 
 export const Dictionary: React.FC = () => {
@@ -38,21 +34,21 @@ export const Dictionary: React.FC = () => {
           dictionary__tab_active: active === 1,
         })}
       >
-        <StudyWords />
+        {active === 1 && <StudyWords />}
       </div>
       <div
         className={cl("dictionary__difficultWords dictionary__tab", {
           dictionary__tab_active: active === 2,
         })}
       >
-        <DifficultWords />
+        {active === 2 && <DifficultWords optional={"difficult"} />}
       </div>
       <div
         className={cl("dictionary__deleteWords dictionary__tab", {
           dictionary__tab_active: active === 3,
         })}
       >
-        <DeletedWords />
+        {active === 3 && <DifficultWords optional={"deleted"} />}
       </div>
     </div>
   );

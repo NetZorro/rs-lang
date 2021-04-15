@@ -7,13 +7,14 @@ import { playAudio } from "../playAudio";
 import "./wordCard.css";
 
 export const WordCard = (props: any) => {
-  const { item, hard, button1, button2, button1Name } = props;
+  const { item, difficult, button1, button2, button1Name, won, lost } = props;
   const { state } = useContext(Context);
-  const { settings } = state;
+  const { settings, login } = state;
   const {
     image,
     word,
     audio,
+    group,
     transcription,
     textExample,
     textMeaning,
@@ -38,7 +39,19 @@ export const WordCard = (props: any) => {
       ></div>
       <div className="word__block">
         <div className="word__name">
-          <span className={cl("word__title", { word__hard: hard === "hard"})}>
+          <span
+            className={cl("word__title", { word__hard: difficult === "hard" })}
+          >
+            <span
+              className={cl("category__indicator", {
+                category__one: group === 0,
+                category__two: group === 1,
+                category__free: group === 2,
+                category__four: group === 3,
+                category__five: group === 4,
+                category__six: group === 5,
+              })}
+            ></span>
             {word}
           </span>
           <span className="word__transcription">{transcription}</span>
@@ -64,12 +77,18 @@ export const WordCard = (props: any) => {
           <br />
           {!settings[keysObjSettings[2]] ? textExampleTranslate : null}
         </p>
+        {won || lost ? (
+          <p className="word__win-los-block">
+            <span className="word__win-los">Win </span>: {won} ,
+            <span className="word__win-los">Los </span>: {lost}
+          </p>
+        ) : null}
       </div>
       {!settings[keysObjSettings[3]] || button1Name === "Restore" ? (
         <div className="word__btn-groups">
           {button1 ? (
             <button
-              onClick={() => button1(item)}
+              onClick={() => login && button1(item)}
               className="btn-groups__difficult"
             >
               {button1Name}
@@ -77,7 +96,7 @@ export const WordCard = (props: any) => {
           ) : null}
           {button2 ? (
             <button
-              onClick={() => button2(item)}
+              onClick={() => login && button2(item)}
               className="btn-groups__delete"
             >
               Delete

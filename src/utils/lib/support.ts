@@ -9,3 +9,7 @@ export const loginUser = (userObj: Object) => ({
   type: "user__authorization",
   payload: userObj,
 });
+
+export const dispatchUserSettings = (data: any) => {
+  return { type: "settings__update", payload: { settings: data } };
+};

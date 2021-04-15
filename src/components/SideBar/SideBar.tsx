@@ -72,7 +72,7 @@ export const SideBar: React.FC = () => {
               })}
             >
               {login ? (
-                <span className="sidebar__login-icon">{user.name[0]}</span>
+                <span className="sidebar__login-icon">{user?.name[0]}</span>
               ) : null}
             </div>
           </Link>
