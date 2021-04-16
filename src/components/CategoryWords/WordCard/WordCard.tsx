@@ -79,8 +79,8 @@ export const WordCard = (props: any) => {
         </p>
         {won || lost ? (
           <p className="word__win-los-block">
-            <span className="word__win-los">Win </span>: {won} ,
-            <span className="word__win-los">Los </span>: {lost}
+            <span className="word__win-los">Win </span>: {won} 
+            <span className="word__win-los"> Los </span>: {lost}
           </p>
         ) : null}
       </div>
