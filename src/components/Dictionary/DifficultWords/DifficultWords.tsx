@@ -35,7 +35,7 @@ export const DifficultWords: React.FC<props> = ({ optional }) => {
       requestCancel();
       cleanupFunction = false;
     };
-  }, [categoryId]);
+  }, []);
 
   const fetchLengthCategorys = async (quantityCat: number) => {
     let result: any = [];

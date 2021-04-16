@@ -15,7 +15,7 @@ export const Team = () => {
         <div className="dictionary__text-block">
           <h3 className="team_member_text-block__title">Родион</h3>
           <span className="text-block__description">
-            Реализовал дизайн приложения, аутентификацию (написать еще)
+            Реализовал дизайн приложения, аутентификацию , работу с сервером, учебник , словарь , Видео.
           </span>
         </div>
       </div>
@@ -28,7 +28,7 @@ export const Team = () => {
         <div className="dictionary__text-block">
           <h3 className="team_member_text-block__title">Александра</h3>
           <span className="text-block__description">
-            Реализовал игры (написать какие игры)
+            Реализовала игру аудио вызов
           </span>
         </div>
       </div>
@@ -41,7 +41,7 @@ export const Team = () => {
         <div className="dictionary__text-block">
           <h3 className="team_member_text-block__title">Константин</h3>
           <span className="text-block__description">
-            Реализовал игры (написать какие игры)
+            Реализовал игры сванна, спринт, speak-it
           </span>
         </div>
       </div>

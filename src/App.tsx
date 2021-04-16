@@ -1,12 +1,10 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useReducer } from "react";
 import {
   Switch,
   Route,
   Redirect,
   BrowserRouter as Router,
-  useHistory,
 } from "react-router-dom";
-import axios from "axios";
 
 import {
   TextBook,
@@ -28,16 +26,13 @@ import "./App.css";
 
 import SavannahPage from "components/Savanna/SavannahPage";
 import SpeakitPage from "components/SpeakIt/SpeakitPage";
-import SprintPage from "./components/Sprint/SprintPage";
+import SprintPage from "components/Sprint/SprintPage";
 
 export const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { axiosSettings } = authorization;
-  const history = useHistory();
 
-  useEffect(() => {
-    axiosSettings(state, dispatch, history);
-  }, []);
+  axiosSettings(state, dispatch);
 
   return (
     <div className="body">

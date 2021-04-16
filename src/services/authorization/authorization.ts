@@ -25,9 +25,9 @@ export const authorization = {
     source.cancel();
   },
 
-  axiosSettings(state: any, dispatch: any, history: any) {
+  axiosSettings(state: any, dispatch: any) {
     const { login } = state;
-    const { defaults, interceptors } = axios;
+    const { defaults } = axios;
     const { headers } = defaults;
 
     defaults.baseURL = baseURL;
@@ -38,15 +38,14 @@ export const authorization = {
 
     if (login) {
       headers.common["Authorization"] = `Bearer ${state.user.token}`;
-      alert(headers.common["Authorization"]);
     }
-
-    interceptors.response.use(undefined, (error) => {
-      if (error.response.status === 417) {
-        return Promise.resolve(error.response);
-      }
-
-      return Promise.reject(error);
-    });
   },
 };
+
+axios.interceptors.response.use(undefined, (error) => {
+  if (error.response.status === 417) {
+    return Promise.resolve(error.response);
+  }
+
+  return Promise.reject(error);
+});
