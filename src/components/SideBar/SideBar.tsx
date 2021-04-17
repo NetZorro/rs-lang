@@ -51,11 +51,11 @@ export const SideBar: React.FC = () => {
           <Link to="/games">
             <img className="menu__item" src={controller} alt="icon" />
           </Link>
-          <Link to="/settings">
-            <img className="menu__item" src={settings} alt="icon" />
-          </Link>
           <Link to="/team">
             <img className="menu__item" src={people} alt="icon" />
+          </Link>
+          <Link to="/settings">
+            <img className="menu__item" src={settings} alt="icon" />
           </Link>
         </div>
         <div

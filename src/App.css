@@ -9,6 +9,8 @@
   width: 1020px;
   position: relative;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .body__sidebar {
   padding-top: 24px;
@@ -18,6 +20,27 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+.footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 8px;
+}
+.app__github {
+  width: 27px;
+  height: 27px;
+  background: center/cover no-repeat url(assets/icon/github.svg);
+}
+.app__block {
+  width: 80px;
+  height: 29px;
+  background: center/cover no-repeat url(assets/icon/rs_school_js.svg);
+}
+.app__github-link {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
 }
 @media (max-width: 1230px) {
   .body {
@@ -80,7 +103,7 @@
   .banner {
     width: 100%;
   }
-  .block .word__games  {
+  .block .word__games {
     flex-direction: row;
   }
   .block .word__games .word__game {
@@ -128,7 +151,7 @@
     justify-content: space-evenly;
   }
   .word__game {
-    flex :0 0 calc(50% - 8px);
+    flex: 0 0 calc(50% - 8px);
   }
   .btn-groups__difficult {
     margin-right: 8px;
