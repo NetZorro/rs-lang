@@ -1,19 +1,19 @@
-import { baseURL } from "constants/baseURL";
+import axios from "axios";
 
-export const Settings = {
-  getSettings: async (id: number) => {
-    try {
-      let result = await fetch(`${baseURL}users/${id}/settings`);
-      return result.json();
-    } catch (error) {
-      console.log('Settings Error', error)
-    }
+type response = {
+  status: number;
+  data: string | any;
+};
+
+export const serviceSettings = {
+  getSettings(id: string): Promise<response> {
+    return axios.get(`users/${id}/settings`);
   },
-  putSettings: async (id: number, data: string) => {
-    let result = await fetch(`${baseURL}`, {
-      method: "PUT",
-      body: data,
-    });
-    return await result.json();
+  setSettings(id: string, data: object): Promise<response> {
+    return axios.put(
+      `users/${id}/settings`,
+      JSON.stringify({ optional: data })
+    );
   },
 };
+

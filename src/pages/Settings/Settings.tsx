@@ -1,43 +1,63 @@
-import { useContext } from "react";
+import { useContext, useLayoutEffect } from "react";
 
-import { Context } from "reducers";
+import { Context } from "reducer";
 import { settingsText } from "constants/data";
+import { serviceSettings } from "services";
+import { dispatchUserSettings } from "utils/lib";
 import "./settings.css";
 
 export const Settings: React.FC = () => {
   const { state, dispatch } = useContext(Context);
-  const { settings } = state;
+  const { login, user, settings } = state;
+  const { userId } = user;
+  const { getSettings } = serviceSettings;
+
   const nameObjProperties: string[] = Object.keys(settings);
-  const dispatchId = (id: number) => {
-    dispatch({
-      type: "settings__update",
+
+  useLayoutEffect(() => {
+    if (login) {
+      getSettings(userId).then(({ status, data }) => {
+        if (status === 200) {
+          dispatch(dispatchUserSettings(data.optional));
+        }
+      });
+    }
+  }, []);
+
+  const dispatchSettingStatus = (nameProperty: string) => {
+    let result = {
+      type: login ? "settings__update-login" : "settings__update",
       payload: {
-        ...state,
         settings: {
           ...settings,
-          [nameObjProperties[id]]: !settings[nameObjProperties[id]],
+          [nameProperty]: !settings[nameProperty],
         },
       },
-    });
+    };
+
+    dispatch(result);
   };
-  console.log(state)
   return (
-    <div>
+    <div className="settings">
       <h1 className="settings__title">Settings</h1>
-      {settingsText.map((item, index) => {
-        return (
-          <div key={index}>
-            <label className="settings__label">
-              {item}
-              <input
-                onChange={() => dispatchId(index)}
-                defaultChecked={settings[nameObjProperties[index]]}
-                type="checkbox"
-              />
-            </label>
-          </div>
-        );
-      })}
+      <div className="settings__block">
+        {settingsText.map((item, index) => {
+          return (
+            <div key={index}>
+              <label className="settings__label">
+                {item}
+                <input
+                  onChange={() =>
+                    dispatchSettingStatus(nameObjProperties[index])
+                  }
+                  checked={settings[nameObjProperties[index]]}
+                  type="checkbox"
+                />
+              </label>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

@@ -1,0 +1,147 @@
+.audioCallGame-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.words-container{
+  margin: 2rem;
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+ }
+.volume-icon{
+  width: 3rem;
+  margin: 2rem;
+}
+.result-icon{
+  width: 17px;
+  margin-right: 0.5rem ;
+}
+
+.hiddenWord-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hiddenWord-img{
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.word-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.option-word:hover{
+  font-weight: bold;
+}
+
+.button-next {
+  margin: 3rem;
+  color: #232323;
+  background: transparent;
+  border: 1px solid #232323;
+  position: relative;
+  font-size: 14px;
+  letter-spacing: .3em;
+  padding: 15px 30px 15px 35px;
+  transition: .2s ease-in-out;
+  cursor: pointer;
+}
+.button-next:before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 100%;
+  height: 100%;
+  background: #32D4E2;
+  z-index: -1;
+  transition: .25s ease;
+  transform: translate(0, 0);
+}
+.button-next:hover:before {
+  transform: translate(4px, 4px);
+}
+
+.fullScreentrue {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  background-color: aliceblue;
+}
+
+.screenIconButton{
+  border: none;
+  background-color: transparent;
+}
+
+.screenIcon-icon{
+  width: 30px;
+}
+
+.preloader-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-top: 6rem;
+}
+
+*,:after,:before{
+  -webkit-box-sizing:border-box;
+  box-sizing:border-box
+}
+.mk-spinner-wrap{
+  min-height:100px;
+  width:100%;
+  position:relative
+}
+@-webkit-keyframes a{
+  0%{
+    -webkit-transform:rotate(0deg);
+    transform:rotate(0deg)
+  }
+  to{
+    -webkit-transform:rotate(1turn);
+    transform:rotate(1turn)
+  }
+}
+@keyframes a{
+  0%{
+    -webkit-transform:rotate(0deg);
+    transform:rotate(0deg)
+  }
+  to{
+    -webkit-transform:rotate(1turn);
+    transform:rotate(1turn)
+  }
+}
+.mk-spinner-ring{
+  content:"";
+  display:inline-block;
+  position:absolute;
+  width:50px;
+  height:50px;
+  top:50%;
+  margin-top:-25px;
+  left:50%;
+  margin-left:-25px;
+  z-index:1;
+  border-radius:50%;
+  border:3px solid #00bcd4;
+  border-left-color:transparent;
+  background:transparent;
+  -webkit-animation:a 1s infinite linear;
+  animation:a 1s infinite linear
+}

@@ -2,11 +2,185 @@
   max-width: 1200px;
   margin: auto;
   display: flex;
+  height: 100%;
 }
 .body__content {
   padding-top: 24px;
   width: 1020px;
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .body__sidebar {
-  padding-top: 24px ;
+  padding-top: 24px;
+}
+.css-1rpz77w {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 8px;
+}
+.app__github {
+  width: 27px;
+  height: 27px;
+  background: center/cover no-repeat url(assets/icon/github.svg);
+}
+.app__block {
+  width: 80px;
+  height: 29px;
+  background: center/cover no-repeat url(assets/icon/rs_school_js.svg);
+}
+.app__github-link {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+}
+@media (max-width: 1230px) {
+  .body {
+    flex-direction: column;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1020px;
+  }
+  .body__content {
+    width: 100%;
+    padding-top: 16px;
+  }
+  .body__sidebar {
+    padding-top: 16px;
+  }
+  .sidebar {
+    width: 100%;
+  }
+  .sidebar__container {
+    width: 100%;
+    flex-direction: row;
+    height: auto;
+    padding: 0 24px;
+  }
+  .menu {
+    flex-direction: row;
+    max-width: none;
+  }
+  .menu__item {
+    margin-bottom: 0;
+    margin-right: 64px;
+    padding-top: 0;
+  }
+  .menu a:last-child .menu__item {
+    margin-right: 0px;
+  }
+  .sidebar__login {
+    margin-bottom: 0;
+  }
+  .word {
+    width: 100%;
+  }
+}
+@media (max-width: 1020px) {
+  .main {
+    flex-direction: column;
+  }
+  .block__game-title {
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .content {
+    max-width: none;
+    margin-right: 0;
+    width: 100%;
+    margin-bottom: 8px;
+  }
+  .banner {
+    width: 100%;
+  }
+  .block .word__games {
+    flex-direction: row;
+  }
+  .block .word__games .word__game {
+    margin-right: 8px;
+  }
+}
+@media (max-width: 768px) {
+  .body {
+    max-width: 768px;
+  }
+  .sidebar__container {
+    flex-direction: column;
+  }
+  .sidebar__burger-icon {
+    display: block;
+  }
+  .sidebar__login {
+    margin-bottom: 16px;
+  }
+  .sidebar__burger-button {
+    display: block;
+  }
+  .menu {
+    flex-direction: column;
+    display: none;
+  }
+  .sidebar__menu-mobile {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .menu__item {
+    margin-bottom: 16px;
+    margin-right: 0;
+  }
+  .word__card {
+    flex-wrap: wrap;
+    height: auto;
+  }
+  .word__btn-groups {
+    padding-top: 8px;
+    align-items: unset;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+  .word__game {
+    flex: 0 0 calc(50% - 8px);
+  }
+  .btn-groups__difficult {
+    margin-right: 8px;
+  }
+  .btn-groups__difficult,
+  .btn-groups__delete {
+    width: 100%;
+  }
+  .logo-app {
+    font-size: 48px;
+    line-height: 86px;
+  }
+  .banner__img {
+    right: 5%;
+  }
+  .authorization {
+    align-items: center;
+    background: none;
+  }
+  .authorization__handler-login {
+    margin-right: 0;
+    transform: none;
+  }
+  .authorization__block {
+    display: none;
+  }
+}
+@media (max-width: 499px) {
+  .word__card {
+    justify-content: center;
+  }
 }

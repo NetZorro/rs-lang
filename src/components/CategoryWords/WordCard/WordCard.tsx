@@ -1,12 +1,20 @@
+import { useContext } from "react";
+import cl from "classnames";
+
+import { Context } from "reducer";
 import { baseURL } from "constants/baseURL";
 import { playAudio } from "../playAudio";
+import "./wordCard.css";
 
 export const WordCard = (props: any) => {
-  const {item, settings,deleted,difficult} = props;
+  const { item, difficult, button1, button2, button1Name, won, lost } = props;
+  const { state } = useContext(Context);
+  const { settings, login } = state;
   const {
     image,
     word,
     audio,
+    group,
     transcription,
     textExample,
     textMeaning,
@@ -16,7 +24,13 @@ export const WordCard = (props: any) => {
     audioExample,
     audioMeaning,
   } = item;
+
   const keysObjSettings = Object.keys(settings);
+
+  const transformText = (text: string) => {
+    return { __html: text };
+  };
+
   return (
     <div className="word__card">
       <div
@@ -25,10 +39,24 @@ export const WordCard = (props: any) => {
       ></div>
       <div className="word__block">
         <div className="word__name">
-          <span className="word__title">{word}</span>
+          <span
+            className={cl("word__title", { word__hard: difficult === "hard" })}
+          >
+            <span
+              className={cl("category__indicator", {
+                category__one: group === 0,
+                category__two: group === 1,
+                category__free: group === 2,
+                category__four: group === 3,
+                category__five: group === 4,
+                category__six: group === 5,
+              })}
+            ></span>
+            {word}
+          </span>
           <span className="word__transcription">{transcription}</span>
           <span className="word__word-translate">
-            {settings[keysObjSettings[0]] ? `${wordTranslate}` : null}
+            {!settings[keysObjSettings[0]] ? `${wordTranslate}` : null}
           </span>
           <span
             className="word__sound"
@@ -36,30 +64,44 @@ export const WordCard = (props: any) => {
           ></span>
         </div>
         <p className="word__meaning">
-          {textMeaning}
+          <span dangerouslySetInnerHTML={transformText(textMeaning)}></span>
           <br />
-          {settings[keysObjSettings[1]] ? textMeaningTranslate : null}
+          {!settings[keysObjSettings[1]] ? (
+            <span
+              dangerouslySetInnerHTML={transformText(textMeaningTranslate)}
+            ></span>
+          ) : null}
         </p>
         <p className="word__example">
-          {textExample}
+          <span dangerouslySetInnerHTML={transformText(textExample)}></span>
           <br />
-          {settings[keysObjSettings[2]] ? textExampleTranslate : null}
+          {!settings[keysObjSettings[2]] ? textExampleTranslate : null}
         </p>
+        {won || lost ? (
+          <p className="word__win-los-block">
+            <span className="word__win-los">Win </span>: {won} 
+            <span className="word__win-los"> Los </span>: {lost}
+          </p>
+        ) : null}
       </div>
-      {settings[keysObjSettings[3]] ? (
+      {!settings[keysObjSettings[3]] || button1Name === "Restore" ? (
         <div className="word__btn-groups">
-          <button
-            onClick={() => deleted(item)}
-            className="btn-groups__difficult"
-          >
-            difficult
-          </button>
-          <button
-            onClick={() => difficult(item)}
-            className="btn-groups__delete"
-          >
-            delete
-          </button>
+          {button1 ? (
+            <button
+              onClick={() => login && button1(item)}
+              className="btn-groups__difficult"
+            >
+              {button1Name}
+            </button>
+          ) : null}
+          {button2 ? (
+            <button
+              onClick={() => login && button2(item)}
+              className="btn-groups__delete"
+            >
+              Delete
+            </button>
+          ) : null}
         </div>
       ) : null}
     </div>

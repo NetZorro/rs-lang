@@ -1,28 +1,24 @@
+import axios from "axios";
+
 import { baseURL } from "constants/baseURL";
-import { IWord } from "interfaces";
+import { IWord } from "Entities";
 
 /**
- * Сервис для работы со словами
+ * Получения слов с api .
+ * Группой по 20 и по id
  */
 export const wordsService = {
-  getWords: async function (category: string, unit: string): Promise<IWord[]> {
-    try {
-      let result = await fetch(
-        `${baseURL}words?group=${category}&page=${unit}`
-      );
-      return await result.json();
-    } catch (error) {
-      console.log("Error get Words :", error);
-      return error;
-    }
+  getWords(category: string, unit: string) {
+    return axios.get(`words?group=${category}&page=${unit}`);
   },
-  getWordById: async (id: string) => {
+
+  getWordById: async (id: string): Promise<IWord> => {
+    let result;
     try {
-      let result = await fetch(`${baseURL}words/${id}`);
-      return await result.json();
+      result = await fetch(`${baseURL}words/${id}`);
     } catch (error) {
-      console.log("Error get Word by id", error);
-      return error;
+      result = error;
     }
+    return (await result) ? result.json() : result;
   },
 };

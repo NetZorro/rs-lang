@@ -1,8 +1,27 @@
+.settings {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, .2);
+    padding: 8px;
+    border-radius: 8px;
+    height: 100%;
+}
 .settings__title {
     margin: 0;
+    text-align: center;
+    margin-bottom: 16px;
 }
 .settings__label {
     font-family: 'Roboto';
     font-size: 16px;
     line-height: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.settings__label input {
+    height: 16px;
+    width: 16px;
+    margin-right: 8px;
 }
