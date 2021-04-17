@@ -2,10 +2,9 @@
   display: flex;
 }
 .content {
-  max-width: 620px;
   margin-right: 64px;
   padding-top: 30px;
-  width: 620px;
+  width: 100%;
 }
 .block {
   width: 100%;
@@ -16,20 +15,21 @@
 .banner {
   position: relative;
   height: 160px;
-  width: 620px;
-  background: #f5f5f7;
+  width: 100%;
+  background: #e5ebfd;
   border-radius: 14px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 .banner__img {
   position: absolute;
   bottom: 0;
   right: 104px;
+  width: 160px;
 }
 .banner__title {
   position: absolute;
-  top: 16px;
-  left: 32px;
+  top: 24px;
+  left: 64px;
   font-family: "Baloo Bhai";
   font-size: 36px;
   font-style: normal;
@@ -38,131 +38,82 @@
 }
 .banner__text {
   position: absolute;
-  top: 88px;
-  left: 32px;
+  top: 96px;
+  left: 64px;
   font-family: "Roboto";
   padding-left: 1px;
-}
-.video {
-  border-radius: 14px;
-  overflow: hidden;
-  width: 100%;
-}
-
-.button-groups {
-  display: flex;
-  align-items: center;
-}
-.button-groups__button-next,
-.button-groups__button-prev {
-  border: 2px solid #0c0b0b;
-  box-sizing: border-box;
-  border-radius: 100px;
-  background: none;
-  width: 40px;
-  height: 40px;
-  outline: none;
-}
-
-.button-groups__button-next {
-  background: no-repeat center url("../../assets/icon/arrow_next.svg");
-}
-
-.button-groups__button-prev {
-  background: no-repeat center url("../../assets/icon/arrow_prev.svg");
-  margin-right: 16px;
-}
-
-.progress__procent {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: Roboto;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 13px;
-  line-height: 15px;
-}
-.dictionary__title {
-  margin-bottom: 16px;
-}
-
-.dictionary__tabs {
-  height: 26px;
-  font-family: Baloo Bhai;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 26px;
-  opacity: 0.3;
-}
-.dictionary__tabs span {
-  margin-right: 32px;
-}
-.dictionary__tabs:first-child {
-  opacity: 1;
-}
-.dictionary__card {
-  height: 80px;
-  width: 100%;
-  background: #f5f5f7;
-  border-radius: 14px;
-  margin-bottom: 16px;
-  padding: 8px;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-}
-.dictionary__img-block {
-  width: 64px;
-  height: 64px;
-  margin-right: 24px;
-  background: #ffffff;
-  border-radius: 12px;
-}
-.text-block__title {
-  font-family: Baloo Bhai;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 26px;
-  margin: 0;
-}
-.text-block__description {
-  font-family: Roboto;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 15px;
-}
-.search {
-  background: #f5f5f7;
-  border-radius: 8px;
-  margin-right: 16px;
-}
-.search input {
-  width: 256px;
-  height: 40px;
-  border-radius: 8px;
-  border: none;
-  background: #f5f5f7;
-  background: no-repeat 16px url("../../assets/icon/search.svg");
-  outline: none;
-}
-.account {
-  height: 40px;
-  width: 40px;
-  background: #f5f5f7;
-  border-radius: 8px;
 }
 .block__profile {
   display: flex;
   margin-bottom: 24px;
 }
 .block__game-title {
-  margin-bottom: 0;
+  margin-bottom: 16px;
   line-height: 32px;
   font-size: 24px;
   font-family: Baloo Bhai;
+  text-align: center;
+}
+.block .word__games {
+  flex-direction: row;
+  justify-content: space-between;
+}
+.info {
+  margin-bottom: 16px;
+  transition: 1s all ease-in ;
+}
+.info__block {
+  display: flex;
+  justify-content: space-evenly;
+   margin-bottom: 16px;
+}
+.info__title {
+  margin-bottom: 8px;
+  line-height: 32px;
+  font-size: 26px;
+  font-family: Baloo Bhai;
+  text-align: center;
+}
+.info__image {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 240px;
+  min-width: 320px;
+}
+.info__text {
+  display: flex;
+  align-items: center;
+  font-family: "Baloo Bhai";
+  font-size: 24px;
+}
+.info__image_1 {
+  background-image: url(assets/images/image-1.svg);
+}
+.info__image_2{
+  background-image: url(assets/images/game.svg);
+}
+.info__image_3 {
+  background-image: url(assets/images/image-3.svg);
+ }
+.info__image_4 {
+  background-image: url(assets/images/image-4.svg);
+ }
+ .video {
+   margin-bottom: 32px;
+ }
+ .video__title {
+  font-family: "Baloo Bhai";
+  font-size: 24px;
+  line-height: 32px;
+  text-align: center;
+  margin-bottom: 16px;
+ }
+ .video__block {
+   display: flex;
+   justify-content: center;
+   border-radius: 8px;
+ }
+iframe {
+  border-radius: 16px;
 }

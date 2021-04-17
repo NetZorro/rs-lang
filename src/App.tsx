@@ -113,6 +113,35 @@ export const App: React.FC = () => {
               )}
               <Redirect from="/" to="/" />
             </Switch>
+            <footer className="footer">
+              <div className="app__github">
+                <a
+                  href="https://github.com/NetZorro"
+                  className="app__github-link"
+                ></a>
+              </div>
+              <div className="app__github">
+                <a
+                  href="https://github.com/KarpusKonstantin"
+                  className="app__github-link"
+                ></a>
+              </div>
+              <div className="app__github">
+                <a
+                  href="https://github.com/SashaSadovskaya"
+                  className="app__github-link"
+                ></a>
+              </div>
+              <div className="app__github">
+                <a
+                  href="https://github.com/Rodion-git"
+                  className="app__github-link"
+                ></a>
+              </div>
+              <div className="app__block">
+                <a href="https://rs.school/react/" className="app__github-link"></a>
+              </div>
+            </footer>
           </div>
         </Router>
       </Context.Provider>

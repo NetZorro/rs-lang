@@ -2,7 +2,8 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 
 import { Context } from "reducer";
-import man from "../../assets/icon/man.svg";
+import man from "assets/icon/man.svg";
+import gerl from 'assets/images/gerl.svg'
 import "./home.css";
 
 export const Home: React.FC = () => {
@@ -18,11 +19,62 @@ export const Home: React.FC = () => {
               Hello {login ? user?.name.slice(0, 9) : "Guest"}
             </h1>
             <span className="banner__text">
-              {login ? "How are you?" : "It's good to see you again."}
+              Welcome to RS-lang 
             </span>
-            <img className="banner__img" src={man} alt="icon" />
+            <img className="banner__img" src={gerl} alt="icon" />
           </div>
-          <div className="dictionary">
+          <div className="info">
+            <h2 className="info__title">Info</h2>
+            <div className="info__block">
+              <div className="info__image info__image_1"></div>
+              <div className="info__text">
+                Saving statistics of learned words
+              </div>
+            </div>
+            <div className="info__block">
+              <div className="info__text">4 games of your choice</div>
+              <div className="info__image info__image_2"></div>
+            </div>
+            <div className="info__block">
+              <div className="info__image info__image_3"></div>
+              <div className="info__text">3600 word textbook for learning</div>
+            </div>
+            <div className="info__block">
+              <div className="info__text">Listening to words</div>
+              <div className="info__image info__image_4"></div>
+            </div>
+          </div>
+          <div className="video">
+            <h2 className="video__title">Video</h2>
+            <div className="video__block">
+              <iframe
+                width="560"
+                height="315"
+                src="https://www.youtube.com/embed/wyeX9w_dkYg"
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              />
+            </div>
+          </div>
+          <div className="block">
+            <h3 className="block__game-title">Games</h3>
+            <div className="word__games">
+              <div className="word__game word__game-audiovyzov">
+                <Link to={`/games/audiocall/textbook`}></Link>
+              </div>
+              <div className="word__game word__game-speakIt">
+                <Link to={`/games/speakit/textbook`}></Link>
+              </div>
+              <div className="word__game word__game-sprint">
+                <Link to={`/games/sprint/textbook`}></Link>
+              </div>
+              <div className="word__game word__game-savanna">
+                <Link to={`/games/savannah/textbook`}></Link>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* <div className="dictionary">
             <h2 className="dictionary__title">Application pros</h2>
             <div className="dictionary__card">
               <div className="dictionary__text-block">
@@ -67,25 +119,7 @@ export const Home: React.FC = () => {
                 </span>
               </div>
             </div>
-          </div>
-        </div>
-        <div className="block">
-          <h3 className="block__game-title">Games</h3>
-          <div className="word__games">
-            <div className="word__game word__game-audiovyzov">
-              <Link to={`/games/audiocall/textbook`}></Link>
-            </div>
-            <div className="word__game word__game-speakIt">
-              <Link to={`/games/speakit/textbook`}></Link>
-            </div>
-            <div className="word__game word__game-sprint">
-              <Link to={`/games/sprint/textbook`}></Link>
-            </div>
-            <div className="word__game word__game-savanna">
-              <Link to={`/games/savannah/textbook`}></Link>
-            </div>
-          </div>
-        </div>
+          </div> */}
       </main>
     </div>
   );
